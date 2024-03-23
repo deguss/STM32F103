@@ -1,0 +1,10 @@
+14:29:55 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  41108	    484	   8868	  50460	   c51c	ADS1256.elf
+Finished building: default.size.stdout
+ 
+
+14:29:56 Build Finished. 0 errors, 0 warnings. (took 811ms)
+

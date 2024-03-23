@@ -1,0 +1,12 @@
+../Core/Src/stm32f1xx_it.c:57:6:EXTI0_IRQHandler	0	static
+../Core/Src/stm32f1xx_it.c:62:6:HAL_GPIO_EXTI_Callback	16	static
+../Core/Src/stm32f1xx_it.c:98:6:NMI_Handler	0	static
+../Core/Src/stm32f1xx_it.c:113:6:HardFault_Handler	0	static
+../Core/Src/stm32f1xx_it.c:128:6:MemManage_Handler	0	static
+../Core/Src/stm32f1xx_it.c:143:6:BusFault_Handler	0	static
+../Core/Src/stm32f1xx_it.c:158:6:UsageFault_Handler	0	static
+../Core/Src/stm32f1xx_it.c:173:6:SVC_Handler	0	static
+../Core/Src/stm32f1xx_it.c:186:6:DebugMon_Handler	0	static
+../Core/Src/stm32f1xx_it.c:199:6:PendSV_Handler	0	static
+../Core/Src/stm32f1xx_it.c:212:6:SysTick_Handler	0	static
+../Core/Src/stm32f1xx_it.c:233:6:USB_LP_CAN1_RX0_IRQHandler	0	static
