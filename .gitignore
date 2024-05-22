@@ -1,0 +1,14 @@
+
+*.log
+/.metadata
+/.metadata
+/testProject/.metadata
+*.o
+*.su
+*.d
+*.cyclo
+*.elf
+*.elf
+*.list
+*.o
+*.o

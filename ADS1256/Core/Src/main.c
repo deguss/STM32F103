@@ -9,9 +9,6 @@ SPI_HandleTypeDef hspi1;
 
 
 
-#define USB_TX_BUF_SIZE 256
-uint8_t usbTx[USB_TX_BUF_SIZE];
-
 void transmitArrayOverUSB(AdcDataArrayStruct *arr);
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -25,10 +22,10 @@ static uint8_t startSampling(void){
 	if (setChannel(0,-1)){	//if not succeeded
 		return 1;
 	}
-	setGain(SPS_50, PGA1);	//continuous conversation starts here
+	setGain(SPS_2000, PGA1);	//continuous conversation starts here
 
 	adcDataArray.length = ADCBUFLEN;
-	adcDataArray.sps = 50;
+	adcDataArray.sps = 2000;
 	adcDataArray.INP = 0;
 	adcDataArray.INM = -1;
 
@@ -81,7 +78,6 @@ int main(void){
 	MX_SPI1_Init();
 	uint8_t status;
 	status = setupADS1256();	//should be 0x30 for this particular piece of AD1256 (ID)
-	sprintf((char *)usbTx, "ADS1256 data logger (status:0x%02X) on the 72MHz SMT32F108\r\n",status);
 
 	BLED(0)	//end INIT
 
@@ -106,7 +102,7 @@ int main(void){
 		else { //if USB status not OK
 			if (!is_REC_ON()) {	//and if it was not connected before
 				if (HAL_GetTick() - tick_1s > 1000){ //check if 1s ellapsed
-					usb_status = CDC_Transmit_FS(usbTx, strlen((char *)usbTx));	//transmit msg
+					usb_status = CDC_Transmit_FS(&status, 1);	//transmit msg
 					tick_1s = HAL_GetTick();	//update timer with present value of time
 				}
 			}
@@ -138,27 +134,9 @@ void transmitArrayOverUSB(AdcDataArrayStruct *arr){
 
     // Calculate the total size of the data to be sent
     size_t totalSize = sizeof(AdcDataArrayStruct);
-    size_t ofs;
-
-    // Buffer to store the data to be sent
-    uint8_t buffer[totalSize];
-
-    memcpy(buffer, &arr->length,sizeof(uint16_t));
-    ofs = sizeof(uint16_t);
-
-    memcpy(buffer+ofs, &arr->sps, 	sizeof(uint16_t));
-    ofs += sizeof(uint16_t);
-
-    memcpy(buffer+ofs, &arr->INP, 	sizeof(int8_t));
-    ofs += sizeof(int8_t);
-
-    memcpy(buffer+ofs, &arr->INM, 	sizeof(int8_t));
-    ofs += sizeof(int8_t);
-
-    memcpy(buffer+ofs, arr->data, arr->length * sizeof(int32_t));
 
     // Transmit the data over USB CDC
-    CDC_Transmit_FS(buffer, totalSize);
+    CDC_Transmit_FS((uint8_t *)arr, totalSize);
 }
 
 

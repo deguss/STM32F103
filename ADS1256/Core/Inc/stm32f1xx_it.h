@@ -39,7 +39,17 @@
 /* USER CODE BEGIN EC */
 extern SPI_HandleTypeDef hspi1;
 
-#define ADCBUFLEN 500
+#define ADCBUFLEN 254
+/* APP_TX_DATA_SIZE = 1024, 6 bytes header, 4 bytes per int32_t -> (1024-6)/4=254
+ * packet transmit time for different sampling frequencies
+ * at 30000 sps packet period = 8.50ms
+ * at 15000 sps packet period = 16.80ms
+ * at 7500 sps packet period = 33.60ms
+ * at 3750 sps packet period = 67.20ms
+ * at 2000 sps packet period = 126.40ms
+ * at 1000 sps packet period = 252.80ms
+ * at 500 sps packet period = 508.00ms
+ */
 
 typedef struct {
     uint16_t length;

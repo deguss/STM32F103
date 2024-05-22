@@ -2631,3 +2631,575 @@ java.lang.NullPointerException: Cannot invoke "org.eclipse.cdt.dsf.gdb.service.I
 
 !ENTRY org.eclipse.core.jobs 2 2 2024-03-23 14:36:23.634
 !MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.cdt.dsf.gdb.service.GDBBackend$MonitorJob
+!SESSION 2024-03-23 15:13:45.764 -----------------------------------------------
+eclipse.buildId=Version 1.14.1
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-03-23 15:14:00.159
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-03-23 15:14:00.163
+!MESSAGE Log4j2 initialized with config file D:\STM_blackpill\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-03-23 15:14:15.155
+!MESSAGE Started RMI Server, listening on port 41337
+!SESSION 2024-03-25 12:16:22.461 -----------------------------------------------
+eclipse.buildId=Version 1.14.1
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-03-25 12:17:08.061
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-03-25 12:17:08.065
+!MESSAGE Log4j2 initialized with config file D:\STM_blackpill\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-03-25 12:17:47.383
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.core.resources 4 77 2024-03-25 12:21:44.353
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-03-25 12:21:44.353
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-03-25 12:21:44.353
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-03-25 12:21:44.357
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-03-25 12:22:13.756
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-03-25 12:22:13.756
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-03-25 12:22:13.757
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-03-25 12:22:13.757
+!MESSAGE Project is null
+!SESSION 2024-05-22 09:24:58.723 -----------------------------------------------
+eclipse.buildId=Version 1.14.1
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-05-22 09:25:36.246
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-05-22 09:25:36.261
+!MESSAGE Log4j2 initialized with config file D:\STM_blackpill\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-05-22 09:26:03.184
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 10:31:11.397
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 10:31:11.398
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 10:31:11.398
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 10:31:11.399
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 10:31:43.101
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 10:31:43.101
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 10:31:43.102
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 10:31:43.102
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 10:31:43.707
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 10:31:43.707
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 10:31:43.707
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 10:31:43.708
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 10:36:46.316
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 10:36:46.317
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 10:36:46.317
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 10:36:46.317
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 10:36:46.614
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 10:36:46.614
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 10:36:46.614
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 10:36:46.614
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 10:38:54.966
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 10:38:54.966
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 10:38:54.966
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 10:38:54.967
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 10:38:55.363
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 10:38:55.363
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 10:38:55.363
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 10:38:55.364
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 10:52:10.384
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 10:52:10.384
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 10:52:10.384
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 10:52:10.384
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 10:52:10.667
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 10:52:10.667
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 10:52:10.667
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 10:52:10.668
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 17:12:18.272
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 17:12:18.272
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 17:12:18.272
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 17:12:18.275
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 17:12:18.771
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 17:12:18.771
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 17:12:18.771
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 17:12:18.772
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 17:25:28.976
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 17:25:28.976
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 17:25:28.976
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 17:25:28.977
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 17:25:29.202
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 17:25:29.202
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 17:25:29.202
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 17:25:29.203
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 17:32:12.481
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 17:32:12.481
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 17:32:12.481
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 17:32:12.481
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 17:32:12.714
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 17:32:12.714
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 17:32:12.714
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 17:32:12.715
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 17:36:54.882
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 17:36:54.882
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 17:36:54.882
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 17:36:54.883
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 17:36:55.167
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 17:36:55.167
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 17:36:55.167
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 17:36:55.169
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 17:41:18.095
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 17:41:18.095
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 17:41:18.095
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 17:41:18.096
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 17:41:18.475
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 17:41:18.475
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 17:41:18.475
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 17:41:18.476
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 17:44:10.294
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 17:44:10.294
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 17:44:10.294
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 17:44:10.295
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 17:44:10.537
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 17:44:10.537
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 17:44:10.537
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 17:44:10.537
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 17:46:20.497
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 17:46:20.498
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 17:46:20.498
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 17:46:20.498
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 17:46:20.800
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 17:46:20.800
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 17:46:20.800
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 17:46:20.800
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 18:07:27.831
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 18:07:27.831
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 18:07:27.831
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 18:07:27.832
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 18:07:28.135
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 18:07:28.135
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 18:07:28.135
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 18:07:28.140
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 18:30:25.875
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 18:30:25.875
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 18:30:25.875
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 18:30:25.877
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 18:31:20.518
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 18:31:20.518
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 18:31:20.518
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 18:31:20.519
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 18:31:20.751
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 18:31:20.751
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 18:31:20.751
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 18:31:20.751
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 18:31:35.431
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 18:31:35.431
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 18:31:35.431
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 18:31:35.432
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 18:33:19.022
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 18:33:19.022
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 18:33:19.022
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 18:33:19.025
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 18:33:24.472
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 18:33:24.472
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 18:33:24.472
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 18:33:24.473
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 18:33:24.784
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 18:33:24.785
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 18:33:24.785
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 18:33:24.785
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 21:13:06.485
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 21:13:06.485
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 21:13:06.485
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 21:13:06.486
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.ui 4 4 2024-05-22 21:13:40.962
+!MESSAGE Plug-in 'com.st.stm32cube.ide.mcu.debug.dsf.oss' contributed an invalid Menu Extension (Path: 'org.eclipse.ui.run' is invalid): com.st.stm32cube.ide.mcu.debug.dsf.oss.ui.action.TerminateAndRelaunch
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 21:17:10.697
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 21:17:10.697
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 21:17:10.697
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 21:17:10.698
+!MESSAGE Project is null
+!SESSION 2024-05-22 21:35:46.210 -----------------------------------------------
+eclipse.buildId=Version 1.14.1
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-05-22 21:36:07.975
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-05-22 21:36:07.978
+!MESSAGE Log4j2 initialized with config file D:\STM_blackpill\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-05-22 21:36:26.105
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 21:44:49.321
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 21:44:49.321
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 21:44:49.321
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 21:44:49.325
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.ui 4 4 2024-05-22 21:44:49.459
+!MESSAGE Unable to create part
+!STACK 1
+org.eclipse.ui.PartInitException: Invalid Input: Must be project's active .ioc file.
+
+Project's 'ADS1256' active one is 'ADS1256.ioc' file
+	at com.st.stm32cube.common.mx.editor.CubeMxEditor.init(CubeMxEditor.java:852)
+	at org.eclipse.ui.internal.EditorReference.initialize(EditorReference.java:353)
+	at org.eclipse.ui.internal.e4.compatibility.CompatibilityPart.create(CompatibilityPart.java:344)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.e4.core.internal.di.MethodRequestor.execute(MethodRequestor.java:58)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.processAnnotated(InjectorImpl.java:971)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.processAnnotated(InjectorImpl.java:936)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.internalInject(InjectorImpl.java:142)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.internalMake(InjectorImpl.java:386)
+	at org.eclipse.e4.core.internal.di.InjectorImpl.make(InjectorImpl.java:313)
+	at org.eclipse.e4.core.contexts.ContextInjectionFactory.make(ContextInjectionFactory.java:202)
+	at org.eclipse.e4.ui.internal.workbench.ReflectionContributionFactory.createFromBundle(ReflectionContributionFactory.java:91)
+	at org.eclipse.e4.ui.internal.workbench.ReflectionContributionFactory.doCreate(ReflectionContributionFactory.java:60)
+	at org.eclipse.e4.ui.internal.workbench.ReflectionContributionFactory.create(ReflectionContributionFactory.java:42)
+	at org.eclipse.e4.ui.workbench.renderers.swt.ContributedPartRenderer.createWidget(ContributedPartRenderer.java:132)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.createWidget(PartRenderingEngine.java:995)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.safeCreateGui(PartRenderingEngine.java:659)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.safeCreateGui(PartRenderingEngine.java:763)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$2.run(PartRenderingEngine.java:728)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.createGui(PartRenderingEngine.java:712)
+	at org.eclipse.e4.ui.internal.workbench.PartServiceImpl.lambda$0(PartServiceImpl.java:105)
+	at org.eclipse.e4.ui.services.internal.events.UIEventHandler.lambda$0(UIEventHandler.java:38)
+	at org.eclipse.swt.widgets.Synchronizer.syncExec(Synchronizer.java:183)
+	at org.eclipse.ui.internal.UISynchronizer.syncExec(UISynchronizer.java:133)
+	at org.eclipse.swt.widgets.Display.syncExec(Display.java:4803)
+	at org.eclipse.e4.ui.workbench.swt.DisplayUISynchronize.syncExec(DisplayUISynchronize.java:34)
+	at org.eclipse.e4.ui.services.internal.events.UIEventHandler.handleEvent(UIEventHandler.java:38)
+	at org.eclipse.equinox.internal.event.EventHandlerWrapper.handleEvent(EventHandlerWrapper.java:205)
+	at org.eclipse.equinox.internal.event.EventHandlerTracker.dispatchEvent(EventHandlerTracker.java:203)
+	at org.eclipse.equinox.internal.event.EventHandlerTracker.dispatchEvent(EventHandlerTracker.java:1)
+	at org.eclipse.osgi.framework.eventmgr.EventManager.dispatchEvent(EventManager.java:234)
+	at org.eclipse.osgi.framework.eventmgr.ListenerQueue.dispatchEventSynchronous(ListenerQueue.java:151)
+	at org.eclipse.equinox.internal.event.EventAdminImpl.dispatchEvent(EventAdminImpl.java:133)
+	at org.eclipse.equinox.internal.event.EventAdminImpl.sendEvent(EventAdminImpl.java:75)
+	at org.eclipse.equinox.internal.event.EventComponent.sendEvent(EventComponent.java:44)
+	at org.eclipse.e4.ui.services.internal.events.EventBroker.send(EventBroker.java:55)
+	at org.eclipse.e4.ui.internal.workbench.UIEventPublisher.notifyChanged(UIEventPublisher.java:63)
+	at org.eclipse.emf.common.notify.impl.BasicNotifierImpl.eNotify(BasicNotifierImpl.java:424)
+	at org.eclipse.e4.ui.model.application.ui.impl.ElementContainerImpl.setSelectedElementGen(ElementContainerImpl.java:170)
+	at org.eclipse.e4.ui.model.application.ui.impl.ElementContainerImpl.setSelectedElement(ElementContainerImpl.java:188)
+	at org.eclipse.e4.ui.internal.workbench.ModelServiceImpl.showElementInWindow(ModelServiceImpl.java:661)
+	at org.eclipse.e4.ui.internal.workbench.ModelServiceImpl.bringToTop(ModelServiceImpl.java:625)
+	at org.eclipse.e4.ui.internal.workbench.PartServiceImpl.delegateBringToTop(PartServiceImpl.java:796)
+	at org.eclipse.e4.ui.internal.workbench.PartServiceImpl.bringToTop(PartServiceImpl.java:401)
+	at org.eclipse.e4.ui.internal.workbench.PartServiceImpl.showPart(PartServiceImpl.java:1270)
+	at org.eclipse.ui.internal.WorkbenchPage.busyOpenEditor(WorkbenchPage.java:3233)
+	at org.eclipse.ui.internal.WorkbenchPage.lambda$11(WorkbenchPage.java:3123)
+	at org.eclipse.swt.custom.BusyIndicator.showWhile(BusyIndicator.java:67)
+	at org.eclipse.ui.internal.WorkbenchPage.openEditor(WorkbenchPage.java:3121)
+	at org.eclipse.ui.internal.WorkbenchPage.openEditor(WorkbenchPage.java:3091)
+	at org.eclipse.ui.internal.WorkbenchPage.openEditor(WorkbenchPage.java:3082)
+	at org.eclipse.ui.ide.IDE.openEditor(IDE.java:548)
+	at org.eclipse.ui.ide.IDE.openEditor(IDE.java:508)
+	at org.eclipse.ui.actions.OpenFileAction.openFile(OpenFileAction.java:103)
+	at org.eclipse.ui.actions.OpenSystemEditorAction.run(OpenSystemEditorAction.java:96)
+	at org.eclipse.ui.actions.RetargetAction.run(RetargetAction.java:215)
+	at org.eclipse.ui.navigator.CommonNavigatorManager$1.open(CommonNavigatorManager.java:183)
+	at org.eclipse.ui.OpenAndLinkWithEditorHelper$InternalListener.open(OpenAndLinkWithEditorHelper.java:48)
+	at org.eclipse.jface.viewers.StructuredViewer$2.run(StructuredViewer.java:801)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jface.util.SafeRunnable.run(SafeRunnable.java:174)
+	at org.eclipse.jface.viewers.StructuredViewer.fireOpen(StructuredViewer.java:798)
+	at org.eclipse.jface.viewers.StructuredViewer.handleOpen(StructuredViewer.java:1121)
+	at org.eclipse.ui.navigator.CommonViewer.handleOpen(CommonViewer.java:452)
+	at org.eclipse.jface.util.OpenStrategy.fireOpenEvent(OpenStrategy.java:296)
+	at org.eclipse.jface.util.OpenStrategy$1.handleEvent(OpenStrategy.java:331)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4274)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1066)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4072)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3660)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:645)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:552)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:171)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:651)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:588)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1459)
+!SUBENTRY 1 org.eclipse.ui 4 0 2024-05-22 21:44:49.465
+!MESSAGE Invalid Input: Must be project's active .ioc file.
+
+Project's 'ADS1256' active one is 'ADS1256.ioc' file
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 21:44:59.997
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 21:44:59.997
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 21:44:59.997
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+
+!ENTRY com.st.stm32cube.common.projectcreation 4 0 2024-05-22 21:44:59.998
+!MESSAGE Project is null
+
+!ENTRY org.eclipse.core.resources 4 77 2024-05-22 22:20:05.076
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2024-05-22 22:20:05.076
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2024-05-22 22:20:05.076
+!MESSAGE D:\STM_blackpill\ADS1256 overlaps the location of another project: 'ADS1256'
+!SESSION 2024-05-22 22:30:27.615 -----------------------------------------------
+eclipse.buildId=Version 1.14.1
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-05-22 22:30:46.955
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-05-22 22:30:46.958
+!MESSAGE Log4j2 initialized with config file D:\STM_blackpill\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-05-22 22:31:03.143
+!MESSAGE Started RMI Server, listening on port 41337

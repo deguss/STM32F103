@@ -60,12 +60,15 @@ void EXTI0_IRQHandler(void){
 
  /* DATA READY INTTERUPT FROM ADS1256 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+	//static int32_t testSignal;
 	//will be called on a falling edge of DRDY
 	if (GPIO_Pin == GPIO_PIN_0){
 		HAL_SPI_Receive(&hspi1, adcData, 3, HAL_MAX_DELAY); // Receive 3 bytes of data
 
 		//store in a ring buffer
 		adcDataArray.data[idx] = concatenateToInt32(adcData);
+		//adcDataArray.data[idx] = testSignal;
+		//testSignal--;
 
 		idx++;
 		if(idx >= ADCBUFLEN){
