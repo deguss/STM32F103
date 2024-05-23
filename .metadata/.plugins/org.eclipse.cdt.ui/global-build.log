@@ -1273,3 +1273,896 @@ Finished building: default.size.stdout
 arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
 Finished building: ADS1256.list
  
+22:50:12 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  39880	    484	   7628	  47992	   bb78	ADS1256.elf
+Finished building: default.size.stdout
+ 
+23:48:11 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../USB_DEVICE/Target/usbd_conf.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/Target/usbd_conf.d" -MT"USB_DEVICE/Target/usbd_conf.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/Target/usbd_conf.o"
+In file included from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:29,
+                 from ../USB_DEVICE/Target/usbd_conf.c:24:
+../Core/Inc/stm32f1xx_it.h:65:16: warning: 'bufferSizes' defined but not used [-Wunused-variable]
+   65 | static uint8_t bufferSizes[16] = {
+      |                ^~~~~~~~~~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:29,
+                 from ../USB_DEVICE/Target/usbd_conf.c:24:
+../Core/Inc/ads1256.h:101:16: warning: 'sps_const' defined but not used [-Wunused-variable]
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+../Core/Inc/ads1256.h:82:17: warning: 'sps' defined but not used [-Wunused-variable]
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+arm-none-eabi-gcc "../USB_DEVICE/App/usb_device.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usb_device.d" -MT"USB_DEVICE/App/usb_device.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usb_device.o"
+In file included from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:29,
+                 from ../USB_DEVICE/App/usb_device.h:32,
+                 from ../USB_DEVICE/App/usb_device.c:23:
+../Core/Inc/stm32f1xx_it.h:65:16: warning: 'bufferSizes' defined but not used [-Wunused-variable]
+   65 | static uint8_t bufferSizes[16] = {
+      |                ^~~~~~~~~~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:29,
+                 from ../USB_DEVICE/App/usb_device.h:32,
+                 from ../USB_DEVICE/App/usb_device.c:23:
+../Core/Inc/ads1256.h:101:16: warning: 'sps_const' defined but not used [-Wunused-variable]
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+../Core/Inc/ads1256.h:82:17: warning: 'sps' defined but not used [-Wunused-variable]
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_cdc_if.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_cdc_if.d" -MT"USB_DEVICE/App/usbd_cdc_if.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_cdc_if.o"
+In file included from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h:29,
+                 from ../USB_DEVICE/App/usbd_cdc_if.h:30,
+                 from ../USB_DEVICE/App/usbd_cdc_if.c:22:
+../Core/Inc/stm32f1xx_it.h:65:16: warning: 'bufferSizes' defined but not used [-Wunused-variable]
+   65 | static uint8_t bufferSizes[16] = {
+      |                ^~~~~~~~~~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h:29,
+                 from ../USB_DEVICE/App/usbd_cdc_if.h:30,
+                 from ../USB_DEVICE/App/usbd_cdc_if.c:22:
+../Core/Inc/ads1256.h:101:16: warning: 'sps_const' defined but not used [-Wunused-variable]
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+../Core/Inc/ads1256.h:82:17: warning: 'sps' defined but not used [-Wunused-variable]
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_desc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_desc.d" -MT"USB_DEVICE/App/usbd_desc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_desc.o"
+In file included from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h:29,
+                 from ../USB_DEVICE/App/usbd_desc.c:22:
+../Core/Inc/stm32f1xx_it.h:65:16: warning: 'bufferSizes' defined but not used [-Wunused-variable]
+   65 | static uint8_t bufferSizes[16] = {
+      |                ^~~~~~~~~~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h:29,
+                 from ../USB_DEVICE/App/usbd_desc.c:22:
+../Core/Inc/ads1256.h:101:16: warning: 'sps_const' defined but not used [-Wunused-variable]
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+../Core/Inc/ads1256.h:82:17: warning: 'sps' defined but not used [-Wunused-variable]
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o"
+In file included from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c:21:
+../Core/Inc/stm32f1xx_it.h:65:16: warning: 'bufferSizes' defined but not used [-Wunused-variable]
+   65 | static uint8_t bufferSizes[16] = {
+      |                ^~~~~~~~~~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c:21:
+../Core/Inc/ads1256.h:101:16: warning: 'sps_const' defined but not used [-Wunused-variable]
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+../Core/Inc/ads1256.h:82:17: warning: 'sps' defined but not used [-Wunused-variable]
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o"
+In file included from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c:21:
+../Core/Inc/stm32f1xx_it.h:65:16: warning: 'bufferSizes' defined but not used [-Wunused-variable]
+   65 | static uint8_t bufferSizes[16] = {
+      |                ^~~~~~~~~~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c:21:
+../Core/Inc/ads1256.h:101:16: warning: 'sps_const' defined but not used [-Wunused-variable]
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+../Core/Inc/ads1256.h:82:17: warning: 'sps' defined but not used [-Wunused-variable]
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o"
+In file included from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c:21:
+../Core/Inc/stm32f1xx_it.h:65:16: warning: 'bufferSizes' defined but not used [-Wunused-variable]
+   65 | static uint8_t bufferSizes[16] = {
+      |                ^~~~~~~~~~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c:21:
+../Core/Inc/ads1256.h:101:16: warning: 'sps_const' defined but not used [-Wunused-variable]
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+../Core/Inc/ads1256.h:82:17: warning: 'sps' defined but not used [-Wunused-variable]
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o"
+In file included from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c:59:
+../Core/Inc/stm32f1xx_it.h:65:16: warning: 'bufferSizes' defined but not used [-Wunused-variable]
+   65 | static uint8_t bufferSizes[16] = {
+      |                ^~~~~~~~~~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../USB_DEVICE/Target/usbd_conf.h:33,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h:29,
+                 from ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c:59:
+../Core/Inc/ads1256.h:101:16: warning: 'sps_const' defined but not used [-Wunused-variable]
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+../Core/Inc/ads1256.h:82:17: warning: 'sps' defined but not used [-Wunused-variable]
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+In file included from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:82:17: error: redefinition of 'sps'
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/ads1256.h:5,
+                 from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:82:17: note: previous definition of 'sps' with type 'uint16_t[16]' {aka 'short unsigned int[16]'}
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+In file included from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:101:16: error: redefinition of 'sps_const'
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/ads1256.h:5,
+                 from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:101:16: note: previous definition of 'sps_const' with type 'uint8_t[16]' {aka 'unsigned char[16]'}
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+In file included from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:101:16: warning: 'sps_const' defined but not used [-Wunused-variable]
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+../Core/Inc/ads1256.h:82:17: warning: 'sps' defined but not used [-Wunused-variable]
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+In file included from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/ads1256.h:5,
+                 from ../Core/Src/ads1256.c:1:
+../Core/Inc/stm32f1xx_it.h:65:16: warning: 'bufferSizes' defined but not used [-Wunused-variable]
+   65 | static uint8_t bufferSizes[16] = {
+      |                ^~~~~~~~~~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/ads1256.h:5,
+                 from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:101:16: warning: 'sps_const' defined but not used [-Wunused-variable]
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+../Core/Inc/ads1256.h:82:17: warning: 'sps' defined but not used [-Wunused-variable]
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+make: *** [Core/Src/subdir.mk:37: Core/Src/ads1256.o] Error 1
+"make all" terminated with exit code 2. Build might be incomplete.
+23:50:00 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+In file included from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:82:17: error: redefinition of 'sps'
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/ads1256.h:5,
+                 from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:82:17: note: previous definition of 'sps' with type 'uint16_t[16]' {aka 'short unsigned int[16]'}
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+In file included from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:101:16: error: redefinition of 'sps_const'
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/ads1256.h:5,
+                 from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:101:16: note: previous definition of 'sps_const' with type 'uint8_t[16]' {aka 'unsigned char[16]'}
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+In file included from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:101:16: warning: 'sps_const' defined but not used [-Wunused-variable]
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+../Core/Inc/ads1256.h:82:17: warning: 'sps' defined but not used [-Wunused-variable]
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+In file included from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/ads1256.h:5,
+                 from ../Core/Src/ads1256.c:1:
+../Core/Inc/stm32f1xx_it.h:65:16: warning: 'bufferSizes' defined but not used [-Wunused-variable]
+   65 | static uint8_t bufferSizes[16] = {
+      |                ^~~~~~~~~~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/ads1256.h:5,
+                 from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:101:16: warning: 'sps_const' defined but not used [-Wunused-variable]
+  101 | static uint8_t sps_const[16] = {
+      |                ^~~~~~~~~
+../Core/Inc/ads1256.h:82:17: warning: 'sps' defined but not used [-Wunused-variable]
+   82 | static uint16_t sps[16] = {
+      |                 ^~~
+make: *** [Core/Src/subdir.mk:37: Core/Src/ads1256.o] Error 1
+"make all" terminated with exit code 2. Build might be incomplete.
+23:53:58 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../USB_DEVICE/Target/usbd_conf.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/Target/usbd_conf.d" -MT"USB_DEVICE/Target/usbd_conf.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/Target/usbd_conf.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usb_device.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usb_device.d" -MT"USB_DEVICE/App/usb_device.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usb_device.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_cdc_if.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_cdc_if.d" -MT"USB_DEVICE/App/usbd_cdc_if.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_cdc_if.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_desc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_desc.d" -MT"USB_DEVICE/App/usbd_desc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_desc.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o"
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+In file included from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:82:16: error: redefinition of 'sps'
+   82 | const uint16_t sps[16] = {
+      |                ^~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/ads1256.h:5,
+                 from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:82:16: note: previous definition of 'sps' with type 'const uint16_t[16]' {aka 'const short unsigned int[16]'}
+   82 | const uint16_t sps[16] = {
+      |                ^~~
+In file included from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:101:15: error: redefinition of 'sps_const'
+  101 | const uint8_t sps_const[16] = {
+      |               ^~~~~~~~~
+In file included from ../Core/Inc/stm32f1xx_it.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ../Core/Inc/ads1256.h:5,
+                 from ../Core/Src/ads1256.c:1:
+../Core/Inc/ads1256.h:101:15: note: previous definition of 'sps_const' with type 'const uint8_t[16]' {aka 'const unsigned char[16]'}
+  101 | const uint8_t sps_const[16] = {
+      |               ^~~~~~~~~
+make: *** [Core/Src/subdir.mk:37: Core/Src/ads1256.o] Error 1
+"make all" terminated with exit code 2. Build might be incomplete.
+23:56:43 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../USB_DEVICE/Target/usbd_conf.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/Target/usbd_conf.d" -MT"USB_DEVICE/Target/usbd_conf.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/Target/usbd_conf.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usb_device.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usb_device.d" -MT"USB_DEVICE/App/usb_device.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usb_device.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_cdc_if.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_cdc_if.d" -MT"USB_DEVICE/App/usbd_cdc_if.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_cdc_if.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_desc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_desc.d" -MT"USB_DEVICE/App/usbd_desc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_desc.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o"
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/stm32f1xx_hal_msp.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_hal_msp.d" -MT"Core/Src/stm32f1xx_hal_msp.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_hal_msp.o"
+arm-none-eabi-gcc "../Core/Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_it.d" -MT"Core/Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_it.o"
+../Core/Src/stm32f1xx_it.c: In function 'HAL_GPIO_EXTI_Callback':
+../Core/Src/stm32f1xx_it.c:75:27: error: 'samplerateBuffersize' undeclared (first use in this function)
+   75 |                 if(idx >= samplerateBuffersize[sps_index][1]){
+      |                           ^~~~~~~~~~~~~~~~~~~~
+../Core/Src/stm32f1xx_it.c:75:27: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:37: Core/Src/stm32f1xx_it.o] Error 1
+"make all" terminated with exit code 2. Build might be incomplete.
+23:59:54 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../USB_DEVICE/Target/usbd_conf.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/Target/usbd_conf.d" -MT"USB_DEVICE/Target/usbd_conf.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/Target/usbd_conf.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usb_device.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usb_device.d" -MT"USB_DEVICE/App/usb_device.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usb_device.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_cdc_if.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_cdc_if.d" -MT"USB_DEVICE/App/usbd_cdc_if.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_cdc_if.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_desc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_desc.d" -MT"USB_DEVICE/App/usbd_desc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_desc.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_it.d" -MT"Core/Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_it.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/stm32f1xx_hal_msp.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/stm32f1xx_hal_msp.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/stm32f1xx_hal_msp.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/stm32f1xx_it.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/stm32f1xx_it.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/stm32f1xx_it.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usb_device.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usb_device.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usb_device.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usbd_cdc_if.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usbd_cdc_if.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usbd_cdc_if.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usbd_desc.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usbd_desc.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usbd_desc.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/Target/usbd_conf.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/Target/usbd_conf.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:105: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/Target/usbd_conf.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:68: ADS1256.elf] Error 1
+"make all" terminated with exit code 2. Build might be incomplete.
+00:06:37 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../USB_DEVICE/Target/usbd_conf.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/Target/usbd_conf.d" -MT"USB_DEVICE/Target/usbd_conf.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/Target/usbd_conf.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usb_device.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usb_device.d" -MT"USB_DEVICE/App/usb_device.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usb_device.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_cdc_if.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_cdc_if.d" -MT"USB_DEVICE/App/usbd_cdc_if.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_cdc_if.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_desc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_desc.d" -MT"USB_DEVICE/App/usbd_desc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_desc.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o"
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/stm32f1xx_hal_msp.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_hal_msp.d" -MT"Core/Src/stm32f1xx_hal_msp.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_hal_msp.o"
+arm-none-eabi-gcc "../Core/Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_it.d" -MT"Core/Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_it.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/stm32f1xx_hal_msp.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/stm32f1xx_hal_msp.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/stm32f1xx_hal_msp.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/stm32f1xx_it.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/stm32f1xx_it.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/stm32f1xx_it.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usb_device.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usb_device.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usb_device.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usbd_cdc_if.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usbd_cdc_if.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usbd_cdc_if.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usbd_desc.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usbd_desc.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usbd_desc.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/Target/usbd_conf.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: multiple definition of `sps'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:86: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/Target/usbd_conf.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: multiple definition of `sps_const'; ./Core/Src/ads1256.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/ads1256.h:88: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/Target/usbd_conf.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:68: ADS1256.elf] Error 1
+"make all" terminated with exit code 2. Build might be incomplete.
+00:08:34 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../USB_DEVICE/Target/usbd_conf.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/Target/usbd_conf.d" -MT"USB_DEVICE/Target/usbd_conf.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/Target/usbd_conf.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usb_device.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usb_device.d" -MT"USB_DEVICE/App/usb_device.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usb_device.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_cdc_if.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_cdc_if.d" -MT"USB_DEVICE/App/usbd_cdc_if.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_cdc_if.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_desc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_desc.d" -MT"USB_DEVICE/App/usbd_desc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_desc.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o"
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/stm32f1xx_hal_msp.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_hal_msp.d" -MT"Core/Src/stm32f1xx_hal_msp.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_hal_msp.o"
+arm-none-eabi-gcc "../Core/Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_it.d" -MT"Core/Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_it.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/stm32f1xx_hal_msp.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Core/Src/stm32f1xx_it.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usb_device.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usbd_cdc_if.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/App/usbd_desc.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+C:/Program Files/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/ld.exe: ./USB_DEVICE/Target/usbd_conf.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: multiple definition of `bufferSizes'; ./Core/Src/main.o:D:/STM_blackpill/ADS1256/Debug/../Core/Inc/stm32f1xx_it.h:65: first defined here
+collect2.exe: error: ld returned 1 exit status
+make: *** [makefile:68: ADS1256.elf] Error 1
+"make all" terminated with exit code 2. Build might be incomplete.
+00:08:59 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../USB_DEVICE/Target/usbd_conf.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/Target/usbd_conf.d" -MT"USB_DEVICE/Target/usbd_conf.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/Target/usbd_conf.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usb_device.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usb_device.d" -MT"USB_DEVICE/App/usb_device.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usb_device.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_cdc_if.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_cdc_if.d" -MT"USB_DEVICE/App/usbd_cdc_if.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_cdc_if.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_desc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_desc.d" -MT"USB_DEVICE/App/usbd_desc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_desc.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o"
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/stm32f1xx_hal_msp.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_hal_msp.d" -MT"Core/Src/stm32f1xx_hal_msp.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_hal_msp.o"
+arm-none-eabi-gcc "../Core/Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_it.d" -MT"Core/Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_it.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40016	    484	   7628	  48128	   bc00	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+00:09:13 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../USB_DEVICE/Target/usbd_conf.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/Target/usbd_conf.d" -MT"USB_DEVICE/Target/usbd_conf.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/Target/usbd_conf.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usb_device.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usb_device.d" -MT"USB_DEVICE/App/usb_device.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usb_device.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_cdc_if.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_cdc_if.d" -MT"USB_DEVICE/App/usbd_cdc_if.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_cdc_if.o"
+arm-none-eabi-gcc "../USB_DEVICE/App/usbd_desc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"USB_DEVICE/App/usbd_desc.d" -MT"USB_DEVICE/App/usbd_desc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "USB_DEVICE/App/usbd_desc.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o"
+arm-none-eabi-gcc "../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.d" -MT"Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.o"
+arm-none-eabi-gcc "../Core/Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_it.d" -MT"Core/Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_it.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40016	    484	   7628	  48128	   bc00	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+00:09:24 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40016	    484	   7628	  48128	   bc00	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+00:14:14 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_it.d" -MT"Core/Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_it.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40012	    484	   7628	  48124	   bbfc	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+00:14:25 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40012	    484	   7628	  48124	   bbfc	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+00:19:46 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40012	    484	   7628	  48124	   bbfc	ADS1256.elf
+Finished building: default.size.stdout
+ 
+00:22:39 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40032	    484	   7628	  48144	   bc10	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+00:31:37 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40028	    484	   7628	  48140	   bc0c	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+00:31:43 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40028	    484	   7628	  48140	   bc0c	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+00:34:07 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40028	    484	   7628	  48140	   bc0c	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+01:53:00 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40028	    484	   7628	  48140	   bc0c	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+01:55:08 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40028	    484	   7628	  48140	   bc0c	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+02:32:01 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40028	    484	   7628	  48140	   bc0c	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+02:32:16 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40028	    484	   7628	  48140	   bc0c	ADS1256.elf
+Finished building: default.size.stdout
+ 
+02:46:52 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_it.d" -MT"Core/Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_it.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40044	    484	   7628	  48156	   bc1c	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+02:46:59 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40044	    484	   7628	  48156	   bc1c	ADS1256.elf
+Finished building: default.size.stdout
+ 
+03:02:21 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40044	    484	   7628	  48156	   bc1c	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+03:06:32 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40052	    484	   7628	  48164	   bc24	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+03:09:17 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40052	    484	   7628	  48164	   bc24	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+03:11:27 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40056	    484	   7628	  48168	   bc28	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+03:14:44 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40064	    484	   7628	  48176	   bc30	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+03:16:55 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40068	    484	   7628	  48180	   bc34	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+03:25:33 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40088	    484	   7628	  48200	   bc48	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+03:31:59 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+arm-none-eabi-gcc "../Core/Src/stm32f1xx_it.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32f1xx_it.d" -MT"Core/Src/stm32f1xx_it.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/stm32f1xx_it.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40076	    484	   7628	  48188	   bc3c	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+03:43:17 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/ads1256.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/ads1256.d" -MT"Core/Src/ads1256.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/ads1256.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40080	    484	   7628	  48192	   bc40	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+03:43:58 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40080	    484	   7628	  48192	   bc40	ADS1256.elf
+Finished building: default.size.stdout
+ 
+03:54:01 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi.d" -MT"Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40084	    484	   7628	  48196	   bc44	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+03:54:09 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40084	    484	   7628	  48196	   bc44	ADS1256.elf
+Finished building: default.size.stdout
+ 
+03:55:01 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'MX_SPI1_Init':
+../Core/Src/main.c:218:32: error: 'SPI_DIRECTION_2LINE' undeclared (first use in this function); did you mean 'SPI_DIRECTION_1LINE'?
+  218 |         hspi1.Init.Direction = SPI_DIRECTION_2LINE;
+      |                                ^~~~~~~~~~~~~~~~~~~
+      |                                SPI_DIRECTION_1LINE
+../Core/Src/main.c:218:32: note: each undeclared identifier is reported only once for each function it appears in
+make: *** [Core/Src/subdir.mk:37: Core/Src/main.o] Error 1
+"make all" terminated with exit code 2. Build might be incomplete.
+03:55:19 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40080	    484	   7628	  48192	   bc40	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+03:55:24 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40080	    484	   7628	  48192	   bc40	ADS1256.elf
+Finished building: default.size.stdout
+ 
+03:56:45 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40080	    484	   7628	  48192	   bc40	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 
+04:41:33 **** Incremental Build of configuration Debug for project ADS1256 ****
+make all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "ADS1256.elf" @"objects.list"   -mcpu=cortex-m3 -T"D:\STM_blackpill\ADS1256\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="ADS1256.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: ADS1256.elf
+ 
+arm-none-eabi-size  ADS1256.elf 
+   text	   data	    bss	    dec	    hex	filename
+  40084	    484	   7628	  48196	   bc44	ADS1256.elf
+Finished building: default.size.stdout
+ 
+arm-none-eabi-objdump -h -S ADS1256.elf  > "ADS1256.list"
+Finished building: ADS1256.list
+ 

@@ -1,8 +1,12 @@
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __ADS1256_H
+#define __ADS1256_H
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include "stm32f1xx_hal.h"
-#include "main.h"
+
 
 #define NOT_DRDY   HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_1)
 
@@ -77,6 +81,13 @@
 #define MUXN_AIN7 0x07
 #define MUXN_AINCOM 0x08
 
+
+
+extern const uint16_t sps[16];
+
+extern const uint8_t sps_const[16];
+
+
 extern SPI_HandleTypeDef hspi1;
 
 
@@ -102,3 +113,4 @@ void setGain(uint8_t drate, uint8_t gain);
 
 int32_t concatenateToInt32(uint8_t *adcData);
 
+#endif

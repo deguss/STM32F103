@@ -49,7 +49,21 @@ extern SPI_HandleTypeDef hspi1;
  * at 2000 sps packet period = 126.40ms
  * at 1000 sps packet period = 252.80ms
  * at 500 sps packet period = 508.00ms
+ * at 100 sps packet period = 2.54s 	-> buflen = 50 yields packet period of 500ms
+ * at 60 sps packet period = 4.20		-> buflen = 30 yields packet period of 500ms
+ * at 50 sps packet period = 5.08		-> buflen = 25 yields packet period of 500ms
+ * at 30 sps packet period = 8.47 		-> buflen = 15 yields packet period of 500ms
+ * at 25 sps packet period = 10.16		-> buflen = 25 yields packet period of 1s
+ * at 15 sps packet period = 16.87		-> buflen = 15 yields packet period of 1s
+ * at 10 sps packet period = 25.40		-> buflen = 10 yields packet period of 1s
+ * at 5 sps packet period = 50.80		-> buflen = 5 yields packet period of 1s
+ * at 2.5 sps packet period = 101.60	-> buflen = 5 yields packet period of 2s
  */
+
+
+
+extern const uint8_t bufferSizes[16];
+
 
 typedef struct {
     uint16_t length;
@@ -61,6 +75,7 @@ typedef struct {
 
 extern uint16_t flagBufferFull;
 extern AdcDataArrayStruct adcDataArray;
+extern uint8_t sps_index;
 
 /* USER CODE END EC */
 

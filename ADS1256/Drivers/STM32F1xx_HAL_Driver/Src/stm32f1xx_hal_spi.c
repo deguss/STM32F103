@@ -977,8 +977,9 @@ HAL_StatusTypeDef HAL_SPI_Receive(SPI_HandleTypeDef *hspi, uint8_t *pData, uint1
   if ((hspi->Init.Mode == SPI_MODE_MASTER) && (hspi->Init.Direction == SPI_DIRECTION_2LINES))
   {
     hspi->State = HAL_SPI_STATE_BUSY_RX;
+    uint8_t tx_while_rx = 0x03;
     /* Call transmit-receive function to send Dummy data on Tx line and generate clock on CLK line */
-    return HAL_SPI_TransmitReceive(hspi, pData, pData, Size, Timeout);
+    return HAL_SPI_TransmitReceive(hspi, &tx_while_rx, pData, Size, Timeout);
   }
 
   /* Process Locked */

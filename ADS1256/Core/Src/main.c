@@ -22,10 +22,11 @@ static uint8_t startSampling(void){
 	if (setChannel(0,-1)){	//if not succeeded
 		return 1;
 	}
-	setGain(SPS_2000, PGA1);	//continuous conversation starts here
+	sps_index = 8;
+	setGain(sps_const[sps_index], PGA1);	//continuous conversation starts here
 
-	adcDataArray.length = ADCBUFLEN;
-	adcDataArray.sps = 2000;
+	adcDataArray.sps = sps[sps_index];
+	adcDataArray.length = bufferSizes[sps_index];
 	adcDataArray.INP = 0;
 	adcDataArray.INM = -1;
 
@@ -133,7 +134,7 @@ void transmitArrayOverUSB(AdcDataArrayStruct *arr){
 } AdcDataArrayStruct;*/
 
     // Calculate the total size of the data to be sent
-    size_t totalSize = sizeof(AdcDataArrayStruct);
+    size_t totalSize = 2*sizeof(uint16_t) + 2*sizeof(int8_t) + arr->length*sizeof(int32_t);
 
     // Transmit the data over USB CDC
     CDC_Transmit_FS((uint8_t *)arr, totalSize);
@@ -219,7 +220,7 @@ static void MX_SPI1_Init(void) {
 	hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
 	hspi1.Init.CLKPhase = SPI_PHASE_2EDGE;
 	hspi1.Init.NSS = SPI_NSS_HARD_OUTPUT;
-	hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
+	hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256; //1.12MHz
 	hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
 	hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
 	hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;

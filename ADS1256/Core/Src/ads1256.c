@@ -1,5 +1,44 @@
 #include <ads1256.h>
 
+const uint16_t sps[16] = {
+    2,
+    5,
+    10,
+    15,
+    25,
+    30,
+    50,
+    60,
+    100,
+    500,
+    1000,
+    2000,
+    3750,
+    7500,
+    15000,
+    30000
+};
+
+const uint8_t sps_const[16] = {
+    SPS_2_5,
+    SPS_5,
+    SPS_10,
+    SPS_15,
+    SPS_25,
+    SPS_30,
+    SPS_50,
+    SPS_60,
+    SPS_100,
+    SPS_500,
+    SPS_1000,
+    SPS_2000,
+    SPS_3750,
+    SPS_7500,
+    SPS_15000,
+    SPS_30000
+};
+
+
 uint8_t readRegister(uint8_t reg){
     uint8_t dat;
 
@@ -53,17 +92,21 @@ uint8_t setupADS1256() {
     // read the STATUS register
 	uint8_t status = readRegister(REG_STATUS);
     writeRegister(REG_STATUS, (status & 0xF0) | 0x02); //enable buffer amplifier
+    HAL_Delay(10);	//ths delay is needed, as DRDY line is not immediately pulled high
     while(NOT_DRDY) ;	//wait for calibration to complete
 
     // Configure the DRATE register for desired data rate
     writeRegister(REG_DRATE, SPS_50); // Set data rate to 50Hz
+    HAL_Delay(1);	//ths delay is needed, as DRDY line is not immediately pulled high
     while(NOT_DRDY) ;	//wait to complete
 
     // Configure the ADCON register
     writeRegister(REG_ADCON, PGA1 ); // Set PGA gain to 1
+    HAL_Delay(1);	//ths delay is needed, as DRDY line is not immediately pulled high
     while(NOT_DRDY) ;	//wait to complete
     
     sendCommand(CMD_SELFCAL); //start Offset and Gain Self-Calibration
+    HAL_Delay(1);	//this delay is needed, as DRDY line is not immediately pulled high
     //can last up to 2 seconds for low data rates
     while(NOT_DRDY) ;	//wait for calibration to complete
 
@@ -158,17 +201,21 @@ void setGain(uint8_t drate, uint8_t gain) {
 	sendCommand(CMD_SDATAC);  // send out SDATAC command to stop continuous reading mode.
 
 	writeRegister(REG_DRATE, drate);  // write data rate register
+	HAL_Delay(1);	//ths delay is needed, as DRDY line is not immediately pulled high
 	while(NOT_DRDY) ;	//wait to complete
 
 
 	writeRegister(REG_ADCON, 0x07 & gain);
+	HAL_Delay(1);	//ths delay is needed, as DRDY line is not immediately pulled high
 	while(NOT_DRDY) ;	//wait to complete
 
     sendCommand(CMD_SELFCAL); //start Offset and Gain Self-Calibration
+    HAL_Delay(1);	//ths delay is needed, as DRDY line is not immediately pulled high
     //can last up to 2 seconds for low data rates
     while(NOT_DRDY) ;	//wait to complete
 
     sendCommand(CMD_RDATAC);
+    HAL_Delay(10);
 }
 
 int32_t concatenateToInt32(uint8_t *adcData){

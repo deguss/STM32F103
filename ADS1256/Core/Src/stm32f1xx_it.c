@@ -46,7 +46,25 @@ uint8_t adcData[3];
 AdcDataArrayStruct adcDataArray;
 uint32_t idx=0;
 uint16_t flagBufferFull = 0;
+uint8_t  sps_index = 6;	//default 50Hz sample rate
 
+const uint8_t bufferSizes[16] = {
+    5,
+    5,
+    10,
+    15,
+    25,
+    15,
+    25,
+    30,
+    50,
+    254,
+    254,
+    254,
+    254,
+    254,
+    254
+};
 //int32_t *pAdcBuf = adcBuf;
 
 /* USER CODE END PV */
@@ -71,9 +89,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 		//testSignal--;
 
 		idx++;
-		if(idx >= ADCBUFLEN){
+		if(idx >= bufferSizes[sps_index]){
 			idx=0;
-			flagBufferFull = adcDataArray.length;
+			adcDataArray.length = bufferSizes[sps_index];
+			flagBufferFull = 1;
 		}
 	}
 
