@@ -12,3 +12,5 @@
 *.list
 *.o
 *.o
+/.metadata
+/ADS1256/.metadata
