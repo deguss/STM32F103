@@ -64,18 +64,21 @@ extern SPI_HandleTypeDef hspi1;
 
 extern const uint8_t bufferSizes[16];
 
-
+// struct must be of length MOD 4 = 0
 typedef struct {
     uint16_t length;
     uint16_t sps;
-    int8_t INP;
-    int8_t INM;
+    uint32_t time;
+    uint16_t res16;
+    uint8_t  res8;
+    uint8_t channels;
     int32_t data[ADCBUFLEN];
 } AdcDataArrayStruct;
 
 extern uint16_t flagBufferFull;
 extern AdcDataArrayStruct adcDataArray;
 extern uint8_t sps_index;
+extern uint8_t pga_index;
 
 /* USER CODE END EC */
 

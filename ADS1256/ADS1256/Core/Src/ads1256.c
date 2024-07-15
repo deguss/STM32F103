@@ -1,5 +1,10 @@
 #include <ads1256.h>
 
+
+const uint8_t pga[7] = {1,2,4,8,16,32,64};
+const uint16_t range[7] = {5000, 2500, 1250, 625, 312, 156, 78};
+const uint8_t pga_const[7] = {PGA1, PGA2, PGA4, PGA8, PGA16, PGA32, PGA64};
+
 const uint16_t sps[16] = {
     2,
     5,
@@ -86,8 +91,9 @@ void writeRegister(uint8_t reg, uint8_t data){
 uint8_t setupADS1256() {
 
 	HAL_Delay(100);
+	while(NOT_DRDY) ;	//wait to complete if any
 	sendCommand(CMD_RESET);
-	HAL_Delay(100);
+	HAL_Delay(500);
 
     // read the STATUS register
 	uint8_t status = readRegister(REG_STATUS);
@@ -120,6 +126,11 @@ void stopSampling(void){
     while(NOT_DRDY) ;	//wait to complete
     //sendCommand(CMD_RESET);
 }
+
+/* f_clckin = 7.68MHz, T_clkin = 130ns
+ * SCLK reset signal
+ * low (high for 52us) (low for 651ns) (high for 84.63us) (low for 651ns) (high for 150us)
+ */
 
 // Channel Switching for differential mode. Use -1 to set input channel to
 // AINCOM
@@ -224,9 +235,9 @@ int32_t concatenateToInt32(uint8_t *adcData){
 	uint8_t lowbyte = *(adcData + 2);
 
     // Concatenate the bytes in the correct order to form a single integer value
-    int adcValue = ((int32_t)highbyte << 16) + ((int32_t)midbyte << 8) + (int32_t)lowbyte;
-    if (adcValue & 0x00800000) {	//transfer sign bit from pos. 23 to pos. 31
-    	adcValue |= 0xff000000;
+    int32_t adcValue = ((int32_t)highbyte << 16) + ((int32_t)midbyte << 8) + (int32_t)lowbyte;
+    if (adcValue > 0x7fffff) { //if MSB == 1 -> negativ
+    	adcValue = 0-(0x1000000 - adcValue); //do 2's complement, correct sign
     }
     return adcValue;
 }

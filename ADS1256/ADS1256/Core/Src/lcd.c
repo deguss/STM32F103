@@ -10,10 +10,9 @@ const uint8_t ROW_16[] = {0x00, 0x40, 0x10, 0x50};
 const uint8_t ROW_20[] = {0x00, 0x40, 0x14, 0x54};
 /************************************** Static declarations **************************************/
 
-//static void lcd_write_data(Lcd_HandleTypeDef * lcd, uint8_t data);
 static void lcd_write_command(Lcd_HandleTypeDef * lcd, uint8_t command);
 static void lcd_write(Lcd_HandleTypeDef * lcd, uint8_t data, uint8_t len);
-
+void lcd_write_fast(Lcd_HandleTypeDef * lcd, uint8_t data, uint8_t len);
 
 /************************************** Function definitions **************************************/
 
@@ -104,6 +103,7 @@ void lcd_cursor(Lcd_HandleTypeDef * lcd, uint8_t row, uint8_t col)
  */
 void lcd_clear(Lcd_HandleTypeDef * lcd) {
 	lcd_write_command(lcd, CLEAR_DISPLAY);
+	DELAY(1);
 }
 
 void lcd_define_char(Lcd_HandleTypeDef * lcd, uint8_t code, uint8_t bitmap[]){
@@ -145,27 +145,41 @@ void lcd_write_data(Lcd_HandleTypeDef * lcd, uint8_t data)
 
 	if(lcd->mode == LCD_4_BIT_MODE)
 	{
-		lcd_write(lcd, data >> 4, LCD_NIB);
-		lcd_write(lcd, data & 0x0F, LCD_NIB);
+		lcd_write_fast(lcd, data >> 4, LCD_NIB);
+		lcd_write_fast(lcd, data & 0x0F, LCD_NIB);
 	}
 	else
 	{
-		lcd_write(lcd, data, LCD_BYTE);
+		lcd_write_fast(lcd, data, LCD_BYTE);
 	}
 
 }
+
+// used only for data writing (short strobe delay)
+void lcd_write_fast(Lcd_HandleTypeDef * lcd, uint8_t data, uint8_t len)
+{
+	HAL_GPIO_WritePin(lcd->en_port, lcd->en_pin, 1);
+	for(uint8_t i = 0; i < len; i++)
+	{
+		HAL_GPIO_WritePin(lcd->data_port[i], lcd->data_pin[i], (data >> i) & 0x01);
+	}
+	for(int i=0; i<72*5; i++)
+		__NOP();
+	HAL_GPIO_WritePin(lcd->en_port, lcd->en_pin, 0); 		// Data receive on falling edge
+}
+
 
 /**
  * Set len bits on the bus and toggle the enable line
  */
 void lcd_write(Lcd_HandleTypeDef * lcd, uint8_t data, uint8_t len)
 {
+	HAL_GPIO_WritePin(lcd->en_port, lcd->en_pin, 1);
 	for(uint8_t i = 0; i < len; i++)
 	{
 		HAL_GPIO_WritePin(lcd->data_port[i], lcd->data_pin[i], (data >> i) & 0x01);
 	}
-
-	HAL_GPIO_WritePin(lcd->en_port, lcd->en_pin, 1);
-	DELAY(1);
+	for(int i=0; i<72*200; i++)
+		__NOP();
 	HAL_GPIO_WritePin(lcd->en_port, lcd->en_pin, 0); 		// Data receive on falling edge
 }

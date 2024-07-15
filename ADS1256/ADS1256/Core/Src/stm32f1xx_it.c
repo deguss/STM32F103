@@ -30,6 +30,7 @@ AdcDataArrayStruct adcDataArray;
 uint32_t idx=0;
 uint16_t flagBufferFull = 0;
 uint8_t  sps_index = 6;	//default 50Hz sample rate
+uint8_t pga_index = 0; //default PGA = 1
 
 const uint8_t bufferSizes[16] = {
     5,
@@ -48,7 +49,8 @@ const uint8_t bufferSizes[16] = {
     254,
     254
 };
-//int32_t *pAdcBuf = adcBuf;
+
+static HAL_SPI_StateTypeDef retvalue;
 
 /* USER CODE END PV */
 
@@ -61,15 +63,16 @@ void EXTI0_IRQHandler(void){
 
  /* DATA READY INTTERUPT FROM ADS1256 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
-	//static int32_t testSignal;
+	//static int32_t testSignal=0;
 	//will be called on a falling edge of DRDY
 	if (GPIO_Pin == GPIO_PIN_0){
-		HAL_SPI_Receive(&hspi1, adcData, 3, HAL_MAX_DELAY); // Receive 3 bytes of data
+
+		retvalue = HAL_SPI_Receive(&hspi1, adcData, 3, HAL_MAX_DELAY); // Receive 3 bytes of data
 
 		//store in a ring buffer
 		adcDataArray.data[idx] = concatenateToInt32(adcData);
 		//adcDataArray.data[idx] = testSignal;
-		//testSignal--;
+		//testSignal+=1048576;
 
 		idx++;
 		if(idx >= bufferSizes[sps_index]){
@@ -236,16 +239,17 @@ void DMA1_Channel1_IRQHandler(void)
 
 /**
   * @brief This function handles USB low priority or CAN RX0 interrupts.
+  * NONO this is called when transmitting!!!
   */
 void USB_LP_CAN1_RX0_IRQHandler(void)
 {
-  /* USER CODE BEGIN USB_LP_CAN1_RX0_IRQn 0 */
+	/* USER CODE BEGIN USB_LP_CAN1_RX0_IRQn 0 */
 
-  /* USER CODE END USB_LP_CAN1_RX0_IRQn 0 */
-  HAL_PCD_IRQHandler(&hpcd_USB_FS);
-  /* USER CODE BEGIN USB_LP_CAN1_RX0_IRQn 1 */
+	/* USER CODE END USB_LP_CAN1_RX0_IRQn 0 */
+	HAL_PCD_IRQHandler(&hpcd_USB_FS);
+	/* USER CODE BEGIN USB_LP_CAN1_RX0_IRQn 1 */
 
-  /* USER CODE END USB_LP_CAN1_RX0_IRQn 1 */
+	/* USER CODE END USB_LP_CAN1_RX0_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

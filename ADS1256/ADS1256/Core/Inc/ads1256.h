@@ -84,8 +84,10 @@
 
 
 extern const uint16_t sps[16];
-
 extern const uint8_t sps_const[16];
+extern const uint8_t pga[7];
+extern const uint16_t range[7];
+extern const uint8_t pga_const[7];
 
 
 extern SPI_HandleTypeDef hspi1;
