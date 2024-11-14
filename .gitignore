@@ -1,8 +1,7 @@
 
 *.log
-/.metadata
-/.metadata
-/testProject/.metadata
+**/.metadata
+/testProject/
 *.o
 *.su
 *.d
@@ -12,5 +11,5 @@
 *.list
 *.o
 *.o
-/.metadata
-/ADS1256/.metadata
+**/Debug/
+**/Release/

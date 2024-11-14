@@ -163,7 +163,7 @@ void lcd_write_fast(Lcd_HandleTypeDef * lcd, uint8_t data, uint8_t len)
 	{
 		HAL_GPIO_WritePin(lcd->data_port[i], lcd->data_pin[i], (data >> i) & 0x01);
 	}
-	for(int i=0; i<72*5; i++)
+	for(volatile int i=0; i<72*5; i++)
 		__NOP();
 	HAL_GPIO_WritePin(lcd->en_port, lcd->en_pin, 0); 		// Data receive on falling edge
 }
@@ -179,7 +179,9 @@ void lcd_write(Lcd_HandleTypeDef * lcd, uint8_t data, uint8_t len)
 	{
 		HAL_GPIO_WritePin(lcd->data_port[i], lcd->data_pin[i], (data >> i) & 0x01);
 	}
-	for(int i=0; i<72*200; i++)
+	/* for(int i=0; i<72*200; i++) //200us delay minimum
 		__NOP();
+	*/
+	HAL_Delay(1);
 	HAL_GPIO_WritePin(lcd->en_port, lcd->en_pin, 0); 		// Data receive on falling edge
 }

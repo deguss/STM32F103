@@ -1,8 +1,0 @@
-../Core/Src/ads1256.c:42:9:readRegister	1
-../Core/Src/ads1256.c:65:6:sendCommand	1
-../Core/Src/ads1256.c:71:6:writeRegister	1
-../Core/Src/ads1256.c:86:9:setupADS1256	5
-../Core/Src/ads1256.c:117:6:stopSampling	3
-../Core/Src/ads1256.c:126:9:setChannel	19
-../Core/Src/ads1256.c:200:6:setGain	4
-../Core/Src/ads1256.c:221:9:concatenateToInt32	2

@@ -1,4 +1,5 @@
 #include "main.h"
+#include "fatfs.h"
 #include "usb_device.h"
 #include "usbd_cdc_if.h"
 #include "ads1256.h"
@@ -15,6 +16,7 @@ ADC_HandleTypeDef hadc1;
 DMA_HandleTypeDef hdma_adc1;
 I2C_HandleTypeDef hi2c1;
 UART_HandleTypeDef huart1;
+TIM_HandleTypeDef htim4;
 
 float ch0, ch1, ch2, ch3;
 float vdda, c0, c1, c2, c3;
@@ -51,18 +53,27 @@ static void MX_I2C1_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_DMA_Init(void);
 static void MX_ADC1_Init(void);
+static void MX_TIM4_Init(void);
 
 
 static int dma_complete = 0;
+static uint8_t spsi = 8;	//start with 100Hz sampling rate
+FATFS fs;
+FATFS *pfs;
+FIL fil;
+FRESULT fres;
+DWORD fre_clust;
+uint32_t totalSpace, freeSpace;
 
-static ADS_states startSampling(void){
-	//configure single ended: AIN0 referred to AINCOM
+
+static ADS_states startSampling(uint8_t sps_index){
+	//configure differential channel: AIN1 - AIN0
 	// test if communication to ADC works (read by register)
 	if (setChannel(0,1)){	//if not succeeded
 		return ADS_ERROR;
 	}
-	sps_index = 6;
-	pga_index = 0;
+
+	pga_index = 0; //start with PGA=1
 	setGain(sps_const[sps_index], pga_const[pga_index]);	//continuous conversation starts here
 
 	adcDataArray.sps = sps[sps_index];
@@ -105,7 +116,7 @@ static void updateStates(void){
 	static USBD_StatusTypeDef USB_state_past = USBD_FAIL;
 	static SD_states SD_state_past = SD_FSERROR;
 	static GPS_states GPS_state_past = GPS_ERROR;
-	static char str[21];
+	static char str[24];
 
 	if (ADS_state != ADS_state_past){
 		lcd_cursor(&lcd, 0, 0);
@@ -189,6 +200,9 @@ int main(void){
 	//float vdda, c0, c1, c2, c3;
 	//float ch0, ch1, ch2, ch3;
 	enum display_pages {ADS, INTADC} display_page = ADS;
+	char cmd_str[21];
+	char query_str[21];
+	static int elog = 0;	//indicates whether data is transmitted to host over USB. Initiated by command INIT:ELOG
 
 
 	HAL_Init();
@@ -196,7 +210,7 @@ int main(void){
 
 	MX_GPIO_Init();
 
-	HAL_Delay(200);
+	HAL_Delay(500);
 	printf("SWV (serial wire viewer) test. Stimulus Port 0.0 enabled\r\n");
 
 	Lcd_PortType ports[] = {GPIOB, GPIOB, GPIOB, GPIOB};
@@ -240,7 +254,8 @@ int main(void){
 
 
 	MX_SPI1_Init();	//interface to ADS1256
-	//MX_SPI2_Init();	//interface to SD-card
+	MX_SPI2_Init();	//interface to SD-card
+	MX_FATFS_Init();
 	//MX_USART1_UART_Init();
 	uint8_t status;
 	status = setupADS1256();	//should be 0x30 for this particular piece of AD1256 (ID)
@@ -253,16 +268,109 @@ int main(void){
 	//MX_IWDG_Init();
 	//__HAL_DBGMCU_FREEZE_IWDG();
 	lcd_clear(&lcd);
+
+
+	// Mount SD Card
+	if (f_mount(&fs, "", 0)  !=  FR_OK){
+#ifdef DEBUG
+		lcd_cursor(&lcd, 3,0);
+		sprintf(str, "NO or BAD SD CARD!");
+		printf("%s\n", str);
+		lcd_string(&lcd, str);
+#endif
+	}
+
+	// Check for free space
+	uint32_t totalSpace, freeSpace;
+	if (f_getfree("", &fre_clust, &pfs) != FR_OK){
+#ifdef DEBUG
+		lcd_cursor(&lcd, 3,0);
+		sprintf(str, "SD CARD not ready!");
+		printf("%s\n", str);
+		lcd_string(&lcd, str);
+#endif
+
+	} else {
+		totalSpace = (uint32_t)((pfs->n_fatent - 2) * pfs->csize * 0.5);
+		freeSpace = (uint32_t)(fre_clust * pfs->csize * 0.5);
+	}
+
+	// try reading a file
+	if (f_open(&fil, "tata.txt", FA_READ) != FR_OK){
+#ifdef DEBUG
+		lcd_cursor(&lcd, 3,0);
+		sprintf(str, "tata.txt can not be read!");
+		printf("%s\n", str);
+		lcd_string(&lcd, str);
+#endif
+	}
+
+
+
+
+	f_open(&fil, "info.txt", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+	f_lseek(&fil, fil.fsize);
+	f_puts("datalogger started.\n", &fil);
+	f_close(&fil);
+
 	while (1){
 		timer_mainloop = HAL_GetTick();
 
+		// -------------- interprete commands received over USB --------------------
 		if (usb_received){
+#ifdef DEBUG
 			printf("USB_received triggered\n");
 			lcd_cursor(&lcd, 3,0);
 			snprintf(str, usb_received+1, "%s", UserRxBufferFS);
 			lcd_string(&lcd, str);
+#endif
+
+			strcpy(cmd_str, (char *)(UserRxBufferFS)); //null terminate string
+			size_t char_length = strlen(cmd_str);
+			char last_char = cmd_str[char_length-1];
+
+			if (strncmp((const char *)("INIT:DLOG"), cmd_str, 9) == 0){
+				SD_state = SD_OK;
+			}
+			if (strncmp((const char *)("ABOR:DLOG"), cmd_str, 9) == 0){
+				SD_state = SD_INIT;
+			}
+
+			if (strncmp((const char *)("INIT:ELOG"), cmd_str, 9) == 0){
+				elog = 1;
+			}
+			if (strncmp((const char *)("ABOR:ELOG"), cmd_str, 9) == 0){
+				elog = false;
+			}
+
+			if (strncmp((const char *)("CONF:CHAN"), cmd_str, 9) == 0){
+				SD_state = SD_INIT;
+				ADS_state = ADS_INIT;
+				sscanf(cmd_str, "CONF:CHAN %hhu", &adcDataArray.channels);
+				printf("command %s received. Channel set to %u\n", cmd_str, adcDataArray.channels);
+
+			}
+			if (strncmp((const char *)("CONF:SPSI"), cmd_str, 9) == 0){
+				if (last_char == '?'){
+					printf("query %s received.\n", cmd_str);
+					size_t len = snprintf(query_str, sizeof(query_str), "%d", adcDataArray.sps);
+					CDC_Transmit_FS((uint8_t *)query_str, len);
+					printf("responded: %s", query_str);
+				}
+				else{
+					SD_state = SD_INIT;
+					ADS_state = ADS_INIT;
+					sscanf(cmd_str, "CONF:SPSI %hu", &spsi);
+					printf("command %s received. SPSI set to %u\n", cmd_str, spsi);
+				}
+
+			}
+			lcd_cursor(&lcd, 1, 0);
+			snprintf(str, 21, "%5dHz %1dch +-%4dmV", adcDataArray.sps, adcDataArray.channels, range[pga_index]);
+			lcd_string(&lcd, str);
+
 			usb_received = 0;
-		}
+		} // end of interpreting commands received over USB --------------------
 
 		if (dma_complete){
 			dma_complete=0;
@@ -319,12 +427,12 @@ int main(void){
 			lcd_cursor(&lcd, 2,0);
 			sprintf(str, "ADS1256 status: 0x%02X", status);
 			lcd_string(&lcd, str);
-			ADS_state = startSampling();
+			ADS_state = startSampling(spsi);
 		}
 		if (ADS_state == ADS_RECORDING && flagBufferFull) { //ADC receive ring buffer full
 			flagBufferFull = 0;
-			if (USB_state == USBD_OK){
-				//transmitArrayOverUSB(&adcDataArray);
+			if (USB_state == USBD_OK && elog){
+				transmitArrayOverUSB(&adcDataArray);
 			}
 			if (SD_state == SD_OK){
 				arraytoFile(&adcDataArray);
@@ -388,7 +496,7 @@ static void arraytoFile(AdcDataArrayStruct *arr){
 }
 
 
-//needed for prinf ITM debug output
+//needed for printf ITM debug output
 int _write(int file, char *ptr, int len){
 	for (int i=0; i<len; i++){
 		ITM_SendChar(*ptr++);
@@ -575,7 +683,7 @@ static void MX_SPI1_Init(void) {
 	hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
 	hspi1.Init.CLKPhase = SPI_PHASE_2EDGE;
 	hspi1.Init.NSS = SPI_NSS_HARD_OUTPUT;
-	hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256; //1.12MHz
+	hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16; //2.25MBit/s
 	hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
 	hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
 	hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -589,19 +697,19 @@ static void MX_SPI1_Init(void) {
 // SPI2 SD-card
 static void MX_SPI2_Init(void) {
 
-	hspi1.Instance = SPI2;
-	hspi1.Init.Mode = SPI_MODE_MASTER;
-	hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-	hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
-	hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
-	hspi1.Init.CLKPhase = SPI_PHASE_2EDGE;
-	hspi1.Init.NSS = SPI_NSS_HARD_OUTPUT;
-	hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256; //1.12MHz
-	hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
-	hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
-	hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-	hspi1.Init.CRCPolynomial = 10;
-	if (HAL_SPI_Init(&hspi1) != HAL_OK){
+	hspi2.Instance = SPI2;
+	hspi2.Init.Mode = SPI_MODE_MASTER;
+	hspi2.Init.Direction = SPI_DIRECTION_2LINES;
+	hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
+	hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
+	hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
+	hspi2.Init.NSS = SPI_NSS_SOFT; //SPI_NSS_HARD_OUTPUT;
+	hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+	hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
+	hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
+	hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+	hspi2.Init.CRCPolynomial = 10;
+	if (HAL_SPI_Init(&hspi2) != HAL_OK){
 		Error_Handler();
 	}
 
@@ -661,6 +769,56 @@ GPIO_PinState HAL_GPIO_GetOutputPin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin){
 
   return (GPIO_PinState)((odr & GPIO_Pin) != 0);
 }
+
+/**
+  * @brief TIM4 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM4_Init(void)
+{
+
+  /* USER CODE BEGIN TIM4_Init 0 */
+
+  /* USER CODE END TIM4_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM4_Init 1 */
+
+  /* USER CODE END TIM4_Init 1 */
+  htim4.Instance = TIM4;
+  htim4.Init.Prescaler = 1;
+  htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim4.Init.Period = 72;
+  htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_OnePulse_Init(&htim4, TIM_OPMODE_SINGLE) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM4_Init 2 */
+
+  /* USER CODE END TIM4_Init 2 */
+
+}
+
 
 
 

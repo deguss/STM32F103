@@ -1,8 +1,0 @@
-../Core/Src/ads1256.c:42:9:readRegister	24	static
-../Core/Src/ads1256.c:65:6:sendCommand	16	static
-../Core/Src/ads1256.c:71:6:writeRegister	24	static
-../Core/Src/ads1256.c:86:9:setupADS1256	16	static
-../Core/Src/ads1256.c:117:6:stopSampling	8	static
-../Core/Src/ads1256.c:126:9:setChannel	24	static
-../Core/Src/ads1256.c:200:6:setGain	16	static
-../Core/Src/ads1256.c:221:9:concatenateToInt32	24	static

@@ -31,6 +31,7 @@ uint32_t idx=0;
 uint16_t flagBufferFull = 0;
 uint8_t  sps_index = 6;	//default 50Hz sample rate
 uint8_t pga_index = 0; //default PGA = 1
+extern uint16_t Timer1, Timer2;
 
 const uint8_t bufferSizes[16] = {
     5,
@@ -50,7 +51,6 @@ const uint8_t bufferSizes[16] = {
     254
 };
 
-static HAL_SPI_StateTypeDef retvalue;
 
 /* USER CODE END PV */
 
@@ -63,6 +63,7 @@ void EXTI0_IRQHandler(void){
 
  /* DATA READY INTTERUPT FROM ADS1256 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
+	static HAL_StatusTypeDef retvalue;
 	//static int32_t testSignal=0;
 	//will be called on a falling edge of DRDY
 	if (GPIO_Pin == GPIO_PIN_0){
@@ -208,7 +209,10 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-
+	if(Timer1 > 0)
+		Timer1--;
+	if(Timer2 > 0)
+		Timer2--;
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
