@@ -1,7 +1,4 @@
-#define TRUE  1
-#define FALSE 0
-#define bool BYTE
-
+#include <stdbool.h>
 #include "stm32f1xx_hal.h"
 
 #include "diskio.h"
@@ -147,7 +144,8 @@ static bool SD_RxDataBlock(BYTE *buff, UINT len)
 	} while((token == 0xFF) && Timer1);
 
 	/* invalid response */
-	if(token != 0xFE) return FALSE;
+	if(token != 0xFE)
+		return false;
 
 	/* receive data */
 	do {
@@ -158,7 +156,7 @@ static bool SD_RxDataBlock(BYTE *buff, UINT len)
 	SPI_RxByte();
 	SPI_RxByte();
 
-	return TRUE;
+	return true;
 }
 
 /* transmit data block */
@@ -169,7 +167,8 @@ static bool SD_TxDataBlock(const uint8_t *buff, BYTE token)
 	uint8_t i = 0;
 
 	/* wait SD ready */
-	if (SD_ReadyWait() != 0xFF) return FALSE;
+	if (SD_ReadyWait() != 0xFF)
+		return false;
 
 	/* transmit token */
 	SPI_TxByte(token);
@@ -189,7 +188,8 @@ static bool SD_TxDataBlock(const uint8_t *buff, BYTE token)
 			resp = SPI_RxByte();
 
 			/* transmit 0x05 accepted */
-			if ((resp & 0x1F) == 0x05) break;
+			if ((resp & 0x1F) == 0x05)
+				break;
 			i++;
 		}
 
@@ -198,9 +198,10 @@ static bool SD_TxDataBlock(const uint8_t *buff, BYTE token)
 	}
 
 	/* transmit 0x05 accepted */
-	if ((resp & 0x1F) == 0x05) return TRUE;
+	if ((resp & 0x1F) == 0x05)
+		return true;
 
-	return FALSE;
+	return false;
 }
 #endif /* _USE_WRITE */
 
@@ -210,7 +211,8 @@ static BYTE SD_SendCmd(BYTE cmd, uint32_t arg)
 	uint8_t crc, res;
 
 	/* wait SD ready */
-	if (SD_ReadyWait() != 0xFF) return 0xFF;
+	if (SD_ReadyWait() != 0xFF)
+		return 0xFF;
 
 	/* transmit command */
 	SPI_TxByte(cmd); 					/* Command */
@@ -249,10 +251,12 @@ DSTATUS SD_disk_initialize(BYTE drv)
 	uint8_t n, type, ocr[4];
 
 	/* single drive, drv should be 0 */
-	if(drv) return STA_NOINIT;
+	if(drv)
+		return STA_NOINIT;
 
 	/* no disk */
-	if(Stat & STA_NODISK) return Stat;
+	if(Stat & STA_NODISK)
+		return Stat;
 
 	/* power on */
 	SD_PowerOn();
@@ -346,7 +350,8 @@ DSTATUS SD_disk_initialize(BYTE drv)
 /* return disk status */
 DSTATUS SD_disk_status(BYTE drv) 
 {
-	if (drv) return STA_NOINIT;
+	if (drv)
+		return STA_NOINIT;
 	return Stat;
 }
 
@@ -532,6 +537,7 @@ DRESULT SD_disk_ioctl(BYTE drv, BYTE ctrl, void *buff)
 				}
 				res = RES_OK;
 			}
+			break;
 		default:
 			res = RES_PARERR;
 		}

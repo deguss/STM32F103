@@ -37,6 +37,7 @@
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
+extern volatile int32_t encoder_count;
 extern SPI_HandleTypeDef hspi1;
 
 #define ADCBUFLEN 254

@@ -35,22 +35,22 @@ void Error_Handler(void);
 
 extern GPIO_PinState HAL_GPIO_GetOutputPin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
 
-#define get_BLED() 		!HAL_GPIO_GetOutputPin(GPIOB, GPIO_PIN_12)
-#define BLED(x) 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, (x == 1) ? GPIO_PIN_RESET : GPIO_PIN_SET);
-#define toggle_BLED() 	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_12);
-
-#define is_REC_ON() 	HAL_GPIO_GetOutputPin(GPIOB, GPIO_PIN_13)
-#define REC_ON() 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, 1);
-#define REC_OFF() 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, 0);
-
-#define get_GLED() 		HAL_GPIO_GetOutputPin(GPIOB, GPIO_PIN_15)
-#define GLED(x) 		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, (x == 1) ? GPIO_PIN_SET : GPIO_PIN_RESET);
-#define toggle_GLED() 	HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_15);
+#define get_PA15() 		HAL_GPIO_GetOutputPin(GPIOA, GPIO_PIN_15)
+#define PA15(x) 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, (x == 1) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+#define toggle_PA15() 	HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_15);
 
 
-/* USER CODE BEGIN Private defines */
+void SystemClock_Config(void);
+void MX_GPIO_Init(void);
+void MX_SPI1_Init(SPI_HandleTypeDef* hspi1);
+void MX_SPI2_Init(SPI_HandleTypeDef* hspi2);
+void MX_IWDG_Init(void);
+void MX_I2C1_Init(I2C_HandleTypeDef* hi2c1);
+void MX_USART1_UART_Init(UART_HandleTypeDef* huart1);
+void MX_DMA_Init(void);
+void MX_ADC1_Init(ADC_HandleTypeDef* hadc1);
+void MX_TIM4_Init(TIM_HandleTypeDef* htim4);
 
-/* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }

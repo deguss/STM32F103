@@ -259,15 +259,16 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
   */
 static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 {
-  printf("CDC_Receive_FS: %d bytes\n",*Len);
+  // printf("CDC_Receive_FS: %d bytes\n",*Len);
   usb_received = *Len;
   /* USER CODE BEGIN 6 */
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
-  for (int i=0; i<*Len; i++){
+  /* for (int i=0; i<*Len; i++){
 	  printf("0x%02X ", *(Buf+i));
   }
   printf("\n");
+  */
   return (USBD_OK);
   /* USER CODE END 6 */
 }

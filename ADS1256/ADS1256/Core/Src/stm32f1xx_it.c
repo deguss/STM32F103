@@ -19,7 +19,17 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "stm32f1xx_hal.h"
 #include "stm32f1xx_it.h"
+#include <stdbool.h>
+
+#define DEBOUNCE_DELAY_MS 10  // Debounce delay in milliseconds
+
+volatile uint8_t last_a_state = 0;
+volatile uint8_t last_b_state = 0;
+volatile int32_t encoder_count = 0; // Use an int to hold the count
+volatile uint32_t last_interrupt_time = 0; // General interrupt timing
+
 
 extern PCD_HandleTypeDef hpcd_USB_FS;
 extern DMA_HandleTypeDef hdma_adc1;
@@ -60,28 +70,151 @@ const uint8_t bufferSizes[16] = {
 void EXTI0_IRQHandler(void){
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
 }
+void EXTI2_IRQHandler(void) {
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_2);
+}
 
- /* DATA READY INTTERUPT FROM ADS1256 */
+void EXTI9_5_IRQHandler(void) {
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8);
+}
+
+void EXTI15_10_IRQHandler(void) {
+    // Handle EXTI lines 10, 11
+    if (__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_10) != RESET) {
+        HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_10); // Call the handler for EXTI pin 10
+    }
+
+    if (__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_11) != RESET) {
+        HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_11); // Call the handler for EXTI pin 11
+    }
+}
+
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
-	static HAL_StatusTypeDef retvalue;
-	//static int32_t testSignal=0;
-	//will be called on a falling edge of DRDY
-	if (GPIO_Pin == GPIO_PIN_0){
+    // Get current time in milliseconds
+    //uint32_t current_time = HAL_GetTick();
 
-		retvalue = HAL_SPI_Receive(&hspi1, adcData, 3, HAL_MAX_DELAY); // Receive 3 bytes of data
+	switch (GPIO_Pin){
+		case (GPIO_PIN_0): // DATA READY INTTERUPT FROM ADS1256
+			//will be called on a falling edge of DRDY
+			HAL_SPI_Receive(&hspi1, adcData, 3, HAL_MAX_DELAY); // Receive 3 bytes of data
 
-		//store in a ring buffer
-		adcDataArray.data[idx] = concatenateToInt32(adcData);
-		//adcDataArray.data[idx] = testSignal;
-		//testSignal+=1048576;
+			//store in a ring buffer
+			adcDataArray.data[idx] = concatenateToInt32(adcData);
 
-		idx++;
-		if(idx >= bufferSizes[sps_index]){
-			idx=0;
-			adcDataArray.length = bufferSizes[sps_index];
-			flagBufferFull = 1;
-		}
+			idx++;
+			if(idx >= bufferSizes[sps_index]){
+				idx=0;
+				adcDataArray.length = bufferSizes[sps_index];
+				flagBufferFull = 1;
+			}
+			break;
+
+		case GPIO_PIN_2: // PPS
+			printf("PPS-interrupt\n");
+			break;
+		case GPIO_PIN_8: // BUT
+			printf("BUTTON\n");
+			break;
+
+		case GPIO_PIN_10:
+		case GPIO_PIN_11:
+			// Get current time in milliseconds
+			uint32_t current_time = HAL_GetTick();
+
+			// Check if this interrupt is occurring after the debounce delay
+			if (current_time - last_interrupt_time < DEBOUNCE_DELAY_MS) {
+				return; // Ignore if within debounce time
+			}
+
+			// Read the current state of both pins
+			last_a_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10); // Read the state of ROTA
+			last_b_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11); // Read the state of ROTB
+
+			if (GPIO_Pin == GPIO_PIN_10) { // ROTA
+				// Determine the direction of rotation
+				if (last_b_state == GPIO_PIN_RESET) {
+					encoder_count--; // Rotate left
+					printf("LEFT\n");
+				} else {
+					encoder_count++; // Rotate right
+					printf("RIGHT\n");
+				}
+			} else if (GPIO_Pin == GPIO_PIN_11) { // ROTB
+				// Determine the direction of rotation
+				if (last_a_state == GPIO_PIN_RESET) {
+					encoder_count++; // Rotate right
+					printf("RIGHT\n");
+				} else {
+					encoder_count--; // Rotate left
+					printf("LEFT\n");
+				}
+			}
+
+			// Update the last interrupt time
+			last_interrupt_time = current_time;
+			break;
+/*
+		case GPIO_PIN_10: // ROTA
+			// Check if this interrupt is occurring after the debounce delay
+			// Check debounce timing
+			if (current_time - last_interrupt_time >= DEBOUNCE_DELAY_MS) {
+				// Read the current state of both ROTA and ROTB
+				uint8_t current_a_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10);
+				uint8_t current_b_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11);
+
+				// Determine the direction based on the state of B
+				if (last_a_state == GPIO_PIN_RESET && current_a_state == GPIO_PIN_SET) {
+					// If A state changes from LOW to HIGH
+					if (current_b_state == GPIO_PIN_RESET) {
+						encoder_count++; // Rotate right
+						printf("RIGHT\n");
+					} else {
+						encoder_count--; // Rotate left
+						printf("LEFT\n");
+					}
+				}
+
+				// Update last_a_state
+				last_a_state = current_a_state;
+				// Update the last interrupt time
+				last_interrupt_time = current_time;
+			}
+			break;
+
+		case GPIO_PIN_11: // ROTB
+			// Check if this interrupt is occurring after the debounce delay
+			// Check debounce timing
+			if (current_time - last_interrupt_time >= DEBOUNCE_DELAY_MS) {
+				// Read the current state of both ROTA and ROTB
+				uint8_t current_a_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10);
+				uint8_t current_b_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11);
+
+				// Determine the direction based on the state of A
+				if (last_b_state == GPIO_PIN_RESET && current_b_state == GPIO_PIN_SET) {
+					// If B state changes from LOW to HIGH
+					if (current_a_state == GPIO_PIN_RESET) {
+						encoder_count--; // Rotate left
+						printf("LEFT\n");
+					} else {
+						encoder_count++; // Rotate right
+						printf("RIGHT\n");
+					}
+				}
+
+				// Update last_b_state
+				last_b_state = current_b_state;
+				// Update the last interrupt time
+				last_interrupt_time = current_time;
+			}
+			break;
+*/
+		// Optionally, handle default case
+		default:
+			while(1);
+			// Handle unknown GPIO_Pin values
+			break;
 	}
+
 
 }
 
