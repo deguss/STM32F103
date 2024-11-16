@@ -22,6 +22,7 @@
 #include "stm32f1xx_hal.h"
 #include "stm32f1xx_it.h"
 #include <stdbool.h>
+#include "ff.h"
 
 #define DEBOUNCE_DELAY_MS 10  // Debounce delay in milliseconds
 
@@ -29,6 +30,7 @@ volatile uint8_t last_a_state = 0;
 volatile uint8_t last_b_state = 0;
 volatile int32_t encoder_count = 0; // Use an int to hold the count
 volatile uint32_t last_interrupt_time = 0; // General interrupt timing
+volatile int dma_complete = 0;
 
 
 extern PCD_HandleTypeDef hpcd_USB_FS;
@@ -62,10 +64,26 @@ const uint8_t bufferSizes[16] = {
 };
 
 
-/* USER CODE END PV */
+void PVD_IRQHandler(void){
+    HAL_PWR_PVD_IRQHandler();
+}
 
-/* Private function prototypes -----------------------------------------------*/
-/* USER CODE BEGIN PFP */
+void HAL_PWR_PVDCallback(void)
+{
+    // Check for the PVD interrupt flag
+    if (__HAL_PWR_GET_FLAG(PWR_FLAG_PVDO)){ // Check the PVD output flag
+        // Attempt to unmount the SD card to ensure data integrity
+        if (f_mount(NULL, "", 1) == FR_OK){  // Unmounting the filesystem
+        	while(1){
+        		ITM_SendString("power loss detected\r\n");
+        		HAL_Delay(1);
+        	}
+        }
+        // Clear the PVD interrupt flag
+        __HAL_PWR_CLEAR_FLAG(PWR_FLAG_PVDO);
+    }
+}
+
 
 void EXTI0_IRQHandler(void){
     HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
@@ -110,10 +128,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 			break;
 
 		case GPIO_PIN_2: // PPS
-			printf("PPS-interrupt\n");
+			//ITM_SendString("PPS-interrupt\n");
 			break;
 		case GPIO_PIN_8: // BUT
-			printf("BUTTON\n");
+			ITM_SendString("BUTTON\n");
 			break;
 
 		case GPIO_PIN_10:
@@ -134,19 +152,19 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 				// Determine the direction of rotation
 				if (last_b_state == GPIO_PIN_RESET) {
 					encoder_count--; // Rotate left
-					printf("LEFT\n");
+					ITM_SendString("LEFT\n");
 				} else {
 					encoder_count++; // Rotate right
-					printf("RIGHT\n");
+					ITM_SendString("RIGHT\n");
 				}
 			} else if (GPIO_Pin == GPIO_PIN_11) { // ROTB
 				// Determine the direction of rotation
 				if (last_a_state == GPIO_PIN_RESET) {
 					encoder_count++; // Rotate right
-					printf("RIGHT\n");
+					ITM_SendString("RIGHT\n");
 				} else {
 					encoder_count--; // Rotate left
-					printf("LEFT\n");
+					ITM_SendString("LEFT\n");
 				}
 			}
 
@@ -167,10 +185,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 					// If A state changes from LOW to HIGH
 					if (current_b_state == GPIO_PIN_RESET) {
 						encoder_count++; // Rotate right
-						printf("RIGHT\n");
+						ITM_SendString("RIGHT\n");
 					} else {
 						encoder_count--; // Rotate left
-						printf("LEFT\n");
+						ITM_SendString("LEFT\n");
 					}
 				}
 
@@ -194,10 +212,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 					// If B state changes from LOW to HIGH
 					if (current_a_state == GPIO_PIN_RESET) {
 						encoder_count--; // Rotate left
-						printf("LEFT\n");
+						ITM_SendString("LEFT\n");
 					} else {
 						encoder_count++; // Rotate right
-						printf("RIGHT\n");
+						ITM_SendString("RIGHT\n");
 					}
 				}
 
@@ -216,6 +234,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 	}
 
 
+}
+
+
+// This function is automatically called when DMA completes a transfer
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc1){
+	dma_complete = 1;
 }
 
 

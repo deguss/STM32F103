@@ -6,6 +6,9 @@
 #include "lcd.h"
 #include "stdio.h"
 #include "file.h"
+#include "core_cm3.h"  // Adjust based on your system
+
+
 
 
 
@@ -44,17 +47,14 @@ Lcd_HandleTypeDef lcd;
 static void updateStates(void);
 static void transmitArrayOverUSB(AdcDataArrayStruct *arr);
 static void arraytoFile(AdcDataArrayStruct *arr);
-
-void print_fresult(FRESULT res);
-
-
-
-static int dma_complete = 0;
-static uint8_t spsi = 8;	//start with 100Hz sampling rate
+static void ITM_Init(void);
+void ITM_SendString(const char* str);
 
 
 
-static ADS_states startSampling(uint8_t sps_index){
+
+
+static ADS_states startSampling(void){
 	//configure differential channel: AIN1 - AIN0
 	// test if communication to ADC works (read by register)
 	if (setChannel(0,1)){	//if not succeeded
@@ -62,42 +62,14 @@ static ADS_states startSampling(uint8_t sps_index){
 	}
 
 	pga_index = 0; //start with PGA=1
-	setGain(sps_const[sps_index], pga_const[pga_index]);	//continuous conversation starts here
+	setGain(getSPSRegValue(adcDataArray.sps), pga_const[pga_index]);	//continuous conversation starts here
 
-	adcDataArray.sps = sps[sps_index];
-	adcDataArray.length = bufferSizes[sps_index];
-	adcDataArray.channels = 1;
 
 	HAL_NVIC_SetPriority(EXTI0_IRQn, 5, 7);
 	HAL_NVIC_EnableIRQ(EXTI0_IRQn); //enable DRDY interrupt
 	return ADS_RECORDING; //for success
 }
 
-/*
-static void keepBlueLEDFlashing(void){
-	// produce a non-blocking 1s OFF and 50ms ON timer (heartbeat signal green LED)
-	static bool initialized = false;
-	static uint32_t tick_s, tick_r;
-
-	if (!initialized) {
-		tick_s = HAL_GetTick();
-		tick_r = HAL_GetTick();
-		initialized = true;
-	}
-
-
-	if (HAL_GetTick() - tick_s == 1000  &&  !get_BLED()){
-		//TODO: tick_s may overflow in 49 days
-		tick_r = HAL_GetTick();	//start reset timer
-		BLED(1)
-	}
-	if (HAL_GetTick() - tick_r == 50 && get_BLED()){
-		tick_s = HAL_GetTick(); //start set timer
-		BLED(0)
-	}
-
-}
-*/
 
 static void updateStates(void){
 	static ADS_states ADS_state_past = ADS_INVALID;
@@ -182,7 +154,7 @@ static void updateStates(void){
 int main(void){
 	uint32_t percent, total;
 	static uint32_t timer_USB, timer_intADC, timer_ADS, timer_mainloop;
-	static char str[21];
+	static char str[64];
 	uint16_t intADCraw[5];
 	static float vrefint = 1200;
 	//float vdda, c0, c1, c2, c3;
@@ -195,10 +167,11 @@ int main(void){
 
 	HAL_Init();
 	SystemClock_Config();
+	ITM_Init();
 	MX_GPIO_Init();
 
 	HAL_Delay(500);
-	printf("\r\nSWV (serial wire viewer) test. Stimulus Port 0.0 enabled\r\n");
+	ITM_SendString("\r\nSWV (serial wire viewer) test. Stimulus Port 0.0 enabled\r\n");
 
 	Lcd_PortType ports[] = {GPIOB, GPIOB, GPIOB, GPIOB};
 	Lcd_PinType pins[] = {GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_8, GPIO_PIN_9};
@@ -215,7 +188,7 @@ int main(void){
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_PORRST))
 		lcd_string(&lcd, "POR/PDR ");
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_LPWRRST))
-				lcd_string(&lcd, "low power ");
+		lcd_string(&lcd, "low power ");
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_PINRST))
 		lcd_string(&lcd, "RESET ");
 	__HAL_RCC_CLEAR_RESET_FLAGS();
@@ -225,19 +198,69 @@ int main(void){
 	MX_TIM4_Init(&htim4);
 
 	lcd_cursor(&lcd, 3, 0);
-	FRESULT fres = mountSD();
+	// mount SD card and display usage at start screen
+	FRESULT fres = f_mount(&FatFs, "", 1);
 	if (fres != FR_OK) {
-		sprintf(str, "SD-CARD ERROR: %2d",fres);
+		// will return FR_NOT_READY: The physical drive cannot work   if no SD card inserted
+		// returns FR_NO_FILESYSTEM: There is no valid PRIMARY formatted FAT32 partition on the SD card
+		print_fresult(fres, str);
 		lcd_string(&lcd, str);
 	} else {
 		fres = checkSDusage(&percent, &total);
-		snprintf(str, 20, "SD:%2u%% used of %2uGB", percent, total);
-		printf("%s\n",str);
-		lcd_string(&lcd, str);
+		if (fres != FR_OK){
+			print_fresult(fres, str);
+			lcd_string(&lcd, str);
+		} else {
+			snprintf(str, 20, "SD:%2u%% used of %2uGB", percent, total);
+			ITM_SendString(str);
+			ITM_SendChar('\n');
+			lcd_string(&lcd, str);
+		}
 	}
 
 	HAL_Delay(3000);
 
+	char value[64]; // Buffer to store the value
+	char uid[25];
+	getSTM_UID(uid);
+	snprintf(str, sizeof(str),"MCU UID = %s\n", uid);
+	ITM_SendString(str);
+
+	//check if file present and UID matches
+	fres = read_config("UID", value, sizeof(value));
+	if (fres != FR_OK  || memcmp(uid, value, strlen(uid)) != 0) {
+		ITM_SendString("config.txt not present or wrong UID!\n");
+		fres = write_config("UID", uid);
+		if (fres == FR_OK)
+			fres = write_config("CH", "1");
+		if (fres == FR_OK)
+			fres = write_config("SPS", "100");
+		if (fres != FR_OK){
+			ITM_SendString("failed to create config file\n");
+		}
+	}
+
+	ITM_SendString("config file read\n");
+	fres = read_config("CH", value, sizeof(value));
+	if (fres == FR_OK){
+		adcDataArray.channels = check_range(atoi(value), 1, 2);
+		ITM_SendString("CH=");
+		snprintf(str, sizeof(str), "%u\n", adcDataArray.channels);
+		ITM_SendString(str);
+	}
+	fres = read_config("SPS", value, sizeof(value));
+	if (fres == FR_OK){
+		uint16_t index = getSPSindex(validateSPS(atoi(value)));
+		adcDataArray.sps = sps[index];
+		adcDataArray.length = bufferSizes[index];
+		ITM_SendString("SPS=");
+		snprintf(str, sizeof(str), "%u\n", adcDataArray.sps);
+		ITM_SendString(str);
+		SD_state = SD_OK;
+	}
+
+
+	// Inits: USB, int. ADC
 	MX_USB_DEVICE_Init();
 	MX_DMA_Init();
 	MX_ADC1_Init(&hadc1);
@@ -247,52 +270,45 @@ int main(void){
 		lcd_string(&lcd, "internal ADC calibr. failed!");
 		Error_Handler();
 	}
-
 	if ( HAL_ADC_Start_DMA(&hadc1, (uint32_t*)(intADCraw), hadc1.Init.NbrOfConversion) ){
 		lcd_clear(&lcd);
 		lcd_string(&lcd, "ADC DMA setup failed!");
 		Error_Handler();
 	}
-
-
 	MX_SPI1_Init(&hspi1);	//interface to ADS1256
 	//MX_I2C_Init(&hi2c1);
 	//MX_USART1_UART_Init(&huart1);
 	uint8_t status;
 	status = setupADS1256();	//should be 0x30 for this particular piece of AD1256 (ID)
 
+/*
+	// Enable PVD with the desired voltage threshold
+	PWR_PVDTypeDef sConfigPVD;
+	sConfigPVD.PVDLevel = PWR_PVDLEVEL_7; // Set PVD detection level (e.g., 2.9V)
+	sConfigPVD.Mode = PWR_PVD_MODE_IT_FALLING; // Set rising edge interrupt mode
 
-	timer_USB = HAL_GetTick();	//start timers
-	timer_ADS = HAL_GetTick();
-	timer_intADC = HAL_GetTick();
+	HAL_PWR_ConfigPVD(&sConfigPVD);
+	HAL_PWR_EnablePVD();
+
+	// Enable PVD EXTI interrupt in NVIC
+	HAL_NVIC_SetPriority(PVD_IRQn, 0, 0);  //highest priority interrupt to unmount SD card in case of a power loss
+	HAL_NVIC_EnableIRQ(PVD_IRQn);
+*/
 
 	//MX_IWDG_Init();
 	//__HAL_DBGMCU_FREEZE_IWDG();
 
-
-	while(1) ;
+	timer_USB = HAL_GetTick();	//start timers
+	timer_ADS = HAL_GetTick();
+	timer_intADC = HAL_GetTick();
 	lcd_clear(&lcd);
-
-	fres = f_open(&fil, "test.txt", FA_CREATE_ALWAYS | FA_WRITE);
-	if (fres != FR_OK) {
-		print_fresult(fres);
-		sprintf(str, "f_open: %2d",fres);
-		lcd_string(&lcd, str);
-	}
-
-
-	while(1){
-		HAL_Delay(5000);
-		NVIC_SystemReset();
-	}
-
 	while (1){
 		timer_mainloop = HAL_GetTick();
 
 		// -------------- interprete commands received over USB --------------------
 		if (usb_received){
 #ifdef DEBUG
-			printf("USB_received triggered\n");
+			ITM_SendString("USB_received triggered\n");
 			lcd_cursor(&lcd, 3,0);
 			snprintf(str, usb_received+1, "%s", UserRxBufferFS);
 			lcd_string(&lcd, str);
@@ -320,21 +336,29 @@ int main(void){
 				SD_state = SD_INIT;
 				ADS_state = ADS_INIT;
 				sscanf(cmd_str, "CONF:CHAN %hhu", &adcDataArray.channels);
-				printf("command %s received. Channel set to %u\n", cmd_str, adcDataArray.channels);
+				snprintf(str, sizeof(str), "command %s received. Channel set to %u\n", cmd_str, adcDataArray.channels);
+				ITM_SendString(str);
 
 			}
-			if (strncmp((const char *)("CONF:SPSI"), cmd_str, 9) == 0){
+			if (strncmp((const char *)("CONF:SPS"), cmd_str, 9) == 0){
+				snprintf(str, sizeof(str), "query %s received\n", cmd_str);
+				ITM_SendString(str);
 				if (last_char == '?'){
-					printf("query %s received.\n", cmd_str);
-					size_t len = snprintf(query_str, sizeof(query_str), "%d", adcDataArray.sps);
+					size_t len = snprintf(query_str, sizeof(query_str), "%u", adcDataArray.sps);
 					CDC_Transmit_FS((uint8_t *)query_str, len);
-					printf("responded: %s", query_str);
+					snprintf(str, sizeof(str),"responded: %s\n", query_str);
+					ITM_SendString(str);
 				}
 				else{
 					SD_state = SD_INIT;
 					ADS_state = ADS_INIT;
-					sscanf(cmd_str, "CONF:SPSI %hu", &spsi);
-					printf("command %s received. SPSI set to %u\n", cmd_str, spsi);
+					uint16_t value, index;
+					sscanf(cmd_str, "CONF:SPS %hu", &value);
+					index = getSPSindex(validateSPS(value));
+					adcDataArray.sps = sps[index];
+					adcDataArray.length = bufferSizes[index];
+					snprintf(str, sizeof(str), "SPS set to %u\n", adcDataArray.sps);
+					ITM_SendString(str);
 				}
 
 			}
@@ -352,7 +376,7 @@ int main(void){
 			if (display_page == INTADC && HAL_GetTick() - timer_intADC > 300){ //check if 300ms ellapsed
 				timer_intADC = HAL_GetTick();	//update timer with present value of time
 				lcd_cursor(&lcd, 1,0);
-				sprintf(str, "VDDA = %04imV ", (int)(vdda*4095.0));
+				snprintf(str, 20, "VDDA = %04imV ", (int)(vdda*4095.0));
 				lcd_string(&lcd, str);
 				if (vdda > 0.9 || vdda < 0.7){
 					lcd_cursor(&lcd, 2,0);
@@ -364,10 +388,10 @@ int main(void){
 					c2 = vdda*(float)(intADCraw[2]);
 					c3 = vdda*(float)(intADCraw[3]);
 					lcd_cursor(&lcd, 2,0);
-					sprintf(str, "A0:%04imV A1:%04imV", (int)(c0), (int)(c1));
+					snprintf(str, 20, "A0:%04imV A1:%04imV", (int)(c0), (int)(c1));
 					lcd_string(&lcd, str);
 					lcd_cursor(&lcd, 3,0);
-					sprintf(str, "A2:%04imV A3:%04imV", (int)(c2), (int)(c3));
+					snprintf(str, 20, "A2:%04imV A3:%04imV", (int)(c2), (int)(c3));
 					lcd_string(&lcd, str);
 				}
 			}
@@ -382,7 +406,6 @@ int main(void){
 			}
 			ch0 = (float)(sum)/(float)(adcDataArray.length) / 0x800000 * 5000.0;	// /2^23 * 5000mV
 			lcd_cursor(&lcd, 2,0);
-			//sprintf(str, "A:% 8.2fmV        ", ch0);
 			uint8_t decimals=2;
 			if (abs(ch0) < 1000)
 				decimals = 3;
@@ -390,20 +413,20 @@ int main(void){
 				decimals = 4;
 			if (abs(ch0) < 10)
 				decimals = 5;
-			sprintf(str, "A:% 8.*fmV        ",decimals, ch0);
+			snprintf(str, 20, "A:% 8.*fmV        ",decimals, ch0);
 			lcd_string(&lcd, str);
 			lcd_cursor(&lcd, 3,0);
-			sprintf(str, "%3i", encoder_count);
+			snprintf(str, 20, "%3u", encoder_count);
 			lcd_string(&lcd, str);
-			//printf("T1: %2d\r\n", HAL_GetTick-timer_ADS);
+
 		}
 
 		if (ADS_state == ADS_INIT) {
 			status = setupADS1256();
 			lcd_cursor(&lcd, 2,0);
-			sprintf(str, "ADS1256 status: 0x%02X", status);
+			snprintf(str, 20, "ADS1256 status: 0x%02X", status);
 			lcd_string(&lcd, str);
-			ADS_state = startSampling(spsi);
+			ADS_state = startSampling();
 		}
 		if (ADS_state == ADS_RECORDING && flagBufferFull) { //ADC receive ring buffer full
 			flagBufferFull = 0;
@@ -442,10 +465,6 @@ int main(void){
 
 }
 
-// This function is automatically called when DMA completes a transfer
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc1){
-	dma_complete = 1;
-}
 
 
 // Function to transmit variable length int32_t array over USB CDC
@@ -480,6 +499,20 @@ int _write(int file, char *ptr, int len){
 	return len;
 }
 
+void ITM_Init(void) {
+    // Check if ITM is present and enabled
+    if ((CoreDebug->DEMCR & CoreDebug_DEMCR_TRCENA_Msk) != 0) {
+        ITM->TCR = ITM_TCR_ITMENA_Msk; // Enable ITM
+        ITM->TER |= (1UL << 0); // Enable stimulus port 0
+    }
+}
+
+
+void ITM_SendString(const char* str) {
+    while (*str) {
+        ITM_SendChar(*str++);
+    }
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.

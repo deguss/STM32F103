@@ -26,23 +26,30 @@
 #define PGA32 0x05
 #define PGA64 0x06
 
-// define some constants for the DRATE register
-#define SPS_30000 0xF0
-#define SPS_15000 0xE0
-#define SPS_7500  0xD0
-#define SPS_3750  0xC0
-#define SPS_2000  0xB0
-#define SPS_1000  0xA1
-#define SPS_500   0x92
-#define SPS_100   0x82
-#define SPS_60    0x72
-#define SPS_50    0x63
-#define SPS_30    0x53
-#define SPS_25    0x43
-#define SPS_15    0x33
-#define SPS_10    0x23
-#define SPS_5     0x13
-#define SPS_2_5   0x03
+
+
+// Define the SPS options using enum for better readability
+typedef enum {
+    SPS_2_5 = 0x03,
+    SPS_5   = 0x13,
+    SPS_10  = 0x23,
+    SPS_15  = 0x33,
+    SPS_25  = 0x43,
+    SPS_30  = 0x53,
+    SPS_50  = 0x63,
+    SPS_60  = 0x72,
+    SPS_100 = 0x82,
+    SPS_500 = 0x92,
+    SPS_1000 = 0xA1,
+    SPS_2000 = 0xB0,
+    SPS_3750 = 0xC0,
+    SPS_7500 = 0xD0,
+    SPS_15000 = 0xE0,
+    SPS_30000 = 0xF0,
+    SPSI_OPTIONS // Size of the array based on defined options
+} SPS_OPTIONS;
+
+extern const uint16_t sps[SPSI_OPTIONS];
 
 // define some commands
 #define CMD_WAKEUP               0x00
@@ -82,9 +89,6 @@
 #define MUXN_AINCOM 0x08
 
 
-
-extern const uint16_t sps[16];
-extern const uint8_t sps_const[16];
 extern const uint8_t pga[7];
 extern const uint16_t range[7];
 extern const uint8_t pga_const[7];
@@ -92,16 +96,15 @@ extern const uint8_t pga_const[7];
 
 extern SPI_HandleTypeDef hspi1;
 
-
+uint8_t check_range(int value, uint8_t LLIM, uint8_t ULIM);
+uint16_t getSPSindex(int input);
+uint16_t validateSPS(int input);
+uint8_t getSPSRegValue(int input);
 void sendCommand(uint8_t cmd);
-
 void writeRegister(uint8_t reg, uint8_t value);
-
 uint8_t readRegister(uint8_t reg);
-
 //call this to initialize ADC. It will not start sampling. Use setGain afterwards
 uint8_t setupADS1256(void);
-
 void stopSampling(void);
 
 //sets channel on the fly without interrupting continuous AD conversion

@@ -1,48 +1,128 @@
 #include <ads1256.h>
 
+// The corresponding sps values as an array
+const uint16_t sps[SPSI_OPTIONS] = {
+    2,      // SPS_2_5
+    5,      // SPS_5
+    10,     // SPS_10
+    15,     // SPS_15
+    25,     // SPS_25
+    30,     // SPS_30
+    50,     // SPS_50
+    60,     // SPS_60
+    100,    // SPS_100
+    500,    // SPS_500
+    1000,   // SPS_1000
+    2000,   // SPS_2000
+    3750,   // SPS_3750
+    7500,   // SPS_7500
+    15000,  // SPS_15000
+    30000   // SPS_30000
+};
+
 
 const uint8_t pga[7] = {1,2,4,8,16,32,64};
 const uint16_t range[7] = {5000, 2500, 1250, 625, 312, 156, 78};
 const uint8_t pga_const[7] = {PGA1, PGA2, PGA4, PGA8, PGA16, PGA32, PGA64};
 
-const uint16_t sps[16] = {
-    2,
-    5,
-    10,
-    15,
-    25,
-    30,
-    50,
-    60,
-    100,
-    500,
-    1000,
-    2000,
-    3750,
-    7500,
-    15000,
-    30000
-};
 
-const uint8_t sps_const[16] = {
-    SPS_2_5,
-    SPS_5,
-    SPS_10,
-    SPS_15,
-    SPS_25,
-    SPS_30,
-    SPS_50,
-    SPS_60,
-    SPS_100,
-    SPS_500,
-    SPS_1000,
-    SPS_2000,
-    SPS_3750,
-    SPS_7500,
-    SPS_15000,
-    SPS_30000
-};
+uint8_t check_range(int value, uint8_t LLIM, uint8_t ULIM) {
+    if (value < LLIM) {
+        return LLIM;
+    } else if (value > ULIM) {
+        return ULIM;
+    } else {
+        return value;
+    }
+}
 
+// Function to check if the input is a valid SPS value
+uint16_t validateSPS(int input) {
+    switch (input) {
+        case 2:
+        case 5:
+        case 10:
+        case 15:
+        case 25:
+        case 30:
+        case 50:
+        case 60:
+        case 100:
+        case 500:
+        case 1000:
+        case 2000:
+        case 3750:
+        case 7500:
+        case 15000:
+        case 30000:
+            return (uint16_t)(input);
+        default:
+            return 100;
+    }
+}
+
+// Function to return index
+uint16_t getSPSindex(int input) {
+    switch (input) {
+        case 2:
+        	return 0;
+        case 5:
+        	return 1;
+        case 10:
+        	return 2;
+        case 15:
+        	return 3;
+        case 25:
+        	return 4;
+        case 30:
+        	return 5;
+        case 50:
+        	return 6;
+        case 60:
+        	return 7;
+        case 100:
+        	return 8;
+        case 500:
+        	return 9;
+        case 1000:
+        	return 10;
+        case 2000:
+        	return 11;
+        case 3750:
+        	return 12;
+        case 7500:
+        	return 13;
+        case 15000:
+        	return 14;
+        case 30000:
+        	return 15;
+        default:
+            return 8;
+    }
+}
+
+// A lookup function to get the value corresponding to the input
+uint8_t getSPSRegValue(int input) {
+    switch (input) {
+        case 2:   return SPS_2_5;
+        case 5:   return SPS_5;
+        case 10:  return SPS_10;
+        case 15:  return SPS_15;
+        case 25:  return SPS_25;
+        case 30:  return SPS_30;
+        case 50:  return SPS_50;
+        case 60:  return SPS_60;
+        case 100: return SPS_100;
+        case 500: return SPS_500;
+        case 1000: return SPS_1000;
+        case 2000: return SPS_2000;
+        case 3750: return SPS_3750;
+        case 7500: return SPS_7500;
+        case 15000: return SPS_15000;
+        case 30000: return SPS_30000;
+        default:   return SPS_100; // or handle error as appropriate
+    }
+}
 
 uint8_t readRegister(uint8_t reg){
     uint8_t dat;

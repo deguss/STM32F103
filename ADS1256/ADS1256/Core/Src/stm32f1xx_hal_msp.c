@@ -233,8 +233,9 @@ void MX_SPI2_Init(SPI_HandleTypeDef* hspi2) {
 	hspi2->Init.CLKPolarity = SPI_POLARITY_LOW;
 	hspi2->Init.CLKPhase = SPI_PHASE_1EDGE;
 	hspi2->Init.NSS = SPI_NSS_SOFT; //SPI_NSS_HARD_OUTPUT;
-	//hspi2->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;  //525kHz
-	hspi2->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;  //130kHz
+	hspi2->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;  //2.25kBit/s
+	//hspi2->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;  //525kBit/s
+	//hspi2->Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;  //130kBit/s
 	hspi2->Init.FirstBit = SPI_FIRSTBIT_MSB;
 	hspi2->Init.TIMode = SPI_TIMODE_DISABLE;
 	hspi2->Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;

@@ -34,6 +34,7 @@ extern IWDG_HandleTypeDef hiwdg;
 void Error_Handler(void);
 
 extern GPIO_PinState HAL_GPIO_GetOutputPin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
+extern void ITM_SendString(const char* str);
 
 #define get_PA15() 		HAL_GPIO_GetOutputPin(GPIOA, GPIO_PIN_15)
 #define PA15(x) 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, (x == 1) ? GPIO_PIN_SET : GPIO_PIN_RESET);
@@ -50,6 +51,7 @@ void MX_USART1_UART_Init(UART_HandleTypeDef* huart1);
 void MX_DMA_Init(void);
 void MX_ADC1_Init(ADC_HandleTypeDef* hadc1);
 void MX_TIM4_Init(TIM_HandleTypeDef* htim4);
+
 
 
 #ifdef __cplusplus
