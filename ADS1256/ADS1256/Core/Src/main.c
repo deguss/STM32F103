@@ -179,7 +179,7 @@ int main(void){
 	lcd_clear(&lcd);
 	lcd_string(&lcd, "24-bit data logger  ");
 	lcd_cursor(&lcd, 1, 0);
-	lcd_string(&lcd, "Piri Daniel 2024");
+	lcd_string(&lcd, "Piri Daniel 2025");
 	lcd_cursor(&lcd, 2, 0);
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_IWDGRST))
 		lcd_string(&lcd, "watchdog ");
@@ -310,13 +310,20 @@ int main(void){
 #ifdef DEBUG
 			ITM_SendString("USB_received triggered\n");
 			lcd_cursor(&lcd, 3,0);
+			lcd_string(&lcd, "                    ");
+			lcd_cursor(&lcd, 3,0);
 			snprintf(str, usb_received+1, "%s", UserRxBufferFS);
 			lcd_string(&lcd, str);
 #endif
 
 			strcpy(cmd_str, (char *)(UserRxBufferFS)); //null terminate string
+			memset(UserRxBufferFS, 0, APP_RX_DATA_SIZE);
 			size_t char_length = strlen(cmd_str);
 			char last_char = cmd_str[char_length-1];
+
+			if (strncmp((const char *)("*RST"), cmd_str, 4) == 0){
+				NVIC_SystemReset();
+			}
 
 			if (strncmp((const char *)("INIT:DLOG"), cmd_str, 9) == 0){
 				SD_state = SD_OK;
@@ -333,14 +340,23 @@ int main(void){
 			}
 
 			if (strncmp((const char *)("CONF:CHAN"), cmd_str, 9) == 0){
-				SD_state = SD_INIT;
-				ADS_state = ADS_INIT;
-				sscanf(cmd_str, "CONF:CHAN %hhu", &adcDataArray.channels);
-				snprintf(str, sizeof(str), "command %s received. Channel set to %u\n", cmd_str, adcDataArray.channels);
+				snprintf(str, sizeof(str), "query %s received\n", cmd_str);
 				ITM_SendString(str);
+				if (last_char == '?'){
+					size_t len = snprintf(query_str, sizeof(query_str), "%u", adcDataArray.channels);
+					CDC_Transmit_FS((uint8_t *)query_str, len);
+					snprintf(str, sizeof(str),"responded: %s\n", query_str);
+					ITM_SendString(str);
+				}
+				else{
+					ADS_state = ADS_INIT;
+					sscanf(cmd_str, "CONF:CHAN %hhu", &adcDataArray.channels);
+					snprintf(str, sizeof(str), "command %s received. Channel set to %u\n", cmd_str, adcDataArray.channels);
+					ITM_SendString(str);
+				}
 
 			}
-			if (strncmp((const char *)("CONF:SPS"), cmd_str, 9) == 0){
+			if (strncmp((const char *)("CONF:SPS"), cmd_str, 8) == 0){
 				snprintf(str, sizeof(str), "query %s received\n", cmd_str);
 				ITM_SendString(str);
 				if (last_char == '?'){
@@ -350,7 +366,6 @@ int main(void){
 					ITM_SendString(str);
 				}
 				else{
-					SD_state = SD_INIT;
 					ADS_state = ADS_INIT;
 					uint16_t value, index;
 					sscanf(cmd_str, "CONF:SPS %hu", &value);
@@ -415,10 +430,10 @@ int main(void){
 				decimals = 5;
 			snprintf(str, 20, "A:% 8.*fmV        ",decimals, ch0);
 			lcd_string(&lcd, str);
-			lcd_cursor(&lcd, 3,0);
+/*			lcd_cursor(&lcd, 3,0);
 			snprintf(str, 20, "%3u", encoder_count);
 			lcd_string(&lcd, str);
-
+*/
 		}
 
 		if (ADS_state == ADS_INIT) {
