@@ -64,6 +64,10 @@ const uint8_t bufferSizes[16] = {
 };
 
 
+uint8_t rx_data; // Variable to store the received byte
+char GPS_rx_buf[64]; // Buffer to store the received string
+uint16_t GPS_rx_index = 0; // Index for the received_string buffer
+
 void PVD_IRQHandler(void){
     HAL_PWR_PVD_IRQHandler();
 }
@@ -242,6 +246,48 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc1){
 	dma_complete = 1;
 }
 
+
+void USART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART1_IRQn 0 */
+
+  /* USER CODE END USART1_IRQn 0 */
+  HAL_UART_IRQHandler(&huart1);
+  /* USER CODE BEGIN USART1_IRQn 1 */
+
+  /* USER CODE END USART1_IRQn 1 */
+}
+
+
+
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+  if (huart->Instance == USART1){
+    // Process the received byte
+    if (GPS_rx_index < sizeof(GPS_rx_buf) - 1){
+    	GPS_rx_buf[GPS_rx_index] = rx_data;
+
+      // Check for a newline character to indicate the end of a string
+      if (rx_data == '\n' || rx_data == '\r'){
+    	  GPS_rx_buf[GPS_rx_index] = '\0'; // Null-terminate the string
+    	  // Forward the received string to ITM_SendStr()
+    	  ITM_SendString(GPS_rx_buf);
+    	  GPS_rx_index = 0; // Reset the index for the next string
+      }
+      else{
+    	  GPS_rx_index++;
+      }
+    }
+    else{
+      // Buffer overflow, reset the buffer and start over
+    	GPS_rx_index = 0;
+    	ITM_SendString("GPS RX buffer overflow!\n");
+    }
+
+    // Re-enable the receive interrupt for the next byte
+    __HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+  }
+}
 
 /******************************************************************************/
 /*           Cortex-M3 Processor Interruption and Exception Handlers          */

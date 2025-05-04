@@ -21,7 +21,6 @@ I2C_HandleTypeDef hi2c1;
 UART_HandleTypeDef huart1;
 TIM_HandleTypeDef htim4;
 
-float ch0, ch1, ch2, ch3;
 float vdda, c0, c1, c2, c3;
 
 typedef enum {
@@ -88,7 +87,7 @@ static void updateStates(void){
 				lcd_string(&lcd, "[REC]");
 				lcd_cursor(&lcd, 1, 0);
 				snprintf(str, 21, "%5dHz %1dch +-%4dmV", adcDataArray.sps, adcDataArray.channels, range[pga_index]);
-				lcd_string(&lcd, str);
+				lcd_line(&lcd, str);
 				break;
 			case ADS_ERROR:
 				lcd_string(&lcd, "!REC!");
@@ -153,8 +152,9 @@ static void updateStates(void){
 //-----------------------------------------------------------------------------
 int main(void){
 	uint32_t percent, total;
+	int bytes_written;
 	static uint32_t timer_USB, timer_intADC, timer_ADS, timer_mainloop;
-	static char str[64];
+	char str[64];
 	uint16_t intADCraw[5];
 	static float vrefint = 1200;
 	//float vdda, c0, c1, c2, c3;
@@ -177,20 +177,20 @@ int main(void){
 	Lcd_PinType pins[] = {GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_8, GPIO_PIN_9};
 	lcd = lcd_create(ports, pins, GPIOA, GPIO_PIN_4, GPIOC, GPIO_PIN_13, LCD_4_BIT_MODE);
 	lcd_clear(&lcd);
-	lcd_string(&lcd, "24-bit data logger  ");
+	lcd_line(&lcd, "24-bit data logger");
 	lcd_cursor(&lcd, 1, 0);
-	lcd_string(&lcd, "Piri Daniel 2025");
+	lcd_line(&lcd, "Piri Daniel 2025");
 	lcd_cursor(&lcd, 2, 0);
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_IWDGRST))
-		lcd_string(&lcd, "watchdog ");
+		lcd_line(&lcd, "watchdog ");
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_SFTRST))
-		lcd_string(&lcd, "software ");
+		lcd_line(&lcd, "software ");
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_PORRST))
-		lcd_string(&lcd, "POR/PDR ");
+		lcd_line(&lcd, "POR/PDR ");
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_LPWRRST))
-		lcd_string(&lcd, "low power ");
+		lcd_line(&lcd, "low power ");
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_PINRST))
-		lcd_string(&lcd, "RESET ");
+		lcd_line(&lcd, "RESET ");
 	__HAL_RCC_CLEAR_RESET_FLAGS();
 
 	MX_SPI2_Init(&hspi2);	//interface to SD-card
@@ -204,17 +204,17 @@ int main(void){
 		// will return FR_NOT_READY: The physical drive cannot work   if no SD card inserted
 		// returns FR_NO_FILESYSTEM: There is no valid PRIMARY formatted FAT32 partition on the SD card
 		print_fresult(fres, str);
-		lcd_string(&lcd, str);
+		lcd_line(&lcd, str);
 	} else {
 		fres = checkSDusage(&percent, &total);
 		if (fres != FR_OK){
 			print_fresult(fres, str);
-			lcd_string(&lcd, str);
+			lcd_line(&lcd, str);
 		} else {
-			snprintf(str, 20, "SD:%2u%% used of %2uGB", percent, total);
+			snprintf(str, 20, "SD:%2u%% used of %uGB", percent, total);
 			ITM_SendString(str);
 			ITM_SendChar('\n');
-			lcd_string(&lcd, str);
+			lcd_line(&lcd, str);
 		}
 	}
 
@@ -267,17 +267,18 @@ int main(void){
 	if (HAL_ADCEx_Calibration_Start(&hadc1) != HAL_OK){
 		lcd_clear(&lcd);
 		lcd_cursor(&lcd, 1, 0);
-		lcd_string(&lcd, "internal ADC calibr. failed!");
+		lcd_line(&lcd, "internal ADC calibr. failed!");
 		Error_Handler();
 	}
 	if ( HAL_ADC_Start_DMA(&hadc1, (uint32_t*)(intADCraw), hadc1.Init.NbrOfConversion) ){
 		lcd_clear(&lcd);
-		lcd_string(&lcd, "ADC DMA setup failed!");
+		lcd_line(&lcd, "ADC DMA setup failed!");
 		Error_Handler();
 	}
 	MX_SPI1_Init(&hspi1);	//interface to ADS1256
 	//MX_I2C_Init(&hi2c1);
-	//MX_USART1_UART_Init(&huart1);
+	MX_USART1_UART_Init(&huart1); //initializes UART RX IT for GPS
+
 	uint8_t status;
 	status = setupADS1256();	//should be 0x30 for this particular piece of AD1256 (ID)
 
@@ -297,6 +298,7 @@ int main(void){
 
 	//MX_IWDG_Init();
 	//__HAL_DBGMCU_FREEZE_IWDG();
+	__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);	// Receive Not Empty interrupt from GPS
 
 	timer_USB = HAL_GetTick();	//start timers
 	timer_ADS = HAL_GetTick();
@@ -308,12 +310,12 @@ int main(void){
 		// -------------- interprete commands received over USB --------------------
 		if (usb_received){
 #ifdef DEBUG
-			ITM_SendString("USB_received triggered\n");
-			lcd_cursor(&lcd, 3,0);
-			lcd_string(&lcd, "                    ");
+			ITM_SendString("USB_received triggered: ");
 			lcd_cursor(&lcd, 3,0);
 			snprintf(str, usb_received+1, "%s", UserRxBufferFS);
-			lcd_string(&lcd, str);
+			ITM_SendString(str);
+			ITM_SendString("\n");
+			lcd_line(&lcd, str);
 #endif
 
 			strcpy(cmd_str, (char *)(UserRxBufferFS)); //null terminate string
@@ -379,7 +381,7 @@ int main(void){
 			}
 			lcd_cursor(&lcd, 1, 0);
 			snprintf(str, 21, "%5dHz %1dch +-%4dmV", adcDataArray.sps, adcDataArray.channels, range[pga_index]);
-			lcd_string(&lcd, str);
+			lcd_line(&lcd, str);
 
 			usb_received = 0;
 		} // end of interpreting commands received over USB --------------------
@@ -391,11 +393,11 @@ int main(void){
 			if (display_page == INTADC && HAL_GetTick() - timer_intADC > 300){ //check if 300ms ellapsed
 				timer_intADC = HAL_GetTick();	//update timer with present value of time
 				lcd_cursor(&lcd, 1,0);
-				snprintf(str, 20, "VDDA = %04imV ", (int)(vdda*4095.0));
-				lcd_string(&lcd, str);
+				snprintf(str, 20, "VDDA = %04imV", (int)(vdda*4095.0));
+				lcd_line(&lcd, str);
 				if (vdda > 0.9 || vdda < 0.7){
 					lcd_cursor(&lcd, 2,0);
-					lcd_string(&lcd, "ADC seems defective");
+					lcd_line(&lcd, "ADC seems defective");
 				}
 				else {
 					c0 = vdda*(float)(intADCraw[0]);
@@ -404,35 +406,35 @@ int main(void){
 					c3 = vdda*(float)(intADCraw[3]);
 					lcd_cursor(&lcd, 2,0);
 					snprintf(str, 20, "A0:%04imV A1:%04imV", (int)(c0), (int)(c1));
-					lcd_string(&lcd, str);
+					lcd_line(&lcd, str);
 					lcd_cursor(&lcd, 3,0);
 					snprintf(str, 20, "A2:%04imV A3:%04imV", (int)(c2), (int)(c3));
-					lcd_string(&lcd, str);
+					lcd_line(&lcd, str);
 				}
 			}
 
 		}
 		if (display_page == ADS && ADS_state == ADS_RECORDING && HAL_GetTick() - timer_ADS > 500){ //check if 300ms ellapsed
 			timer_ADS = HAL_GetTick();	//update timer with present value of time
-			//calculate average
-			int32_t sum=0;
-			for (int i=0; i<adcDataArray.length; i++){
-				sum+=adcDataArray.data[i];
-			}
-			ch0 = (float)(sum)/(float)(adcDataArray.length) / 0x800000 * 5000.0;	// /2^23 * 5000mV
+
+			int32_t ch0 = calculate_average(adcDataArray.data, adcDataArray.length);
 			lcd_cursor(&lcd, 2,0);
 			uint8_t decimals=2;
-			if (abs(ch0) < 1000)
-				decimals = 3;
-			if (abs(ch0) < 100)
-				decimals = 4;
-			if (abs(ch0) < 10)
-				decimals = 5;
-			snprintf(str, 20, "A:% 8.*fmV        ",decimals, ch0);
-			lcd_string(&lcd, str);
+			int32_t abs_ch0 = (ch0 < 0) ? -ch0 : ch0; // Calculate absolute value
+			if (abs_ch0 < 1e6) //<1000mV
+			    decimals = 3;
+			if (abs_ch0 < 1e5) //<100mV
+			    decimals = 4;
+			if (abs_ch0 < 1e4)  //<10mV
+			    decimals = 5;
+
+			//snprintf(str, 20, "A:% 8.*fmV        ",decimals, ch0);
+			// Format the output string in integer math.
+			snprintf(str, 20, "A:%d.%0*dmV", ch0/1000, decimals, abs_ch0 % 1000);
+			lcd_line(&lcd, str);
 /*			lcd_cursor(&lcd, 3,0);
 			snprintf(str, 20, "%3u", encoder_count);
-			lcd_string(&lcd, str);
+			lcd_line(&lcd, str);
 */
 		}
 
@@ -440,7 +442,7 @@ int main(void){
 			status = setupADS1256();
 			lcd_cursor(&lcd, 2,0);
 			snprintf(str, 20, "ADS1256 status: 0x%02X", status);
-			lcd_string(&lcd, str);
+			lcd_line(&lcd, str);
 			ADS_state = startSampling();
 		}
 		if (ADS_state == ADS_RECORDING && flagBufferFull) { //ADC receive ring buffer full
@@ -465,7 +467,7 @@ int main(void){
 		if (ADS_state == ADS_ERROR) {
 			if (HAL_GetTick() - timer_ADS > 5000){ //check if 5s ellapsed
 				lcd_cursor(&lcd, 2,0);
-				lcd_string(&lcd, "please power cycle! ");
+				lcd_line(&lcd, "please power cycle! ");
 				timer_ADS = HAL_GetTick();	//update timer with present value of time
 				HAL_NVIC_DisableIRQ(EXTI0_IRQn); //disable DRDY interrupt
 				stopSampling();

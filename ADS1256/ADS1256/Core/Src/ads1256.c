@@ -26,6 +26,27 @@ const uint16_t range[7] = {5000, 2500, 1250, 625, 312, 156, 78};
 const uint8_t pga_const[7] = {PGA1, PGA2, PGA4, PGA8, PGA16, PGA32, PGA64};
 
 
+// Calculate average (avoiding float)
+int32_t calculate_average(const int32_t *Array, size_t length) {
+	int64_t sum = 0;
+	if (length == 0) {
+		return 0; // Or handle the error in a more robust way
+	}
+
+	for (size_t i = 0; i < length; i++) {
+		sum += Array[i];
+	}
+
+	// Crucial: Handle potential overflow.  If sum is too large, this will wrap around.
+	// Using int64_t is essential here.
+	int64_t average = (sum * 5000LL *1000LL) / length;
+
+	// Now, handle the right shift.  Crucially, do this *before* the cast to int32_t.
+	average >>= 23;
+
+	return (int32_t)average; //result in uV (microVolts)
+}
+
 uint8_t check_range(int value, uint8_t LLIM, uint8_t ULIM) {
     if (value < LLIM) {
         return LLIM;

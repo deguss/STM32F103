@@ -40,6 +40,7 @@
 extern volatile int32_t encoder_count;
 extern volatile int dma_complete;
 extern SPI_HandleTypeDef hspi1;
+extern UART_HandleTypeDef huart1;
 
 #define ADCBUFLEN 254
 /* APP_TX_DATA_SIZE = 1024, 6 bytes header, 4 bytes per int32_t -> (1024-6)/4=254
@@ -102,6 +103,7 @@ void SysTick_Handler(void);
 void USB_LP_CAN1_RX0_IRQHandler(void);
 void EXTI0_IRQHandler(void);
 void PVD_IRQHandler(void);
+void USART1_IRQHandler(void);
 
 
 

@@ -96,6 +96,7 @@ extern const uint8_t pga_const[7];
 
 extern SPI_HandleTypeDef hspi1;
 
+int32_t calculate_average(const int32_t *Array, size_t length);
 uint8_t check_range(int value, uint8_t LLIM, uint8_t ULIM);
 uint16_t getSPSindex(int input);
 uint16_t validateSPS(int input);

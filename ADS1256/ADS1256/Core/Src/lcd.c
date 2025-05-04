@@ -73,15 +73,42 @@ void lcd_int(Lcd_HandleTypeDef * lcd, int number)
 	lcd_string(lcd, buffer);
 }
 
+
 /**
  * Write a string on the current position
  */
 void lcd_string(Lcd_HandleTypeDef * lcd, char * string)
 {
-	for(uint8_t i = 0; i < strlen(string); i++)
-	{
+	uint8_t i;
+	for(i=0; i<strlen(string); i++){
 		lcd_write_data(lcd, string[i]);
 	}
+}
+
+/**
+ * Write a string on the current position and clear the rest of the line
+ */
+void lcd_line(Lcd_HandleTypeDef * lcd, char * string)
+{
+	uint8_t i;
+	for(i=0; i<strlen(string); i++){
+		lcd_write_data(lcd, string[i]);
+	}
+
+	#ifdef LCD20xN
+	while (i<20){
+		lcd_write_data(lcd, ' ');
+		i++;
+	}
+	#endif
+
+	#ifdef LCD16xN
+	while (i<16){
+		lcd_write_data(lcd, ' ');
+		i++;
+	}
+	#endif
+
 }
 
 /**
