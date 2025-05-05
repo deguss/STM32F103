@@ -6,6 +6,7 @@
 #include "lcd.h"
 #include "stdio.h"
 #include "file.h"
+#include "gps.h"
 #include "core_cm3.h"  // Adjust based on your system
 
 
@@ -35,12 +36,8 @@ typedef enum {
 	SD_OK,
 	SD_FSERROR } SD_states;
 static SD_states SD_state = SD_INIT;
-typedef enum {
-	GPS_INIT,
-	GPS_TIME,
-	GPS_FIX,
-	GPS_ERROR } GPS_states;
-static GPS_states GPS_state = GPS_INIT;
+
+GPS_states GPS_state = GPS_INIT;
 Lcd_HandleTypeDef lcd;
 
 static void updateStates(void);
@@ -75,7 +72,7 @@ static void updateStates(void){
 	static USBD_StatusTypeDef USB_state_past = USBD_FAIL;
 	static SD_states SD_state_past = SD_FSERROR;
 	static GPS_states GPS_state_past = GPS_ERROR;
-	static char str[24];
+	static char str[32];
 
 	if (ADS_state != ADS_state_past){
 		lcd_cursor(&lcd, 0, 0);
@@ -304,13 +301,21 @@ int main(void){
 	HAL_NVIC_EnableIRQ(USART1_IRQn);
 	// Start the first receive operation with interrupt
 	//HAL_UART_RxCpltCallback(&huart1);
+	uint8_t rx_data; // Variable to store the received byte
+    if (HAL_UART_Receive_IT(&huart1, &rx_data, 1) != HAL_OK){
+    	ITM_SendString("UART (GPS) seems not to be configured properly.");
+    }
 
 
 	timer_USB = HAL_GetTick();	//start timers
 	timer_ADS = HAL_GetTick();
 	timer_intADC = HAL_GetTick();
 	lcd_clear(&lcd);
+
+	//----------------------------------------------------------------------------------------
 	while (1){
+	//---------------------------------------------------------------------------------------
+
 		timer_mainloop = HAL_GetTick();
 
 		// -------------- interprete commands received over USB --------------------
@@ -460,6 +465,14 @@ int main(void){
 				arraytoFile(&adcDataArray);
 			}
 		}
+
+		//if (GPS_state == GPS_INIT){
+		parse_gprmc_datetime(GPS_rx_buf, str, &hours, &minutes, &seconds, &GPS_state);
+		lcd_cursor(&lcd, 3,0);
+		lcd_line(&lcd, str);
+
+
+
 
 		if (USB_state ==  USBD_OK){
 			;

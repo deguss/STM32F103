@@ -83,6 +83,9 @@ extern AdcDataArrayStruct adcDataArray;
 extern uint8_t sps_index;
 extern uint8_t pga_index;
 
+extern char GPS_rx_buf[300]; // Buffer to store the received string
+extern uint16_t GPS_rx_index; // Index for the received_string buffer
+
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/

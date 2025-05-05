@@ -65,7 +65,7 @@ const uint8_t bufferSizes[16] = {
 
 
 uint8_t rx_data; // Variable to store the received byte
-char GPS_rx_buf[64]; // Buffer to store the received string
+char GPS_rx_buf[300]; // Buffer to store the received string
 uint16_t GPS_rx_index = 0; // Index for the received_string buffer
 
 void PVD_IRQHandler(void){
@@ -268,10 +268,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
     	GPS_rx_buf[GPS_rx_index] = rx_data;
 
       // Check for a newline character to indicate the end of a string
-      if (rx_data == '\n' || rx_data == '\r'){
+      if (rx_data == '$' || rx_data == '\r'){
     	  GPS_rx_buf[GPS_rx_index] = '\0'; // Null-terminate the string
     	  // Forward the received string to ITM_SendStr()
-    	  ITM_SendString(GPS_rx_buf);
+    	  //ITM_SendString(GPS_rx_buf);
+    	  //ITM_SendString('\n');
+
     	  GPS_rx_index = 0; // Reset the index for the next string
       }
       else{
@@ -284,8 +286,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
     	ITM_SendString("GPS RX buffer overflow!\n");
     }
 
-    // Re-enable the receive interrupt for the next byte
-    __HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);
+    if (HAL_UART_Receive_IT(&huart1, &rx_data, 1) != HAL_OK){
+    	ITM_SendString("UART Receive IT returned NOK ");
+    }
+
   }
 }
 
