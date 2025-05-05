@@ -467,6 +467,7 @@ int main(void){
 		}
 
 		//if (GPS_state == GPS_INIT){
+		ITM_SendString(GPS_rx_buf);
 		parse_gprmc_datetime(GPS_rx_buf, str, &hours, &minutes, &seconds, &GPS_state);
 		lcd_cursor(&lcd, 3,0);
 		lcd_line(&lcd, str);
