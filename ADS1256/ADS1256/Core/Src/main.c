@@ -298,7 +298,13 @@ int main(void){
 
 	//MX_IWDG_Init();
 	//__HAL_DBGMCU_FREEZE_IWDG();
+
 	__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);	// Receive Not Empty interrupt from GPS
+	HAL_NVIC_SetPriority(USART1_IRQn, 14, 7);  //highest priority interrupt to unmount SD card in case of a power loss
+	HAL_NVIC_EnableIRQ(USART1_IRQn);
+	// Start the first receive operation with interrupt
+	//HAL_UART_RxCpltCallback(&huart1);
+
 
 	timer_USB = HAL_GetTick();	//start timers
 	timer_ADS = HAL_GetTick();
