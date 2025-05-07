@@ -97,7 +97,9 @@ typedef struct {
 #define X_MEAN 248
 #define BLANK 255
 
+/************************* shared variables *****************/
 
+extern Lcd_HandleTypeDef lcd;
 
 /************************************** Public functions **************************************/
 void lcd_init(Lcd_HandleTypeDef * lcd);

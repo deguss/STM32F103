@@ -1,17 +1,17 @@
 #include "main.h"
 #include "fatfs.h"
-#include "usb_device.h"
-#include "usbd_cdc_if.h"
+#include "core_cm3.h"  // Adjust based on your system
 #include "ads1256.h"
 #include "lcd.h"
 #include "stdio.h"
 #include "file.h"
 #include "gps.h"
-#include "core_cm3.h"  // Adjust based on your system
+#include "displays.h"
 
-
-
-
+ADS_states ADS_state = ADS_INIT;
+USBD_StatusTypeDef USB_state = USBD_BUSY;	//initialize with NOK at beginning
+SD_states SD_state = SD_INIT;
+GPS_states GPS_state = GPS_INIT;
 
 IWDG_HandleTypeDef hiwdg;
 SPI_HandleTypeDef hspi1;
@@ -23,32 +23,6 @@ UART_HandleTypeDef huart1;
 TIM_HandleTypeDef htim4;
 
 float vdda, c0, c1, c2, c3;
-
-typedef enum {
-	ADS_INIT,
-	ADS_RECORDING,
-	ADS_ERROR,
-	ADS_INVALID}  ADS_states;
-static ADS_states ADS_state = ADS_INIT;
-static USBD_StatusTypeDef USB_state = USBD_BUSY;	//initialize with NOK at beginning
-typedef enum {
-	SD_INIT,
-	SD_OK,
-	SD_FSERROR } SD_states;
-static SD_states SD_state = SD_INIT;
-
-GPS_states GPS_state = GPS_INIT;
-Lcd_HandleTypeDef lcd;
-
-static void updateStates(void);
-static void transmitArrayOverUSB(AdcDataArrayStruct *arr);
-static void arraytoFile(AdcDataArrayStruct *arr);
-static void ITM_Init(void);
-void ITM_SendString(const char* str);
-
-
-
-
 
 static ADS_states startSampling(void){
 	//configure differential channel: AIN1 - AIN0
@@ -67,89 +41,8 @@ static ADS_states startSampling(void){
 }
 
 
-static void updateStates(void){
-	static ADS_states ADS_state_past = ADS_INVALID;
-	static USBD_StatusTypeDef USB_state_past = USBD_FAIL;
-	static SD_states SD_state_past = SD_FSERROR;
-	static GPS_states GPS_state_past = GPS_ERROR;
-	static char str[32];
-
-	if (ADS_state != ADS_state_past){
-		lcd_cursor(&lcd, 0, 0);
-		switch (ADS_state){
-			case ADS_INIT:
-				lcd_string(&lcd, "[   ]");
-				break;
-			case ADS_RECORDING:
-				lcd_string(&lcd, "[REC]");
-				lcd_cursor(&lcd, 1, 0);
-				snprintf(str, 21, "%5dHz %1dch +-%4dmV", adcDataArray.sps, adcDataArray.channels, range[pga_index]);
-				lcd_line(&lcd, str);
-				break;
-			case ADS_ERROR:
-				lcd_string(&lcd, "!REC!");
-				break;
-			case ADS_INVALID:
-				lcd_string(&lcd, "?REC?");
-				break;
-		}
-		ADS_state_past = ADS_state;
-	}
-	if (USB_state != USB_state_past){
-		lcd_cursor(&lcd, 0, 15);
-		switch (USB_state){
-			case USBD_BUSY:
-				lcd_string(&lcd, "[   ]");
-				break;
-			case USBD_OK:
-				lcd_string(&lcd, "[USB]");
-				break;
-			case USBD_FAIL:
-				lcd_string(&lcd, "!USB!");
-				break;
-		}
-		USB_state_past = USB_state;
-	}
-	if (SD_state != SD_state_past){
-		lcd_cursor(&lcd, 0, 5);
-		switch (SD_state){
-			case SD_INIT:
-				lcd_string(&lcd, "[  ]");
-				break;
-			case SD_OK:
-				lcd_string(&lcd, "[SD]");
-				break;
-			case SD_FSERROR:
-				lcd_string(&lcd, "!SD!");
-				break;
-		}
-		SD_state_past = SD_state;
-	}
-	if (GPS_state != GPS_state_past){
-		lcd_cursor(&lcd, 0, 10);
-		switch (GPS_state){
-			case GPS_INIT:
-				lcd_string(&lcd, "[   ]");
-				break;
-			case GPS_TIME:
-				lcd_string(&lcd, "[TIM]");
-				break;
-			case GPS_FIX:
-				lcd_string(&lcd, "[GPS]");
-				break;
-			case GPS_ERROR:
-				lcd_string(&lcd, "!GPS!");
-				break;
-		}
-		GPS_state_past = GPS_state;
-	}
-
-}
-
-//-----------------------------------------------------------------------------
 int main(void){
 	uint32_t percent, total;
-	int bytes_written;
 	static uint32_t timer_USB, timer_intADC, timer_ADS, timer_mainloop;
 	char str[64];
 	uint16_t intADCraw[5];
@@ -168,7 +61,7 @@ int main(void){
 	MX_GPIO_Init();
 
 	HAL_Delay(500);
-	ITM_SendString("\r\nSWV (serial wire viewer) test. Stimulus Port 0.0 enabled\r\n");
+	ITM_SendString("\n\nSWV (serial wire viewer) test. Stimulus Port 0.0 enabled\n");
 
 	Lcd_PortType ports[] = {GPIOB, GPIOB, GPIOB, GPIOB};
 	Lcd_PinType pins[] = {GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_8, GPIO_PIN_9};
@@ -208,54 +101,14 @@ int main(void){
 			print_fresult(fres, str);
 			lcd_line(&lcd, str);
 		} else {
-			snprintf(str, 20, "SD:%2u%% used of %uGB", percent, total);
-			ITM_SendString(str);
-			ITM_SendChar('\n');
+			snprintf(str, 20, "SD:%2lu%% used of %luGB", percent, total);
 			lcd_line(&lcd, str);
 		}
 	}
 
-	HAL_Delay(3000);
+	HAL_Delay(2000);
 
-	char value[64]; // Buffer to store the value
-	char uid[25];
-	getSTM_UID(uid);
-	snprintf(str, sizeof(str),"MCU UID = %s\n", uid);
-	ITM_SendString(str);
-
-	//check if file present and UID matches
-	fres = read_config("UID", value, sizeof(value));
-	if (fres != FR_OK  || memcmp(uid, value, strlen(uid)) != 0) {
-		ITM_SendString("config.txt not present or wrong UID!\n");
-		fres = write_config("UID", uid);
-		if (fres == FR_OK)
-			fres = write_config("CH", "1");
-		if (fres == FR_OK)
-			fres = write_config("SPS", "100");
-		if (fres != FR_OK){
-			ITM_SendString("failed to create config file\n");
-		}
-	}
-
-	ITM_SendString("config file read\n");
-	fres = read_config("CH", value, sizeof(value));
-	if (fres == FR_OK){
-		adcDataArray.channels = check_range(atoi(value), 1, 2);
-		ITM_SendString("CH=");
-		snprintf(str, sizeof(str), "%u\n", adcDataArray.channels);
-		ITM_SendString(str);
-	}
-	fres = read_config("SPS", value, sizeof(value));
-	if (fres == FR_OK){
-		uint16_t index = getSPSindex(validateSPS(atoi(value)));
-		adcDataArray.sps = sps[index];
-		adcDataArray.length = bufferSizes[index];
-		ITM_SendString("SPS=");
-		snprintf(str, sizeof(str), "%u\n", adcDataArray.sps);
-		ITM_SendString(str);
-		SD_state = SD_OK;
-	}
-
+	readWriteConfigFile("config.txt");
 
 	// Inits: USB, int. ADC
 	MX_USB_DEVICE_Init();
@@ -279,7 +132,7 @@ int main(void){
 	uint8_t status;
 	status = setupADS1256();	//should be 0x30 for this particular piece of AD1256 (ID)
 
-/*
+
 	// Enable PVD with the desired voltage threshold
 	PWR_PVDTypeDef sConfigPVD;
 	sConfigPVD.PVDLevel = PWR_PVDLEVEL_7; // Set PVD detection level (e.g., 2.9V)
@@ -291,7 +144,7 @@ int main(void){
 	// Enable PVD EXTI interrupt in NVIC
 	HAL_NVIC_SetPriority(PVD_IRQn, 0, 0);  //highest priority interrupt to unmount SD card in case of a power loss
 	HAL_NVIC_EnableIRQ(PVD_IRQn);
-*/
+
 
 	//MX_IWDG_Init();
 	//__HAL_DBGMCU_FREEZE_IWDG();
@@ -305,6 +158,9 @@ int main(void){
     if (HAL_UART_Receive_IT(&huart1, &rx_data, 1) != HAL_OK){
     	ITM_SendString("UART (GPS) seems not to be configured properly.");
     }
+    //configure GPS to send time and date
+    const char *enable_zda = "$PUBX,40,ZDA,0,1,0,0*45\r\n";
+    HAL_UART_Transmit(&huart1, (uint8_t*)enable_zda, strlen(enable_zda), HAL_MAX_DELAY);
 
 
 	timer_USB = HAL_GetTick();	//start timers
@@ -391,7 +247,7 @@ int main(void){
 
 			}
 			lcd_cursor(&lcd, 1, 0);
-			snprintf(str, 21, "%5dHz %1dch +-%4dmV", adcDataArray.sps, adcDataArray.channels, range[pga_index]);
+			snprintf(str, 25, "%5dHz %1dch +-%4dmV", adcDataArray.sps, adcDataArray.channels, range[pga_index]);
 			lcd_line(&lcd, str);
 
 			usb_received = 0;
@@ -425,63 +281,41 @@ int main(void){
 			}
 
 		}
-		if (display_page == ADS && ADS_state == ADS_RECORDING && HAL_GetTick() - timer_ADS > 500){ //check if 300ms ellapsed
-			timer_ADS = HAL_GetTick();	//update timer with present value of time
+		if (display_page == ADS && HAL_GetTick() - timer_ADS > 500){ //check if 300ms ellapsed
+			if (ADS_state == ADS_RECORDING){
+				timer_ADS = HAL_GetTick();	//update timer with present value of time
 
-			int32_t ch0 = calculate_average(adcDataArray.data, adcDataArray.length);
-			lcd_cursor(&lcd, 2,0);
-			uint8_t decimals=2;
-			int32_t abs_ch0 = (ch0 < 0) ? -ch0 : ch0; // Calculate absolute value
-			if (abs_ch0 < 1e6) //<1000mV
-			    decimals = 3;
-			if (abs_ch0 < 1e5) //<100mV
-			    decimals = 4;
-			if (abs_ch0 < 1e4)  //<10mV
-			    decimals = 5;
+				int32_t ch0 = calculate_average(adcDataArray.data, adcDataArray.length);
+				lcd_cursor(&lcd, 2,0);
+				uint8_t decimals=2;
+				int32_t abs_ch0 = (ch0 < 0) ? -ch0 : ch0; // Calculate absolute value
+				if (abs_ch0 < 1e6) //<1000mV
+					decimals = 3;
+				if (abs_ch0 < 1e5) //<100mV
+					decimals = 4;
+				if (abs_ch0 < 1e4)  //<10mV
+					decimals = 5;
+				// Format the output string in integer math.
+				snprintf(str, 20, "A:%ld.%0*ldmV", ch0/1000, decimals, abs_ch0 % 1000);
+				lcd_line(&lcd, str);
+			}
+			else if(ADS_state == ADS_INIT) {
+				status = setupADS1256();
+				lcd_cursor(&lcd, 2,0);
+				snprintf(str, 21, "ADS1256 status: 0x%02X", status);
+				lcd_line(&lcd, str);
+				ADS_state = startSampling();
+			}
 
-			//snprintf(str, 20, "A:% 8.*fmV        ",decimals, ch0);
-			// Format the output string in integer math.
-			snprintf(str, 20, "A:%d.%0*dmV", ch0/1000, decimals, abs_ch0 % 1000);
-			lcd_line(&lcd, str);
-/*			lcd_cursor(&lcd, 3,0);
-			snprintf(str, 20, "%3u", encoder_count);
-			lcd_line(&lcd, str);
-*/
-		}
+		}	//end of display_page == ADS
 
-		if (ADS_state == ADS_INIT) {
-			status = setupADS1256();
-			lcd_cursor(&lcd, 2,0);
-			snprintf(str, 20, "ADS1256 status: 0x%02X", status);
-			lcd_line(&lcd, str);
-			ADS_state = startSampling();
-		}
 		if (ADS_state == ADS_RECORDING && flagBufferFull) { //ADC receive ring buffer full
 			flagBufferFull = 0;
 			if (USB_state == USBD_OK && elog){
 				transmitArrayOverUSB(&adcDataArray);
 			}
-			if (SD_state == SD_OK){
+			if (SD_state == SD_OK && GPS_state == GPS_TIME){
 				arraytoFile(&adcDataArray);
-			}
-		}
-
-		//if (GPS_state == GPS_INIT){
-		ITM_SendString(GPS_rx_buf);
-		parse_gprmc_datetime(GPS_rx_buf, str, &hours, &minutes, &seconds, &GPS_state);
-		lcd_cursor(&lcd, 3,0);
-		lcd_line(&lcd, str);
-
-
-
-
-		if (USB_state ==  USBD_OK){
-			;
-		}
-		else { //if USB status not OK
-			if (HAL_GetTick() - timer_USB > 1000){ //check if 1s ellapsed
-				timer_USB = HAL_GetTick();	//update timer with present value of time
-				USB_state = CDC_Transmit_FS(&status, 1);	//transmit some msg
 			}
 		}
 		if (ADS_state == ADS_ERROR) {
@@ -495,8 +329,38 @@ int main(void){
 			}
 		}
 
+		//ITM_SendString(GPS_rx_buf);
 
-		updateStates();
+		if (GPS_rx_index == 0 && parse_nmea_minmea(GPS_rx_buf, &dateTimeNow, &sat_in_view)) {
+			if (dateTimeNow.hours<24 && dateTimeNow.minutes<60 && dateTimeNow.seconds<60 &&
+					dateTimeNow.day<32 && dateTimeNow.month<13 && dateTimeNow.year>2024 && dateTimeNow.year<3000){
+				snprintf(str, 20, "%4u.%02u.%02u %2u:%02u:%02u",
+						dateTimeNow.year, dateTimeNow.month, dateTimeNow.day, dateTimeNow.hours, dateTimeNow.minutes, dateTimeNow.seconds);
+				GPS_state = GPS_TIME;
+			}
+			else {
+				snprintf(str, 20, "waiting for GPS");
+				GPS_state = GPS_INIT;
+			}
+			lcd_cursor(&lcd, 3,0);
+			lcd_line(&lcd, str);
+		}
+
+
+
+		if (USB_state ==  USBD_OK){
+			;
+		}
+		else { //if USB status not OK
+			if (HAL_GetTick() - timer_USB > 1000){ //check if 1s ellapsed
+				timer_USB = HAL_GetTick();	//update timer with present value of time
+				USB_state = CDC_Transmit_FS(&status, 1);	//transmit some msg
+			}
+		}
+
+
+
+		updateStatesLCD();
 		//HAL_IWDG_Refresh(&hiwdg);
 	}
 
@@ -504,81 +368,7 @@ int main(void){
 
 
 
-// Function to transmit variable length int32_t array over USB CDC
-static void transmitArrayOverUSB(AdcDataArrayStruct *arr){
-/*typedef struct {
-    uint16_t length;
-    uint16_t sps;
-    uint32_t time;
-    uint16_t res16;
-    uint8_t  res8;
-    uint8_t channels;
-    int32_t data[ADCBUFLEN];
-} AdcDataArrayStruct;*/
-
-    // Calculate the total size of the data to be sent
-    size_t totalSize = 2*2+4+2+1+1 + arr->length*sizeof(int32_t);
-
-    // Transmit the data over USB CDC
-    CDC_Transmit_FS((uint8_t *)arr, totalSize);
-}
-
-static void arraytoFile(AdcDataArrayStruct *arr){
-	;
-}
 
 
-//needed for printf ITM debug output
-int _write(int file, char *ptr, int len){
-	for (int i=0; i<len; i++){
-		ITM_SendChar(*ptr++);
-	}
-	return len;
-}
-
-void ITM_Init(void) {
-    // Check if ITM is present and enabled
-    if ((CoreDebug->DEMCR & CoreDebug_DEMCR_TRCENA_Msk) != 0) {
-        ITM->TCR = ITM_TCR_ITMENA_Msk; // Enable ITM
-        ITM->TER |= (1UL << 0); // Enable stimulus port 0
-    }
-}
 
 
-void ITM_SendString(const char* str) {
-    while (*str) {
-        ITM_SendChar(*str++);
-    }
-}
-
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
-void Error_Handler(void)
-{
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
-  /* USER CODE END Error_Handler_Debug */
-}
-
-#ifdef  USE_FULL_ASSERT
-/**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
-void assert_failed(uint8_t *file, uint32_t line)
-{
-  /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
-}
-#endif /* USE_FULL_ASSERT */

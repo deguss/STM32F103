@@ -7,16 +7,26 @@
 
 #ifndef INC_GPS_H_
 #define INC_GPS_H_
+#include "displays.h"
 
-extern uint8_t hours, minutes, seconds;
+typedef struct datetime {
+	uint8_t hours;
+	uint8_t minutes;
+	uint8_t seconds;
+    uint8_t day;
+    uint8_t month;
+    uint16_t year;
+} dateTimeStruct;
 
-typedef enum {
-	GPS_INIT,
-	GPS_TIME,
-	GPS_FIX,
-	GPS_ERROR } GPS_states;
+extern dateTimeStruct dateTimeNow;
+extern uint8_t sat_in_view;
 
 
-int parse_gprmc_datetime(const char *nmea_sentence, char *date_str_out, uint8_t *hours_out, uint8_t *minutes_out, uint8_t *seconds_out, GPS_states *fix_status_out);
+uint32_t datetime_to_epoch(dateTimeStruct dt);
+uint32_t datetime_diff(dateTimeStruct dt1, dateTimeStruct dt2) ;
+
+int parse_nmea_minmea(const char *nmea_sentence, dateTimeStruct *dateTime, uint8_t *sat_in_view);
+
+
 
 #endif /* INC_GPS_H_ */

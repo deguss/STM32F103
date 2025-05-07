@@ -29,8 +29,37 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
 #include "stm32f1xx_it.h"
+//#include "usbd_def.h"
+#include "usb_device.h"
+#include "usbd_cdc_if.h"
+
+
+
+
+typedef enum {
+	ADS_INIT,
+	ADS_RECORDING,
+	ADS_ERROR,
+	ADS_INVALID}  ADS_states;
+typedef enum {
+	SD_INIT,
+	SD_OK,
+	SD_FSERROR } SD_states;
+typedef enum {
+	GPS_INIT,
+	GPS_TIME,
+	GPS_FIX,
+	GPS_ERROR } GPS_states;
+
 
 extern IWDG_HandleTypeDef hiwdg;
+extern ADS_states ADS_state;
+extern SD_states SD_state;
+extern GPS_states GPS_state;
+extern USBD_StatusTypeDef USB_state;
+
+
+
 void Error_Handler(void);
 
 extern GPIO_PinState HAL_GPIO_GetOutputPin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);

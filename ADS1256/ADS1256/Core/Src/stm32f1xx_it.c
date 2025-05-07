@@ -65,12 +65,33 @@ const uint8_t bufferSizes[16] = {
 
 
 uint8_t rx_data; // Variable to store the received byte
-char GPS_rx_buf[300]; // Buffer to store the received string
+char GPS_rx_buf[200]; // Buffer to store the received string
 uint16_t GPS_rx_index = 0; // Index for the received_string buffer
+
+// Function to transmit variable length int32_t array over USB CDC
+void transmitArrayOverUSB(AdcDataArrayStruct *arr){
+/*typedef struct {
+    uint16_t length;
+    uint16_t sps;
+    uint32_t time;
+    uint16_t res16;
+    uint8_t  res8;
+    uint8_t channels;
+    int32_t data[ADCBUFLEN];
+} AdcDataArrayStruct;*/
+
+    // Calculate the total size of the data to be sent
+    size_t totalSize = 2*2+4+2+1+1 + arr->length*sizeof(int32_t);
+
+    // Transmit the data over USB CDC
+    CDC_Transmit_FS((uint8_t *)arr, totalSize);
+}
+
 
 void PVD_IRQHandler(void){
     HAL_PWR_PVD_IRQHandler();
 }
+
 
 void HAL_PWR_PVDCallback(void)
 {
@@ -262,34 +283,34 @@ void USART1_IRQHandler(void)
 
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
-  if (huart->Instance == USART1){
-    // Process the received byte
-    if (GPS_rx_index < sizeof(GPS_rx_buf) - 1){
-    	GPS_rx_buf[GPS_rx_index] = rx_data;
-
-      // Check for a newline character to indicate the end of a string
-      if (rx_data == '$' || rx_data == '\r'){
-    	  GPS_rx_buf[GPS_rx_index] = '\0'; // Null-terminate the string
-    	  // Forward the received string to ITM_SendStr()
-    	  //ITM_SendString(GPS_rx_buf);
-    	  //ITM_SendString('\n');
-
-    	  GPS_rx_index = 0; // Reset the index for the next string
+  if (huart->Instance == USART1) {
+      // Process incoming NMEA characters into GPS_rx_buf
+      if (rx_data == '$') {
+          // Start of new NMEA sentence
+          GPS_rx_index = 0;
+          GPS_rx_buf[GPS_rx_index++] = rx_data;
       }
-      else{
-    	  GPS_rx_index++;
+      else if (rx_data == '\n') {
+          // End of sentence
+          GPS_rx_buf[GPS_rx_index] = '\0';
+          // Sentence ready: parse or forward
+          //ITM_SendString(GPS_rx_buf);
+          GPS_rx_index = 0;
       }
-    }
-    else{
-      // Buffer overflow, reset the buffer and start over
-    	GPS_rx_index = 0;
-    	ITM_SendString("GPS RX buffer overflow!\n");
-    }
+      else {
+          // Middle of sentence
+          if (GPS_rx_index < sizeof(GPS_rx_buf) - 1) {
+              GPS_rx_buf[GPS_rx_index++] = rx_data;
+          } else {
+              // Buffer overflow: reset buffer
+              GPS_rx_index = 0;
+          }
+      }
 
-    if (HAL_UART_Receive_IT(&huart1, &rx_data, 1) != HAL_OK){
-    	ITM_SendString("UART Receive IT returned NOK ");
-    }
-
+      // Restart UART receive interrupt for next byte
+      if (HAL_UART_Receive_IT(&huart1, &rx_data, 1) != HAL_OK) {
+          ITM_SendString("UART Receive IT returned NOK ");
+      }
   }
 }
 

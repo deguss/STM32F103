@@ -38,6 +38,7 @@ extern FIL USERFile; /* File object for USER */
 
 void MX_FATFS_Init(void);
 
+
 /* USER CODE BEGIN Prototypes */
 
 /* USER CODE END Prototypes */

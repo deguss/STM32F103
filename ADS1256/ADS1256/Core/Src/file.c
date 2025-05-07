@@ -4,6 +4,185 @@ FATFS FatFs;
 FATFS* pfs;
 
 
+FRESULT readWriteConfigFile(const char* fname){
+	char value[64]; // Buffer to store the value
+	char uid[25];
+	char str[36];
+	FRESULT fres;
+	getSTM_UID(uid);
+	snprintf(str, sizeof(str),"MCU UID = %s\n", uid);
+	ITM_SendString(str);
+
+	//check if file present and UID matches
+	fres = read_config(fname, "UID", value, sizeof(value));
+	if (fres != FR_OK  || memcmp(uid, value, strlen(uid)) != 0) {
+		ITM_SendString("config file not present or wrong UID!\n");
+		ITM_SendString("creating new config file\n");
+		fres = write_config(fname, "UID", uid);
+		if (fres != FR_OK)
+			return fres;
+		fres = write_config(fname, "CH", "1");
+		if (fres != FR_OK)
+			return fres;
+		fres = write_config(fname, "SPS", "10");
+		if (fres != FR_OK){
+			ITM_SendString("failed to create config file\n");
+			return fres;
+		}
+
+
+	}
+
+	fres = read_config(fname, "CH", value, sizeof(value));
+	if (fres != FR_OK){
+		ITM_SendString("failed to read config file\n");
+		return fres;
+	}
+	adcDataArray.channels = check_range(atoi(value), 1, 2);
+	ITM_SendString("CH=");
+	snprintf(str, sizeof(str), "%u\n", adcDataArray.channels);
+	ITM_SendString(str);
+
+	fres = read_config(fname, "SPS", value, sizeof(value));
+	if (fres != FR_OK){
+		return fres;
+	}
+	uint16_t index = getSPSindex(validateSPS(atoi(value)));
+	adcDataArray.sps = sps[index];
+	adcDataArray.length = bufferSizes[index];
+	ITM_SendString("SPS=");
+	snprintf(str, sizeof(str), "%u\n", adcDataArray.sps);
+	ITM_SendString(str);
+	SD_state = SD_OK;
+
+	return FR_OK;
+}
+
+FRESULT stat_with_lfn(const char *path, FILINFO *fno) {
+#if _USE_LFN
+    static char lfn[_MAX_LFN + 1];  // Static = safe if no threading
+    fno->lfname = lfn;
+    fno->lfsize = sizeof(lfn);
+#endif
+    return f_stat(path, fno);
+}
+
+FRESULT arraytoFile(AdcDataArrayStruct *arr){
+
+	FRESULT fres;
+	FIL fil;
+	char str[64];
+	char base[32];
+	char fn[32];
+	UINT bytesWritten;
+	dateTimeStruct dT;
+	static dateTimeStruct startdT, lastdT;
+	//TODO timing
+
+	__disable_irq();
+	dT = dateTimeNow;
+	__enable_irq();
+
+	//determine if last call of this function was more than 3 seconds ago
+	if (datetime_diff(lastdT, dT) > 3){
+		//if recording not yet ongoing (contdT will be different from dT)
+		//if (memcmp(&startdT, &dT, sizeof(dateTimeStruct)) != 0) {
+
+		startdT = dT;
+
+		snprintf(base,sizeof(base),"%4d_%02d_%02d", dT.year, dT.month, dT.day);	//create folder name
+		FILINFO fno;
+		fres = stat_with_lfn(base, &fno); // Check if directory exists
+		if (fres != FR_OK) {
+		    // Directory does not exist; create it
+			fres = f_mkdir(base);
+			if (fres != FR_OK) {
+				ITM_SendString("failed to create directory\n");
+				return fres;
+			}
+		}
+
+		// ----------- log file ------------------------
+		snprintf(fn,sizeof(fn),"%s/%02u%02u.txt",base, dT.hours, dT.minutes);	//create log file name 1204.txt
+		fres = stat_with_lfn(fn, &fno); // Check if file exists
+		if (fres != FR_OK) {	//file does not exists,
+			fres = f_open(&fil, fn, FA_CREATE_ALWAYS | FA_WRITE); //Create a new file or overwrite if it exists.
+			if (fres != FR_OK) {
+				ITM_SendString("failed to create log file\n");
+				f_close(&fil);
+				return fres;
+			}
+			f_close(&fil); //I have to close it in order for further writes to open it again.
+
+
+			snprintf(str, sizeof(str), "%4u.%02u.%02u", dT.year, dT.month, dT.day);
+			fres = write_config(fn, "start_day", str);
+			if (fres != FR_OK) {
+				return fres;
+			}
+
+			snprintf(str, sizeof(str), "%2u%02u", dT.hours, dT.minutes);
+			fres = write_config(fn, "start_time", str);
+			if (fres != FR_OK) {
+				return fres;
+			}
+
+			snprintf(str, sizeof(str), "%lu", datetime_to_epoch(dT));
+			fres = write_config(fn, "epoch", str);
+			if (fres != FR_OK) {
+				return fres;
+			}
+
+
+			snprintf(str, sizeof(str), "%d", arr->sps);
+			fres = write_config(fn, "SPS", str);
+			if (fres != FR_OK) {
+				return fres;
+			}
+
+			snprintf(str, sizeof(str), "%d", arr->channels);
+			fres = write_config(fn, "CH", str);
+			if (fres != FR_OK) {
+				return fres;
+			}
+		}
+
+	}
+
+
+
+	// ------------- binary data file --------------------------
+	snprintf(fn,sizeof(fn),"%s/%02d%02d.bin",base, dT.hours, dT.minutes);	//create data file name
+	fres = f_open(&fil, fn, FA_WRITE | FA_OPEN_ALWAYS ); // If the file does not exist → it is created.
+	if (fres != FR_OK) {
+		ITM_SendString("failed to create data file\n");
+		return fres;
+	}
+	fres = f_lseek(&fil, f_size(&fil)); // Seek to the end
+	if (fres != FR_OK) {
+		ITM_SendString("failed to seek to the end of the file\n");
+		f_close(&fil);
+		return fres;
+	}
+	// Write the data to the file
+	fres = f_write(&fil, arr->data, arr->length * sizeof(int32_t), &bytesWritten);
+	if (fres != FR_OK || bytesWritten != arr->length * sizeof(int32_t)) {
+		f_close(&fil);
+		ITM_SendString("could not write all data to file\n");
+		return fres;
+	}
+	f_close(&fil);
+
+	lastdT = dT;
+
+	uint32_t duration = datetime_diff(startdT, dT);
+	snprintf(str,20,"%lus\n", duration);
+	ITM_SendString(str);
+
+	return FR_OK;
+}
+
+
 void getSTM_UID(char *uid) {
 	uint32_t id[3];
     // Ensure that the address is aligned to a uint32_t pointer
@@ -15,7 +194,7 @@ void getSTM_UID(char *uid) {
 
 //f_sync(&fil);
 
-FRESULT read_config(const char* key, char* value, size_t value_size) {
+FRESULT read_config(const char* fname, const char* key, char* value, size_t value_size) {
     FIL fil;
     FRESULT fr;
     char line[128]; // Buffer for reading lines
@@ -30,7 +209,7 @@ FRESULT read_config(const char* key, char* value, size_t value_size) {
     memset(value, 0, value_size);
 
     // Open the file for reading
-    fr = f_open(&fil, CONFIG_FILE_NAME, FA_READ);
+    fr = f_open(&fil, fname, FA_READ);
     if (fr != FR_OK) { //file does not exists
     	//printf("Config file does not exist!\n");
     	ITM_SendString("Error opening file!\n");
@@ -59,12 +238,12 @@ FRESULT read_config(const char* key, char* value, size_t value_size) {
 }
 
 
-FRESULT write_config(const char* key, const char* value) {
+FRESULT write_config(const char* fname, const char* key, const char* value) {
     FIL fil;
     FRESULT fr;
 
-    // Open the file for writing (create if it doesn't exist)
-    fr = f_open(&fil, CONFIG_FILE_NAME, FA_OPEN_ALWAYS | FA_WRITE);
+    // Open the file if it exists, or create a new one if it doesn't.
+    fr = f_open(&fil, fname, FA_OPEN_ALWAYS | FA_WRITE);
     if (fr == FR_OK) {
         // Move the file pointer to the end
         f_lseek(&fil, f_size(&fil));
@@ -72,9 +251,11 @@ FRESULT write_config(const char* key, const char* value) {
         // Write the key-value pair to the file
         f_printf(&fil, "%s=%s\n", key, value); // Use f_printf for formatted output
 
-        // Close the file
-        f_close(&fil);
+        // flush
+        f_sync(&fil);
     }
+    // Close the file
+    f_close(&fil);
     return fr; // Return the result
 }
 
@@ -105,8 +286,8 @@ FRESULT checkSDusage(uint32_t* percent, uint32_t* total){
 	snprintf(str, sizeof(str),"%2.2f%% used\n", usedPercent);
 	ITM_SendString(str);
 #endif
-	*total = MIN(((uint32_t)(totalSpace / 1000 / 1000)), 100);
-	*percent = MIN(((uint32_t)(usedPercent)), 99);
+	*total = MINIM(((uint32_t)(totalSpace / 1000 / 1000)), 100);
+	*percent = MINIM(((uint32_t)(usedPercent)), 99);
 	return fres;
 
 }

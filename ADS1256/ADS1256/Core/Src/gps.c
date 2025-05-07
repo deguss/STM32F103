@@ -10,81 +10,117 @@
 #include <stdint.h> // Include for uint8_t
 #include <stdbool.h> // Include for bool
 #include "gps.h"
-
-uint8_t hours, minutes, seconds;
-
-int parse_gprmc_datetime(const char *nmea_sentence, char *date_str_out, uint8_t *hours_out, uint8_t *minutes_out, uint8_t *seconds_out, GPS_states *fix_status_out) {
-  // Error handling: Check for null pointers.
-  if (!nmea_sentence || !date_str_out || !hours_out || !minutes_out || !seconds_out) {
-    return -1; // Indicate an error: NULL pointer passed.
-  }
-
-  //  Crucial: Check if the input starts with "GPRMC,".
-  if (strncmp(nmea_sentence, "GPRMC,", 6) != 0) { // Adjusted length to 6
-    return -2; // Indicate invalid NMEA sentence format (doesn't start with GPRMC,)
-  }
-
-  // Buffer for extracting time and date data.  Crucial for safety!
-  char time_str[12]; // Increased size to accommodate potential fractional seconds
-  char date_str[7];  // Date is DDMMYY
-  char status_char;
-
-  // Use sscanf to parse the relevant fields.
-  // The format string needs to accommodate the optional fields between time and date.
-  // We'll use %*[^,] to skip fields we don't need for date/time extraction.
-  // %c will read the status character.
-  // %6[^,] will read the date field.
-
-  // Removed the "$" from the sscanf format string
-  int result = sscanf(nmea_sentence, "GPRMC,%11[^,],%c,%*[^,],%*[^,],%*[^,],%*[^,],%*[^,],%*[^,],%6[^,],%*[^\n]",
-                      time_str, &status_char, date_str);
-
-  // Check the result of sscanf. We expect to successfully read time, status, and date.
-  // However, the date field can sometimes be missing in 'V' status sentences.
-  // Let's handle the case where only time and status are parsed.
-  if (result < 2) {
-      return -3; // Indicate a general parsing error (couldn't even get time and status).
-  }
-
-  // Determine the fix status based on the status character
-  if (status_char == 'A') {
-      fix_status_out = GPS_FIX;
-  } else if (status_char == 'V') {
-      fix_status_out = GPS_TIME;
-  } else {
-      fix_status_out = GPS_ERROR; // Handle other potential status characters
-  }
-
-  // Handle the case where the date field was not successfully parsed (result == 2)
-  if (result == 2) {
-      // Date field was not parsed. This is common for 'V' status sentences.
-      // We can still extract time, but date will be empty.
-      date_str_out[0] = '\0'; // Set date string to empty
-      // Continue to parse time
-  } else if (result == 3) {
-      // Time, status, and date were all parsed successfully.
-      // Copy the date string to the output buffer.
-      strcpy(date_str_out, date_str);
-  } else {
-      // Unexpected sscanf result
-      return -4; // Indicate an unexpected parsing outcome.
-  }
+#include "minmea.h"
 
 
-  // Extract time components (using strtol is safer than atoi)
-  char *decimal_point = strchr(time_str, '.');
-  if (decimal_point) {
-    *decimal_point = '\0'; // Null-terminate at the decimal point
-  }
+dateTimeStruct dateTimeNow;
+uint8_t sat_in_view;
 
-  long time_long = strtol(time_str, NULL, 10);
-  if (time_long < 0 || time_long > 235959) {
-      return -5; // Error in extracted time component (value out of range).
-  }
 
-  *hours_out = (uint8_t)(time_long / 10000);
-  *minutes_out = (uint8_t)((time_long % 10000) / 100);
-  *seconds_out = (uint8_t)(time_long % 100);
+// Function to convert DateTime to seconds since the Unix epoch (1st January 1970)
+uint32_t datetime_to_epoch(dateTimeStruct dt) {
 
-  return 0; // Success
+	// Assumes year >= 1970
+	if (dt.month < 3) {
+		dt.month += 12;
+		dt.year -= 1;
+	}
+	return (uint32_t)(
+		365L * dt.year + dt.year / 4 - dt.year / 100 + dt.year / 400 +
+		(153 * (int)dt.month - 457) / 5 + (int)dt.day - 719469
+	) * 86400L + (int)dt.hours * 3600 + (int)dt.minutes * 60 + (int)dt.seconds;
 }
+
+// Function to calculate the difference between two DateTime objects in seconds
+uint32_t datetime_diff(dateTimeStruct dt1, dateTimeStruct dt2) {
+    uint32_t seconds1 = datetime_to_epoch(dt1);
+    uint32_t seconds2 = datetime_to_epoch(dt2);
+
+    return seconds2 - seconds1;  // return the difference in seconds
+}
+
+// Parses a complete NMEA sentence using the minmea library
+int parse_nmea_minmea(const char *nmea_sentence, dateTimeStruct *dateTime, uint8_t *sat_in_view)
+{
+    if (!nmea_sentence || !dateTime) {
+        return -1; // null pointer
+    }
+    size_t len = strlen(nmea_sentence);
+    // Verify checksum and structure
+    if (!minmea_check(nmea_sentence, len)) {
+        return -2; // invalid NMEA
+    }
+    switch( minmea_sentence_id(nmea_sentence, false)){
+		case MINMEA_SENTENCE_RMC: {
+			struct minmea_sentence_rmc frame;
+			if (minmea_parse_rmc(&frame, nmea_sentence) && frame.valid) {
+				dateTime->hours   = frame.time.hours;
+				dateTime->minutes = frame.time.minutes;
+				dateTime->seconds = frame.time.seconds;
+				dateTime->day     = frame.date.day;
+				dateTime->month   = frame.date.month;
+				dateTime->year    = frame.date.year;
+
+				/*char s[100];
+				snprintf(s,sizeof(s),"RMC lat: %ld, lon: %ld (speed: %ld)\r\n",
+						minmea_rescale(&frame.latitude, 1000),
+						minmea_rescale(&frame.longitude, 1000),
+						minmea_rescale(&frame.speed, 1000));
+				ITM_SendString(s);*/
+				return 1; // RMC parsed
+			}
+		} break;
+
+    	case MINMEA_SENTENCE_ZDA: {
+			struct minmea_sentence_zda frame;
+			if (minmea_parse_zda(&frame, nmea_sentence)) {
+				dateTime->hours   = frame.time.hours;
+				dateTime->minutes = frame.time.minutes;
+				dateTime->seconds = frame.time.seconds;
+				dateTime->day     = frame.date.day;
+				dateTime->month   = frame.date.month;
+				dateTime->year    = frame.date.year;
+				return 2; // ZDA parsed
+			}
+		} break;
+
+        case MINMEA_SENTENCE_GSV: {
+            struct minmea_sentence_gsv frame;
+            if (minmea_parse_gsv(&frame, nmea_sentence)) {
+            	*sat_in_view = (uint8_t)frame.total_sats;
+            	return 3; //GSV parsed
+            }
+        } break;
+
+        case MINMEA_SENTENCE_GGA: {
+            struct minmea_sentence_gga frame;
+            if (minmea_parse_gga(&frame, nmea_sentence)) {
+                // Evaluate fix quality for time validity
+                if (frame.fix_quality > 0) {
+                	char s[100];
+                	snprintf(s,sizeof(s),"GGA lat: %ld, lon: %ld (alt: %ld%c)\r\n",
+						minmea_rescale(&frame.latitude, 1000), minmea_rescale(&frame.longitude, 1000),
+						frame.altitude, frame.altitude_units);
+					ITM_SendString(s);
+                	// fix_quality: 1...TIME only, 2=2D, 3=3D fix
+					snprintf(s,sizeof(s),"GGA: GPS fix %dD, SAT=%d\n", frame.fix_quality, frame.satellites_tracked);
+					ITM_SendString(s);
+
+                     // The time in GGA is generally considered valid if there's a fix.
+                     // Access time: frame.time
+                     // printf("  Time: %d:%d:%d.%d\n", frame.time.hours, frame.time.minutes, frame.time.seconds, frame.time.microseconds);
+                }
+                return 4; //GGA parsed
+            }
+        } break;
+
+        default:  // unsupported sentence or parse failed
+        	return -3;
+
+
+    }
+    return -4;
+
+}
+
+

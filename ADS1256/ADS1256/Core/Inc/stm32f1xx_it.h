@@ -25,24 +25,28 @@
  extern "C" {
 #endif
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+
 #include "ads1256.h"
-/* USER CODE END Includes */
 
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
 
-/* USER CODE END ET */
+#define ADCBUFLEN 254
+// struct must be of length MOD 4 = 0
+typedef struct {
+	uint16_t length;
+	uint16_t sps;
+	uint32_t time;
+	uint16_t res16;
+	uint8_t  res8;
+	uint8_t channels;
+	int32_t data[ADCBUFLEN];
+} AdcDataArrayStruct;
 
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
 extern volatile int32_t encoder_count;
 extern volatile int dma_complete;
 extern SPI_HandleTypeDef hspi1;
 extern UART_HandleTypeDef huart1;
+void transmitArrayOverUSB(AdcDataArrayStruct *arr);
 
-#define ADCBUFLEN 254
 /* APP_TX_DATA_SIZE = 1024, 6 bytes header, 4 bytes per int32_t -> (1024-6)/4=254
  * packet transmit time for different sampling frequencies
  * at 30000 sps packet period = 8.50ms
@@ -66,24 +70,12 @@ extern UART_HandleTypeDef huart1;
 
 
 extern const uint8_t bufferSizes[16];
-
-// struct must be of length MOD 4 = 0
-typedef struct {
-    uint16_t length;
-    uint16_t sps;
-    uint32_t time;
-    uint16_t res16;
-    uint8_t  res8;
-    uint8_t channels;
-    int32_t data[ADCBUFLEN];
-} AdcDataArrayStruct;
-
 extern uint16_t flagBufferFull;
 extern AdcDataArrayStruct adcDataArray;
 extern uint8_t sps_index;
 extern uint8_t pga_index;
 
-extern char GPS_rx_buf[300]; // Buffer to store the received string
+extern char GPS_rx_buf[]; // Buffer to store the received string
 extern uint16_t GPS_rx_index; // Index for the received_string buffer
 
 /* USER CODE END EC */

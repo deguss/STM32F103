@@ -6,6 +6,11 @@
  */
 
 #include "lcd.h"
+
+
+Lcd_HandleTypeDef lcd;
+
+
 const uint8_t ROW_16[] = {0x00, 0x40, 0x10, 0x50};
 const uint8_t ROW_20[] = {0x00, 0x40, 0x14, 0x54};
 /************************************** Static declarations **************************************/
