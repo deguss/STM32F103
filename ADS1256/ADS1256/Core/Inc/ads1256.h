@@ -45,11 +45,11 @@ typedef enum {
     SPS_3750 = 0xC0,
     SPS_7500 = 0xD0,
     SPS_15000 = 0xE0,
-    SPS_30000 = 0xF0,
-    SPSI_OPTIONS // Size of the array based on defined options
+    SPS_30000 = 0xF0
 } SPS_OPTIONS;
 
-extern const uint16_t sps[SPSI_OPTIONS];
+#define NUM_SPS_OPTIONS 16
+extern const uint16_t sps[NUM_SPS_OPTIONS];
 
 // define some commands
 #define CMD_WAKEUP               0x00

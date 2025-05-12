@@ -7,8 +7,10 @@
 #include "file.h"
 #include "gps.h"
 #include "displays.h"
+#include "minmea.h"
 
 ADS_states ADS_state = ADS_INIT;
+uint8_t config_channels=1;
 USBD_StatusTypeDef USB_state = USBD_BUSY;	//initialize with NOK at beginning
 SD_states SD_state = SD_INIT;
 GPS_states GPS_state = GPS_INIT;
@@ -30,6 +32,7 @@ static ADS_states startSampling(void){
 	if (setChannel(0,1)){	//if not succeeded
 		return ADS_ERROR;
 	}
+	adcDataArray.channel=1;
 
 	pga_index = 0; //start with PGA=1
 	setGain(getSPSRegValue(adcDataArray.sps), pga_const[pga_index]);	//continuous conversation starts here
@@ -37,13 +40,16 @@ static ADS_states startSampling(void){
 
 	HAL_NVIC_SetPriority(EXTI0_IRQn, 5, 7);
 	HAL_NVIC_EnableIRQ(EXTI0_IRQn); //enable DRDY interrupt
-	return ADS_RECORDING; //for success
+	return ADS_READY; //for success
 }
 
 
 int main(void){
 	uint32_t percent, total;
-	static uint32_t timer_USB, timer_intADC, timer_ADS, timer_mainloop;
+	static uint32_t timer_USB, timer_intADC, timer_ADS, timer_update;
+	static uint8_t nmea_valid;
+	static dateTimeStruct startdT;
+	static uint8_t sat_in_view;
 	char str[64];
 	uint16_t intADCraw[5];
 	static float vrefint = 1200;
@@ -95,20 +101,25 @@ int main(void){
 		// returns FR_NO_FILESYSTEM: There is no valid PRIMARY formatted FAT32 partition on the SD card
 		print_fresult(fres, str);
 		lcd_line(&lcd, str);
+		SD_state = SD_FSERROR;
 	} else {
 		fres = checkSDusage(&percent, &total);
 		if (fres != FR_OK){
 			print_fresult(fres, str);
 			lcd_line(&lcd, str);
+			SD_state = SD_FSERROR;
 		} else {
 			snprintf(str, 20, "SD:%2lu%% used of %luGB", percent, total);
 			lcd_line(&lcd, str);
 		}
 	}
 
-	HAL_Delay(2000);
+	HAL_Delay(5000);
 
-	readWriteConfigFile("config.txt");
+	fres = readWriteConfigFile("config.txt");
+	if (fres != FR_OK){
+		SD_state = SD_FSERROR;
+	}
 
 	// Inits: USB, int. ADC
 	MX_USB_DEVICE_Init();
@@ -150,13 +161,13 @@ int main(void){
 	//__HAL_DBGMCU_FREEZE_IWDG();
 
 	__HAL_UART_ENABLE_IT(&huart1, UART_IT_RXNE);	// Receive Not Empty interrupt from GPS
-	HAL_NVIC_SetPriority(USART1_IRQn, 14, 7);  //highest priority interrupt to unmount SD card in case of a power loss
+	HAL_NVIC_SetPriority(USART1_IRQn, 14, 7);
 	HAL_NVIC_EnableIRQ(USART1_IRQn);
 	// Start the first receive operation with interrupt
-	//HAL_UART_RxCpltCallback(&huart1);
+
 	uint8_t rx_data; // Variable to store the received byte
     if (HAL_UART_Receive_IT(&huart1, &rx_data, 1) != HAL_OK){
-    	ITM_SendString("UART (GPS) seems not to be configured properly.");
+    	ITM_SendString("UART config failed");
     }
     //configure GPS to send time and date
     const char *enable_zda = "$PUBX,40,ZDA,0,1,0,0*45\r\n";
@@ -167,13 +178,11 @@ int main(void){
 	timer_ADS = HAL_GetTick();
 	timer_intADC = HAL_GetTick();
 	lcd_clear(&lcd);
+	updateStatesLCD(0,0);
 
 	//----------------------------------------------------------------------------------------
 	while (1){
 	//---------------------------------------------------------------------------------------
-
-		timer_mainloop = HAL_GetTick();
-
 		// -------------- interprete commands received over USB --------------------
 		if (usb_received){
 #ifdef DEBUG
@@ -209,30 +218,26 @@ int main(void){
 			}
 
 			if (strncmp((const char *)("CONF:CHAN"), cmd_str, 9) == 0){
-				snprintf(str, sizeof(str), "query %s received\n", cmd_str);
-				ITM_SendString(str);
+				ITM_SendString(cmd_str);
 				if (last_char == '?'){
-					size_t len = snprintf(query_str, sizeof(query_str), "%u", adcDataArray.channels);
+					size_t len = snprintf(query_str, sizeof(query_str), "%u", config_channels);
 					CDC_Transmit_FS((uint8_t *)query_str, len);
-					snprintf(str, sizeof(str),"responded: %s\n", query_str);
-					ITM_SendString(str);
+					ITM_SendString(query_str);
 				}
 				else{
 					ADS_state = ADS_INIT;
-					sscanf(cmd_str, "CONF:CHAN %hhu", &adcDataArray.channels);
-					snprintf(str, sizeof(str), "command %s received. Channel set to %u\n", cmd_str, adcDataArray.channels);
+					sscanf(cmd_str, "CONF:CHAN %u", &config_channels);
+					snprintf(str, sizeof(str), "Channel set to %u\n", config_channels);
 					ITM_SendString(str);
 				}
 
 			}
 			if (strncmp((const char *)("CONF:SPS"), cmd_str, 8) == 0){
-				snprintf(str, sizeof(str), "query %s received\n", cmd_str);
-				ITM_SendString(str);
+				ITM_SendString(cmd_str);
 				if (last_char == '?'){
 					size_t len = snprintf(query_str, sizeof(query_str), "%u", adcDataArray.sps);
 					CDC_Transmit_FS((uint8_t *)query_str, len);
-					snprintf(str, sizeof(str),"responded: %s\n", query_str);
-					ITM_SendString(str);
+					ITM_SendString(query_str);
 				}
 				else{
 					ADS_state = ADS_INIT;
@@ -247,7 +252,7 @@ int main(void){
 
 			}
 			lcd_cursor(&lcd, 1, 0);
-			snprintf(str, 25, "%5dHz %1dch +-%4dmV", adcDataArray.sps, adcDataArray.channels, range[pga_index]);
+			snprintf(str, 25, "%5dHz %1dch +-%4dmV", adcDataArray.sps, config_channels, range[pga_index]);
 			lcd_line(&lcd, str);
 
 			usb_received = 0;
@@ -282,7 +287,7 @@ int main(void){
 
 		}
 		if (display_page == ADS && HAL_GetTick() - timer_ADS > 500){ //check if 300ms ellapsed
-			if (ADS_state == ADS_RECORDING){
+			if (ADS_state == ADS_READY || ADS_state == ADS_RECORDING){
 				timer_ADS = HAL_GetTick();	//update timer with present value of time
 
 				int32_t ch0 = calculate_average(adcDataArray.data, adcDataArray.length);
@@ -309,13 +314,25 @@ int main(void){
 
 		}	//end of display_page == ADS
 
-		if (ADS_state == ADS_RECORDING && flagBufferFull) { //ADC receive ring buffer full
+		if ((ADS_state == ADS_READY || ADS_state == ADS_RECORDING ) && flagBufferFull) { //ADC receive ring buffer full
 			flagBufferFull = 0;
 			if (USB_state == USBD_OK && elog){
 				transmitArrayOverUSB(&adcDataArray);
 			}
 			if (SD_state == SD_OK && GPS_state == GPS_TIME){
-				arraytoFile(&adcDataArray);
+				writeArrayToFile(&adcDataArray, &startdT);
+				if ((dateTimeNow.seconds == 1 || dateTimeNow.seconds == 31) && startdT.year > 2024){	//update twice every minute
+					lcd_cursor(&lcd, 1,0);
+					//"05-12/1400 133457kB "
+					FILINFO fno;
+					snprintf(str,sizeof(str),"%4u-%02u-%02u/%02u%02u.bin", startdT.year, startdT.month, startdT.day, startdT.hours, startdT.minutes );
+					fres = stat_with_lfn(str, &fno);
+					if (fres == FR_OK) {
+					    uint32_t size_kb = (fno.fsize + 1023) / 1024; // Round up to nearest KB
+					    snprintf(str,21,"%02u-%02u/%02u%02u %6ukB",startdT.month, startdT.day, startdT.hours, startdT.minutes, size_kb);
+					    lcd_line(&lcd,str);
+					}
+				}
 			}
 		}
 		if (ADS_state == ADS_ERROR) {
@@ -331,19 +348,29 @@ int main(void){
 
 		//ITM_SendString(GPS_rx_buf);
 
-		if (GPS_rx_index == 0 && parse_nmea_minmea(GPS_rx_buf, &dateTimeNow, &sat_in_view)) {
-			if (dateTimeNow.hours<24 && dateTimeNow.minutes<60 && dateTimeNow.seconds<60 &&
-					dateTimeNow.day<32 && dateTimeNow.month<13 && dateTimeNow.year>2024 && dateTimeNow.year<3000){
-				snprintf(str, 20, "%4u.%02u.%02u %2u:%02u:%02u",
-						dateTimeNow.year, dateTimeNow.month, dateTimeNow.day, dateTimeNow.hours, dateTimeNow.minutes, dateTimeNow.seconds);
-				GPS_state = GPS_TIME;
+		if (GPS_rx_index == 0){
+			volatile int typeN = parse_nmea_minmea(GPS_rx_buf, &dateTimeNow, &sat_in_view);
+			if (typeN == MINMEA_SENTENCE_ZDA) { //ZDA only. others may deliver year 25 instead of 2025. if it could be parsed
+				//ITM_SendString(GPS_rx_buf);
+				if (dateTimeNow.hours<24 && dateTimeNow.minutes<60 && dateTimeNow.seconds<60 &&
+						dateTimeNow.day<32 && dateTimeNow.month<13 && dateTimeNow.year>2024 && dateTimeNow.year<3000){ //if valid time
+					snprintf(str, 20, "%4u.%02u.%02u %2u:%02u:%02u",
+							dateTimeNow.year, dateTimeNow.month, dateTimeNow.day, dateTimeNow.hours, dateTimeNow.minutes, dateTimeNow.seconds);
+					GPS_state = GPS_TIME;
+					nmea_valid = 4;
+				}
+				else { //if not valid time
+					if (nmea_valid){
+						nmea_valid--;
+					}
+					else {
+						snprintf(str, 20, "waiting for GPS");
+						GPS_state = GPS_INIT;
+					}
+				}
+				lcd_cursor(&lcd, 3,0);
+				lcd_line(&lcd, str);
 			}
-			else {
-				snprintf(str, 20, "waiting for GPS");
-				GPS_state = GPS_INIT;
-			}
-			lcd_cursor(&lcd, 3,0);
-			lcd_line(&lcd, str);
 		}
 
 
@@ -359,8 +386,15 @@ int main(void){
 		}
 
 
+		if (dateTimeNow.seconds == 33 && HAL_GetTick() - timer_update > 10000){ //at least 10s passed
+			timer_update = HAL_GetTick();
+			fres = checkSDusage(&percent, &total);
+			if (fres != FR_OK){
+				SD_state = SD_FSERROR;
+			}
 
-		updateStatesLCD();
+		}
+		updateStatesLCD(percent, sat_in_view);
 		//HAL_IWDG_Refresh(&hiwdg);
 	}
 

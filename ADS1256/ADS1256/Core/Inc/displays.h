@@ -18,7 +18,7 @@
 int _write(int file, char *ptr, int len);
 void ITM_Init(void);
 void ITM_SendString(const char* str);
-void updateStatesLCD(void);
+void updateStatesLCD(uint32_t percentFull, uint8_t sat_in_view);
 
 
 

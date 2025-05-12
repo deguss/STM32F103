@@ -635,6 +635,10 @@ bool minmea_parse_zda(struct minmea_sentence_zda *frame, const char *sentence)
       frame->minute_offset < 0)
       return false;
 
+  if (frame->date.year < 100) {
+      frame->date.year += 2000;
+  }
+
   return true;
 }
 

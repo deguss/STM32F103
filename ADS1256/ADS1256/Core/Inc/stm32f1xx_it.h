@@ -29,15 +29,15 @@
 #include "ads1256.h"
 
 
-#define ADCBUFLEN 254
+#define ADCBUFLEN 125
 // struct must be of length MOD 4 = 0
 typedef struct {
 	uint16_t length;
 	uint16_t sps;
-	uint32_t time;
+	uint32_t epochtime;
+	uint8_t gain;
+	uint8_t channel;
 	uint16_t res16;
-	uint8_t  res8;
-	uint8_t channels;
 	int32_t data[ADCBUFLEN];
 } AdcDataArrayStruct;
 
@@ -47,24 +47,24 @@ extern SPI_HandleTypeDef hspi1;
 extern UART_HandleTypeDef huart1;
 void transmitArrayOverUSB(AdcDataArrayStruct *arr);
 
-/* APP_TX_DATA_SIZE = 1024, 6 bytes header, 4 bytes per int32_t -> (1024-6)/4=254
+/* APP_TX_DATA_SIZE = 512, 12 bytes header, 4 bytes per int32_t -> (512-12)/4=125
  * packet transmit time for different sampling frequencies
- * at 30000 sps packet period = 8.50ms
- * at 15000 sps packet period = 16.80ms
- * at 7500 sps packet period = 33.60ms
- * at 3750 sps packet period = 67.20ms
- * at 2000 sps packet period = 126.40ms
- * at 1000 sps packet period = 252.80ms
- * at 500 sps packet period = 508.00ms
- * at 100 sps packet period = 2.54s 	-> buflen = 50 yields packet period of 500ms
- * at 60 sps packet period = 4.20		-> buflen = 30 yields packet period of 500ms
- * at 50 sps packet period = 5.08		-> buflen = 25 yields packet period of 500ms
- * at 30 sps packet period = 8.47 		-> buflen = 15 yields packet period of 500ms
- * at 25 sps packet period = 10.16		-> buflen = 25 yields packet period of 1s
- * at 15 sps packet period = 16.87		-> buflen = 15 yields packet period of 1s
- * at 10 sps packet period = 25.40		-> buflen = 10 yields packet period of 1s
- * at 5 sps packet period = 50.80		-> buflen = 5 yields packet period of 1s
- * at 2.5 sps packet period = 101.60	-> buflen = 5 yields packet period of 2s
+ * at 30000 sps packet period = 4.17ms
+ * at 15000 sps packet period = 8.33ms
+ * at 7500 sps packet period = 16.67ms
+ * at 3750 sps packet period = 33.33ms
+ * at 2000 sps packet period = 62.50ms
+ * at 1000 sps packet period = 125.00ms
+ * at 500 sps packet period = 250.00ms
+ * at 100 sps packet period = 1.25s 	-> buflen = 50 yields packet period of 500ms
+ * at 60 sps packet period = 2.08s		-> buflen = 30 yields packet period of 500ms
+ * at 50 sps packet period = 2.50s		-> buflen = 25 yields packet period of 500ms
+ * at 30 sps packet period = 4.17s 		-> buflen = 15 yields packet period of 500ms
+ * at 25 sps packet period = 5.00s		-> buflen = 25 yields packet period of 1s
+ * at 15 sps packet period = 8.33s		-> buflen = 15 yields packet period of 1s
+ * at 10 sps packet period = 12.50s		-> buflen = 10 yields packet period of 1s
+ * at 5 sps packet period = 25.00s		-> buflen = 5 yields packet period of 1s
+ * at 2.5 sps packet period = 50.00s	-> buflen = 5 yields packet period of 2s
  */
 
 

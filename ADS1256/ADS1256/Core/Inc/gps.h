@@ -19,7 +19,6 @@ typedef struct datetime {
 } dateTimeStruct;
 
 extern dateTimeStruct dateTimeNow;
-extern uint8_t sat_in_view;
 
 
 uint32_t datetime_to_epoch(dateTimeStruct dt);

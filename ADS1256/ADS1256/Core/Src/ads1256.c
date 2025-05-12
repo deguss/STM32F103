@@ -1,7 +1,7 @@
 #include <ads1256.h>
 
 // The corresponding sps values as an array
-const uint16_t sps[SPSI_OPTIONS] = {
+const uint16_t sps[NUM_SPS_OPTIONS] = {
     2,      // SPS_2_5
     5,      // SPS_5
     10,     // SPS_10

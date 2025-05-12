@@ -1,4 +1,5 @@
 #include "file.h"
+#include "main.h"
 
 FATFS FatFs;
 FATFS* pfs;
@@ -17,16 +18,15 @@ FRESULT readWriteConfigFile(const char* fname){
 	fres = read_config(fname, "UID", value, sizeof(value));
 	if (fres != FR_OK  || memcmp(uid, value, strlen(uid)) != 0) {
 		ITM_SendString("config file not present or wrong UID!\n");
-		ITM_SendString("creating new config file\n");
 		fres = write_config(fname, "UID", uid);
 		if (fres != FR_OK)
 			return fres;
 		fres = write_config(fname, "CH", "1");
 		if (fres != FR_OK)
 			return fres;
-		fres = write_config(fname, "SPS", "10");
+		fres = write_config(fname, "SPS", "100");
 		if (fres != FR_OK){
-			ITM_SendString("failed to create config file\n");
+			ITM_SendString("failed to create config\n");
 			return fres;
 		}
 
@@ -35,12 +35,12 @@ FRESULT readWriteConfigFile(const char* fname){
 
 	fres = read_config(fname, "CH", value, sizeof(value));
 	if (fres != FR_OK){
-		ITM_SendString("failed to read config file\n");
+		ITM_SendString("failed to read config\n");
 		return fres;
 	}
-	adcDataArray.channels = check_range(atoi(value), 1, 2);
+	config_channels= check_range(atoi(value), 1, 2);
 	ITM_SendString("CH=");
-	snprintf(str, sizeof(str), "%u\n", adcDataArray.channels);
+	snprintf(str, sizeof(str), "%u\n", config_channels);
 	ITM_SendString(str);
 
 	fres = read_config(fname, "SPS", value, sizeof(value));
@@ -67,120 +67,118 @@ FRESULT stat_with_lfn(const char *path, FILINFO *fno) {
     return f_stat(path, fno);
 }
 
-FRESULT arraytoFile(AdcDataArrayStruct *arr){
+FRESULT writeArrayToFile(AdcDataArrayStruct *arr, dateTimeStruct* startdT) {
+    FRESULT fres;
+    FIL fil;
+    UINT bytesWritten;
+    FILINFO fno;
+    char str[64];
+    char fn[32];
+    static char base[12]; // YYYY-MM-DD
+    static dateTimeStruct lastdT;
+    static uint32_t duration;
+    dateTimeStruct dT;
 
-	FRESULT fres;
-	FIL fil;
-	char str[64];
-	char base[32];
-	char fn[32];
-	UINT bytesWritten;
-	dateTimeStruct dT;
-	static dateTimeStruct startdT, lastdT;
-	//TODO timing
+    __disable_irq();
+    dT = dateTimeNow;
+    __enable_irq();
 
-	__disable_irq();
-	dT = dateTimeNow;
-	__enable_irq();
+    if (ADS_state == ADS_READY) {
+        if (dT.seconds != 0) {
+            return FR_OK; // Wait for full minute
+        }
+        ITM_SendString("start recording\n");
+        ADS_state = ADS_RECORDING;
+    }
 
-	//determine if last call of this function was more than 3 seconds ago
-	if (datetime_diff(lastdT, dT) > 3){
-		//if recording not yet ongoing (contdT will be different from dT)
-		//if (memcmp(&startdT, &dT, sizeof(dateTimeStruct)) != 0) {
+    arr->epochtime = datetime_to_epoch(dT);
 
-		startdT = dT;
+    // Check for file rotation
+    bool isNewSession = datetime_diff(lastdT, dT) > 5 ||
+                        (dT.hours == 0 && dT.minutes == 0 && dT.seconds == 0);
 
-		snprintf(base,sizeof(base),"%4d_%02d_%02d", dT.year, dT.month, dT.day);	//create folder name
-		FILINFO fno;
-		fres = stat_with_lfn(base, &fno); // Check if directory exists
-		if (fres != FR_OK) {
-		    // Directory does not exist; create it
-			fres = f_mkdir(base);
-			if (fres != FR_OK) {
-				ITM_SendString("failed to create directory\n");
-				return fres;
-			}
-		}
+    if (isNewSession) {
+        /* / Append duration to last file
+        if (base[0] != '\0' && stat_with_lfn(base, &fno) == FR_OK) {
+            snprintf(fn, sizeof(fn), "%s/%02u%02u.txt", base, startdT->hours, startdT->minutes);
+            if (stat_with_lfn(fn, &fno) == FR_OK) {
+                uint32_t dur = duration;
+                snprintf(str, sizeof(str), "%u days, %02u:%02u:%02u",
+                         dur / 86400, (dur % 86400) / 3600, (dur % 3600) / 60, dur % 60);
+                write_config(fn, "duration", str);
+            }
+        } */
 
-		// ----------- log file ------------------------
-		snprintf(fn,sizeof(fn),"%s/%02u%02u.txt",base, dT.hours, dT.minutes);	//create log file name 1204.txt
-		fres = stat_with_lfn(fn, &fno); // Check if file exists
-		if (fres != FR_OK) {	//file does not exists,
-			fres = f_open(&fil, fn, FA_CREATE_ALWAYS | FA_WRITE); //Create a new file or overwrite if it exists.
-			if (fres != FR_OK) {
-				ITM_SendString("failed to create log file\n");
-				f_close(&fil);
-				return fres;
-			}
-			f_close(&fil); //I have to close it in order for further writes to open it again.
+        *startdT = dT;
+        snprintf(base, sizeof(base), "%4u-%02u-%02u", dT.year, dT.month, dT.day);
 
+        // Ensure directory exists
+        fres = stat_with_lfn(base, &fno);
+        if (fres != FR_OK && f_mkdir(base) != FR_OK) {
+            ITM_SendString("failed to create dir\n");
+            return fres;
+        }
 
-			snprintf(str, sizeof(str), "%4u.%02u.%02u", dT.year, dT.month, dT.day);
-			fres = write_config(fn, "start_day", str);
-			if (fres != FR_OK) {
-				return fres;
-			}
+        // Create log file if needed
+        snprintf(fn, sizeof(fn), "%s/%02u%02u.txt", base, dT.hours, dT.minutes);
+        if (stat_with_lfn(fn, &fno) != FR_OK) {
+            fres = f_open(&fil, fn, FA_CREATE_ALWAYS | FA_WRITE);
+            if (fres != FR_OK) {
+                ITM_SendString("failed to create log\n");
+                return fres;
+            }
 
-			snprintf(str, sizeof(str), "%2u%02u", dT.hours, dT.minutes);
-			fres = write_config(fn, "start_time", str);
-			if (fres != FR_OK) {
-				return fres;
-			}
+            snprintf(str, sizeof(str), "%4u-%02u-%02u", dT.year, dT.month, dT.day);
+            if (write_config_line(&fil, "start_day", str) != FR_OK) goto error_close;
 
-			snprintf(str, sizeof(str), "%lu", datetime_to_epoch(dT));
-			fres = write_config(fn, "epoch", str);
-			if (fres != FR_OK) {
-				return fres;
-			}
+            snprintf(str, sizeof(str), "%02u:%02u:%02u", dT.hours, dT.minutes, dT.seconds);
+            if (write_config_line(&fil, "start_time", str) != FR_OK) goto error_close;
 
+            snprintf(str, sizeof(str), "%lu", arr->epochtime);
+            if (write_config_line(&fil, "epochtime", str) != FR_OK) goto error_close;
 
-			snprintf(str, sizeof(str), "%d", arr->sps);
-			fres = write_config(fn, "SPS", str);
-			if (fres != FR_OK) {
-				return fres;
-			}
+            snprintf(str, sizeof(str), "%u", arr->sps);
+            if (write_config_line(&fil, "sps", str) != FR_OK) goto error_close;
 
-			snprintf(str, sizeof(str), "%d", arr->channels);
-			fres = write_config(fn, "CH", str);
-			if (fres != FR_OK) {
-				return fres;
-			}
-		}
+            snprintf(str, sizeof(str), "%u", arr->channel);
+            if (write_config_line(&fil, "ch", str) != FR_OK) goto error_close;
 
-	}
+            f_sync(&fil);
+            f_close(&fil);
+        }
+    }
 
+    // Write binary data
+    snprintf(fn, sizeof(fn), "%s/%02u%02u.bin", base, startdT->hours, startdT->minutes);
+    fres = f_open(&fil, fn, FA_WRITE | FA_OPEN_ALWAYS);
+    if (fres != FR_OK) {
+        ITM_SendString("failed to create data\n");
+        return fres;
+    }
 
+    fres = f_lseek(&fil, f_size(&fil));
+    if (fres != FR_OK) {
+        ITM_SendString("failed to seek\n");
+        goto error_close;
+    }
 
-	// ------------- binary data file --------------------------
-	snprintf(fn,sizeof(fn),"%s/%02d%02d.bin",base, dT.hours, dT.minutes);	//create data file name
-	fres = f_open(&fil, fn, FA_WRITE | FA_OPEN_ALWAYS ); // If the file does not exist → it is created.
-	if (fres != FR_OK) {
-		ITM_SendString("failed to create data file\n");
-		return fres;
-	}
-	fres = f_lseek(&fil, f_size(&fil)); // Seek to the end
-	if (fres != FR_OK) {
-		ITM_SendString("failed to seek to the end of the file\n");
-		f_close(&fil);
-		return fres;
-	}
-	// Write the data to the file
-	fres = f_write(&fil, arr->data, arr->length * sizeof(int32_t), &bytesWritten);
-	if (fres != FR_OK || bytesWritten != arr->length * sizeof(int32_t)) {
-		f_close(&fil);
-		ITM_SendString("could not write all data to file\n");
-		return fres;
-	}
-	f_close(&fil);
+    size_t write_len = sizeof(uint32_t) * 3 + arr->length * sizeof(int32_t); // Header + data
+    fres = f_write(&fil, arr, write_len, &bytesWritten);
+    if (fres != FR_OK || bytesWritten != write_len) {
+        ITM_SendString("could not write all data\n");
+        goto error_close;
+    }
 
-	lastdT = dT;
+    f_close(&fil);
+    lastdT = dT;
+    duration = datetime_diff(*startdT, dT);
+    return FR_OK;
 
-	uint32_t duration = datetime_diff(startdT, dT);
-	snprintf(str,20,"%lus\n", duration);
-	ITM_SendString(str);
-
-	return FR_OK;
+error_close:
+    f_close(&fil);
+    return fres;
 }
+
 
 
 void getSTM_UID(char *uid) {
@@ -237,59 +235,111 @@ FRESULT read_config(const char* fname, const char* key, char* value, size_t valu
 	return FR_OK;  // Return success if everything goes fine
 }
 
+FRESULT write_config_line(FIL* fil, const char* key, const char* value) {
+    FRESULT fr;
+    UINT bytesWritten;
+    char line[128]; // Buffer for writing
+
+    if (f_size(fil)){ //file with some content
+        // Move the file pointer to the end
+        fr = f_lseek(fil, f_size(fil));
+        if (fr != FR_OK){
+        	f_close(fil);
+        	return fr;
+        }
+    }
+
+    // create the key-value pair into a buffer
+    snprintf(line, sizeof(line), "%s=%s\n", key, value);
+
+    fr = f_write(fil, line, strlen(line), &bytesWritten);
+    if (fr != FR_OK || bytesWritten != strlen(line)) {
+        f_close(fil);
+        return fr;
+    }
+
+    return fr; // Return the result
+}
 
 FRESULT write_config(const char* fname, const char* key, const char* value) {
     FIL fil;
     FRESULT fr;
+    UINT bytesWritten;
+    char line[128]; // Buffer for writing
 
     // Open the file if it exists, or create a new one if it doesn't.
     fr = f_open(&fil, fname, FA_OPEN_ALWAYS | FA_WRITE);
-    if (fr == FR_OK) {
-        // Move the file pointer to the end
-        f_lseek(&fil, f_size(&fil));
-
-        // Write the key-value pair to the file
-        f_printf(&fil, "%s=%s\n", key, value); // Use f_printf for formatted output
-
-        // flush
-        f_sync(&fil);
+    if (fr != FR_OK){
+    	return fr;
     }
-    // Close the file
-    f_close(&fil);
+    if (f_size(&fil)){ //file with some content
+        // Move the file pointer to the end
+        fr = f_lseek(&fil, f_size(&fil));
+        if (fr != FR_OK){
+        	f_close(&fil);
+        	return fr;
+        }
+    }
+    // create the key-value pair into a buffer
+    snprintf(line, sizeof(line), "%s=%s\n", key, value);
+
+    fr = f_write(&fil, line, strlen(line), &bytesWritten);
+    if (fr != FR_OK || bytesWritten != strlen(line)) {
+        f_close(&fil);
+        return fr;
+    }
+
+	f_sync(&fil); 	// flush
+    f_close(&fil); // Close the file
     return fr; // Return the result
 }
 
 
 
-FRESULT checkSDusage(uint32_t* percent, uint32_t* total){
+FRESULT checkSDusage(uint32_t* percent, uint32_t* total) {
+    FRESULT fres;
+    DWORD fre_clust;
+    DWORD total_clust, free_kB, total_kB, used_percent;
 
-	FRESULT fres;
-	DWORD fre_clust;
-	float totalSpace, freeSpace, usedPercent;
-	// Check free space
-	fres = f_getfree("", &fre_clust, &pfs);
-	if (fres != FR_OK){
-		return fres;
-	}
+    // Get free cluster count
+    fres = f_getfree("", &fre_clust, &pfs);
+    if (fres != FR_OK) {
+        return fres;
+    }
 
-	totalSpace = (float)((pfs->n_fatent - 2) * pfs->csize * 0.5);
-	freeSpace = (float)(fre_clust * pfs->csize * 0.5);
-	usedPercent = 100.0 - (freeSpace*100 / totalSpace);
+    total_clust = pfs->n_fatent - 2;
+
+    // Each cluster = pfs->csize * 512 bytes
+    // Convert to kilobytes: (clusters * csize * 512) / 1024 = clusters * csize / 2
+    total_kB = total_clust * pfs->csize / 2;
+    free_kB  = fre_clust   * pfs->csize / 2;
+
+    if (total_kB == 0) {
+        *percent = 0;
+        *total = 0;
+        return fres;
+    }
+
+    // Calculate approximate used percent: (used * 100) / total
+    used_percent = ((total_kB - free_kB) * 100) / total_kB;
+
 #ifdef DEBUG
-	char str[64];
-	snprintf(str, sizeof(str), "total: %9.0fkB\n", totalSpace);
-	ITM_SendString(str);
-	snprintf(str, sizeof(str),"free: %10.0fkB\n", freeSpace);
-	ITM_SendString(str);
-	snprintf(str, sizeof(str),"%2.2f%% free\n", freeSpace*100 / totalSpace);
-	ITM_SendString(str);
-	snprintf(str, sizeof(str),"%2.2f%% used\n", usedPercent);
-	ITM_SendString(str);
+    char str[64];
+    snprintf(str, sizeof(str), "total: %lu kB\n", (unsigned long)total_kB);
+    ITM_SendString(str);
+    snprintf(str, sizeof(str), "free:  %lu kB\n", (unsigned long)free_kB);
+    ITM_SendString(str);
+    snprintf(str, sizeof(str), "%lu%% free\n", (unsigned long)(100 - used_percent));
+    ITM_SendString(str);
+    snprintf(str, sizeof(str), "%lu%% used\n", (unsigned long)used_percent);
+    ITM_SendString(str);
 #endif
-	*total = MINIM(((uint32_t)(totalSpace / 1000 / 1000)), 100);
-	*percent = MINIM(((uint32_t)(usedPercent)), 99);
-	return fres;
 
+    // Return rough values (optional clamping)
+    *total = MINIM(total_kB / 1024 / 1024, 100);  // total in GB, clamped to 100
+    *percent = MINIM(used_percent, 99);          // max 99% to prevent overflow
+
+    return fres;
 }
 
 

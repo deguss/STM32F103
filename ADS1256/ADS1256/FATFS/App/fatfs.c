@@ -17,6 +17,7 @@
   */
 /* USER CODE END Header */
 #include "fatfs.h"
+#include "gps.h"
 
 uint8_t retUSER;    /* Return value for USER */
 char USERPath[4];   /* USER logical drive path */
@@ -40,13 +41,18 @@ void MX_FATFS_Init(void){
   * @param  None
   * @retval Time in DWORD
   */
+
 DWORD get_fattime(void)
 {
-  /* USER CODE BEGIN get_fattime */
-  return 0;
-  /* USER CODE END get_fattime */
+    // Check for sanity — if GPS hasn't provided a valid year yet, return a safe default
+    if (dateTimeNow.year < 1980) {
+        return ((DWORD)(2025 - 1980) << 25) | ((DWORD)1 << 21) | ((DWORD)1 << 16);
+    }
+
+    return  ((DWORD)(dateTimeNow.year - 1980) << 25)
+          | ((DWORD)dateTimeNow.month << 21)
+          | ((DWORD)dateTimeNow.day << 16)
+          | ((DWORD)dateTimeNow.hours << 11)
+          | ((DWORD)dateTimeNow.minutes << 5)
+          | ((DWORD)(dateTimeNow.seconds / 2));
 }
-
-/* USER CODE BEGIN Application */
-
-/* USER CODE END Application */

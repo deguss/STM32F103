@@ -38,9 +38,9 @@ extern "C" {
 
 typedef enum {
 	ADS_INIT,
+	ADS_READY,
 	ADS_RECORDING,
-	ADS_ERROR,
-	ADS_INVALID}  ADS_states;
+	ADS_ERROR}  ADS_states;
 typedef enum {
 	SD_INIT,
 	SD_OK,
@@ -57,7 +57,7 @@ extern ADS_states ADS_state;
 extern SD_states SD_state;
 extern GPS_states GPS_state;
 extern USBD_StatusTypeDef USB_state;
-
+extern uint8_t config_channels;
 
 
 void Error_Handler(void);

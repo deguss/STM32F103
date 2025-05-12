@@ -49,7 +49,7 @@
   */
 /* Define size for the receive and transmit buffer over CDC */
 #define APP_RX_DATA_SIZE  32
-#define APP_TX_DATA_SIZE  1024
+#define APP_TX_DATA_SIZE  512
 
 extern uint8_t UserRxBufferFS[APP_RX_DATA_SIZE];
 extern uint16_t usb_received;

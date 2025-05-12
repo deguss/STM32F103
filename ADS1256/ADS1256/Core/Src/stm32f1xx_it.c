@@ -46,21 +46,22 @@ uint8_t pga_index = 0; //default PGA = 1
 extern uint16_t Timer1, Timer2;
 
 const uint8_t bufferSizes[16] = {
-    5,
-    5,
-    10,
-    15,
-    25,
-    15,
-    25,
-    30,
-    50,
-    254,
-    254,
-    254,
-    254,
-    254,
-    254
+    5,	//2.5Hz
+    5,	//5Hz
+    10,	//10Hz
+    15,	//15Hz
+    25,	//25Hz
+    15,	//30Hz
+    25,	//50Hz
+    30,	//60Hz
+    50,	//100Hz
+    125,//500Hz
+    125,//1kHz
+    125,//2kHz
+    125,//3.75kHz
+    125,//7.5kHz
+    125,//15kHz
+	125 //30kHz
 };
 
 
@@ -71,17 +72,17 @@ uint16_t GPS_rx_index = 0; // Index for the received_string buffer
 // Function to transmit variable length int32_t array over USB CDC
 void transmitArrayOverUSB(AdcDataArrayStruct *arr){
 /*typedef struct {
-    uint16_t length;
-    uint16_t sps;
-    uint32_t time;
-    uint16_t res16;
-    uint8_t  res8;
-    uint8_t channels;
-    int32_t data[ADCBUFLEN];
+	uint16_t length;
+	uint16_t sps;
+	uint32_t epochtime;
+	uint8_t gain;
+	uint8_t channel;
+	uint16_t res16;
+	int32_t data[ADCBUFLEN];
 } AdcDataArrayStruct;*/
 
     // Calculate the total size of the data to be sent
-    size_t totalSize = 2*2+4+2+1+1 + arr->length*sizeof(int32_t);
+    size_t totalSize = 2+2+4+1+1+2 + arr->length*sizeof(int32_t);
 
     // Transmit the data over USB CDC
     CDC_Transmit_FS((uint8_t *)arr, totalSize);
