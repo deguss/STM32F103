@@ -6,7 +6,7 @@
  */
 
 #include "lcd.h"
-
+#include "main.h"
 
 Lcd_HandleTypeDef lcd;
 

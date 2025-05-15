@@ -39,4 +39,10 @@ extern SPI_HandleTypeDef 	hspi2;
 #define	SD_CS_PORT			GPIOB
 #define SD_CS_PIN			GPIO_PIN_12
 
+
+
+bool is_sd_inserted(void);
+
+
+
 #endif

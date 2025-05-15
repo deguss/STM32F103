@@ -163,7 +163,7 @@ static bool SD_RxDataBlock(BYTE *buff, UINT len)
 #if _USE_WRITE == 1
 static bool SD_TxDataBlock(const uint8_t *buff, BYTE token)
 {
-	uint8_t resp;
+	volatile uint8_t resp;
 	uint8_t i = 0;
 
 	/* wait SD ready */
@@ -205,6 +205,7 @@ static bool SD_TxDataBlock(const uint8_t *buff, BYTE token)
 }
 #endif /* _USE_WRITE */
 
+
 /* transmit command */
 static BYTE SD_SendCmd(BYTE cmd, uint32_t arg)
 {
@@ -239,6 +240,14 @@ static BYTE SD_SendCmd(BYTE cmd, uint32_t arg)
 	} while ((res & 0x80) && --n);
 
 	return res;
+}
+
+bool is_sd_inserted(void){
+
+	return SD_SendCmd(CMD0, 0) == 0x01;
+
+    // 0x00 = ready, 0x01 = idle, 0xFF = no response
+
 }
 
 /***************************************

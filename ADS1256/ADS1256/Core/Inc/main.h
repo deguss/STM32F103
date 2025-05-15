@@ -63,7 +63,6 @@ extern uint8_t config_channels;
 void Error_Handler(void);
 
 extern GPIO_PinState HAL_GPIO_GetOutputPin(GPIO_TypeDef *GPIOx, uint16_t GPIO_Pin);
-extern void ITM_SendString(const char* str);
 
 #define get_PA15() 		HAL_GPIO_GetOutputPin(GPIOA, GPIO_PIN_15)
 #define PA15(x) 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, (x == 1) ? GPIO_PIN_SET : GPIO_PIN_RESET);

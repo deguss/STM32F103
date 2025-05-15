@@ -8,17 +8,27 @@
 #ifndef INC_DISPLAYS_H_
 #define INC_DISPLAYS_H_
 
-#include "lcd.h"
-#include "main.h"
-//#include "usb_device.h"
-//#include "usbd_cdc_if.h"
-#include "gps.h"
+#include <stdint.h>
+#include "stm32f1xx.h"
+#include "core_cm3.h"
 
 //needed for printf ITM debug output
 int _write(int file, char *ptr, int len);
 void ITM_Init(void);
-void ITM_SendString(const char* str);
+void update_display_config(void);
 void updateStatesLCD(uint32_t percentFull, uint8_t sat_in_view);
+
+
+#ifdef DEBUG
+#define ITM_SendString(str)    do { \
+                                const char* s = str; \
+                                while (*s) { \
+                                    ITM_SendChar(*s++); \
+                                } \
+                            } while(0)
+#else
+#define ITM_SendString(str)    ((void)0)  // No-op in production
+#endif
 
 
 

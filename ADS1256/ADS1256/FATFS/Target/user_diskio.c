@@ -36,6 +36,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
 #include "ff_gen_drv.h"
+#include "stdint.h"
+#include "stm32f1xx_hal.h"  // Adjust based on your MCU
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -70,6 +72,7 @@ Diskio_drvTypeDef  USER_Driver =
 #endif /* _USE_IOCTL == 1 */
 };
 
+
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -81,11 +84,10 @@ DSTATUS USER_initialize (
 	BYTE pdrv           /* Physical drive nmuber to identify the drive */
 )
 {
-  /* USER CODE BEGIN INIT */
-    // Stat = STA_NOINIT;
-    // return Stat;
-	return SD_disk_initialize(pdrv);
-  /* USER CODE END INIT */
+    if (!is_sd_inserted())
+        return STA_NODISK;
+
+    return SD_disk_initialize(pdrv);
 }
 
 /**
@@ -97,11 +99,11 @@ DSTATUS USER_status (
 	BYTE pdrv       /* Physical drive number to identify the drive */
 )
 {
-  /* USER CODE BEGIN STATUS */
-    // Stat = STA_NOINIT;
-    // return Stat;
-	return SD_disk_status(pdrv);
-  /* USER CODE END STATUS */
+    if (pdrv != 0)
+        return STA_NOINIT;
+
+
+    return SD_disk_status(pdrv);
 }
 
 /**

@@ -1,11 +1,12 @@
 #include "file.h"
 #include "main.h"
+#include "displays.h"
 
 FATFS FatFs;
 FATFS* pfs;
 
 
-FRESULT readWriteConfigFile(const char* fname){
+FRESULT readWriteConfigFile(const char* fname, bool overwrite){
 	char value[64]; // Buffer to store the value
 	char uid[25];
 	char str[36];
@@ -14,48 +15,62 @@ FRESULT readWriteConfigFile(const char* fname){
 	snprintf(str, sizeof(str),"MCU UID = %s\n", uid);
 	ITM_SendString(str);
 
-	//check if file present and UID matches
-	fres = read_config(fname, "UID", value, sizeof(value));
-	if (fres != FR_OK  || memcmp(uid, value, strlen(uid)) != 0) {
-		ITM_SendString("config file not present or wrong UID!\n");
-		fres = write_config(fname, "UID", uid);
-		if (fres != FR_OK)
-			return fres;
-		fres = write_config(fname, "CH", "1");
-		if (fres != FR_OK)
-			return fres;
-		fres = write_config(fname, "SPS", "100");
-		if (fres != FR_OK){
-			ITM_SendString("failed to create config\n");
-			return fres;
-		}
 
+	fres = read_config(fname, "UID", value, sizeof(value)); //check if file present and UID matches
+	if (fres != FR_OK  || memcmp(uid, value, strlen(uid)) != 0 || overwrite) {
+		ITM_SendString("config file not present or wrong UID or requested to overwrite!\n");
+
+		fres = write_config(fname, overwrite, "UID", uid);	//write new file
+		if (fres != FR_OK)	 	goto err_write;
+		snprintf(str, sizeof(str), "%u", config_channels);
+		fres = write_config(fname, false, "channels", str);	//append to newly created file
+		if (fres != FR_OK) 		goto err_write;
+		snprintf(str, sizeof(str), "%u", sps[sps_index]);
+		fres = write_config(fname, false, "sps", str);
+		if (fres != FR_OK) 		goto err_write;
+		snprintf(str, sizeof(str), "%u", pga[pga_index]);
+		fres = write_config(fname, false, "gain", str);
+		if (fres != FR_OK) 		goto err_write;
 
 	}
 
-	fres = read_config(fname, "CH", value, sizeof(value));
-	if (fres != FR_OK){
-		ITM_SendString("failed to read config\n");
-		return fres;
-	}
-	config_channels= check_range(atoi(value), 1, 2);
-	ITM_SendString("CH=");
+	//read back
+
+	fres = read_config(fname, "channels", value, sizeof(value));
+	if (fres != FR_OK)		goto err_close;
+	config_channels = check_range(atoi(value), 1, 2);
+	ITM_SendString("channels=");
 	snprintf(str, sizeof(str), "%u\n", config_channels);
 	ITM_SendString(str);
 
-	fres = read_config(fname, "SPS", value, sizeof(value));
-	if (fres != FR_OK){
-		return fres;
-	}
-	uint16_t index = getSPSindex(validateSPS(atoi(value)));
-	adcDataArray.sps = sps[index];
-	adcDataArray.length = bufferSizes[index];
-	ITM_SendString("SPS=");
+	fres = read_config(fname, "sps", value, sizeof(value));
+	if (fres != FR_OK)		goto err_close;
+	sps_index = getSPSindex(validateSPS(atoi(value)));
+	adcDataArray.sps = sps[sps_index];
+	adcDataArray.length = bufferSizes[sps_index];
+	ITM_SendString("sps=");
 	snprintf(str, sizeof(str), "%u\n", adcDataArray.sps);
 	ITM_SendString(str);
-	SD_state = SD_OK;
 
+	fres = read_config(fname, "gain", value, sizeof(value));
+	if (fres != FR_OK)		goto err_close;
+	pga_index = getPGAindex(validatePGA(atoi(value)));
+	adcDataArray.gain = pga[pga_index];
+	ITM_SendString("gain=");
+	snprintf(str, sizeof(str), "%u\n", adcDataArray.gain);
+	ITM_SendString(str);
+
+
+	SD_state = SD_OK;
 	return FR_OK;
+
+err_close:
+	ITM_SendString("failed to read config\n");
+	return fres;
+
+err_write:
+	ITM_SendString("failed to write config\n");
+	return fres;
 }
 
 FRESULT stat_with_lfn(const char *path, FILINFO *fno) {
@@ -76,7 +91,6 @@ FRESULT writeArrayToFile(AdcDataArrayStruct *arr, dateTimeStruct* startdT) {
     char fn[32];
     static char base[12]; // YYYY-MM-DD
     static dateTimeStruct lastdT;
-    static uint32_t duration;
     dateTimeStruct dT;
 
     __disable_irq();
@@ -84,8 +98,8 @@ FRESULT writeArrayToFile(AdcDataArrayStruct *arr, dateTimeStruct* startdT) {
     __enable_irq();
 
     if (ADS_state == ADS_READY) {
-        if (dT.seconds != 0) {
-            return FR_OK; // Wait for full minute
+        if (dT.seconds != 0 || dT.minutes%2!=0) {
+            return FR_OK; // Wait for full minute and minute MOD 5 = 0
         }
         ITM_SendString("start recording\n");
         ADS_state = ADS_RECORDING;
@@ -98,17 +112,6 @@ FRESULT writeArrayToFile(AdcDataArrayStruct *arr, dateTimeStruct* startdT) {
                         (dT.hours == 0 && dT.minutes == 0 && dT.seconds == 0);
 
     if (isNewSession) {
-        /* / Append duration to last file
-        if (base[0] != '\0' && stat_with_lfn(base, &fno) == FR_OK) {
-            snprintf(fn, sizeof(fn), "%s/%02u%02u.txt", base, startdT->hours, startdT->minutes);
-            if (stat_with_lfn(fn, &fno) == FR_OK) {
-                uint32_t dur = duration;
-                snprintf(str, sizeof(str), "%u days, %02u:%02u:%02u",
-                         dur / 86400, (dur % 86400) / 3600, (dur % 3600) / 60, dur % 60);
-                write_config(fn, "duration", str);
-            }
-        } */
-
         *startdT = dT;
         snprintf(base, sizeof(base), "%4u-%02u-%02u", dT.year, dT.month, dT.day);
 
@@ -140,8 +143,11 @@ FRESULT writeArrayToFile(AdcDataArrayStruct *arr, dateTimeStruct* startdT) {
             snprintf(str, sizeof(str), "%u", arr->sps);
             if (write_config_line(&fil, "sps", str) != FR_OK) goto error_close;
 
-            snprintf(str, sizeof(str), "%u", arr->channel);
-            if (write_config_line(&fil, "ch", str) != FR_OK) goto error_close;
+            snprintf(str, sizeof(str), "%u", config_channels);
+            if (write_config_line(&fil, "channels", str) != FR_OK) goto error_close;
+
+            snprintf(str, sizeof(str), "%u", arr->gain);
+            if (write_config_line(&fil, "ch1_gain", str) != FR_OK) goto error_close;
 
             f_sync(&fil);
             f_close(&fil);
@@ -171,7 +177,6 @@ FRESULT writeArrayToFile(AdcDataArrayStruct *arr, dateTimeStruct* startdT) {
 
     f_close(&fil);
     lastdT = dT;
-    duration = datetime_diff(*startdT, dT);
     return FR_OK;
 
 error_close:
@@ -261,14 +266,15 @@ FRESULT write_config_line(FIL* fil, const char* key, const char* value) {
     return fr; // Return the result
 }
 
-FRESULT write_config(const char* fname, const char* key, const char* value) {
+FRESULT write_config(const char* fname, bool overwrite, const char* key, const char* value) {
     FIL fil;
     FRESULT fr;
     UINT bytesWritten;
     char line[128]; // Buffer for writing
 
+    BYTE mode = overwrite ? FA_CREATE_ALWAYS : FA_OPEN_ALWAYS;
     // Open the file if it exists, or create a new one if it doesn't.
-    fr = f_open(&fil, fname, FA_OPEN_ALWAYS | FA_WRITE);
+    fr = f_open(&fil, fname, mode | FA_WRITE);
     if (fr != FR_OK){
     	return fr;
     }
@@ -323,7 +329,7 @@ FRESULT checkSDusage(uint32_t* percent, uint32_t* total) {
     // Calculate approximate used percent: (used * 100) / total
     used_percent = ((total_kB - free_kB) * 100) / total_kB;
 
-#ifdef DEBUG
+/*
     char str[64];
     snprintf(str, sizeof(str), "total: %lu kB\n", (unsigned long)total_kB);
     ITM_SendString(str);
@@ -333,11 +339,11 @@ FRESULT checkSDusage(uint32_t* percent, uint32_t* total) {
     ITM_SendString(str);
     snprintf(str, sizeof(str), "%lu%% used\n", (unsigned long)used_percent);
     ITM_SendString(str);
-#endif
+*/
 
     // Return rough values (optional clamping)
-    *total = MINIM(total_kB / 1024 / 1024, 100);  // total in GB, clamped to 100
-    *percent = MINIM(used_percent, 99);          // max 99% to prevent overflow
+    *total = MIN(total_kB / 1024 / 1024, 100);  // total in GB, clamped to 100
+    *percent = MIN(used_percent, 99);          // max 99% to prevent overflow
 
     return fres;
 }

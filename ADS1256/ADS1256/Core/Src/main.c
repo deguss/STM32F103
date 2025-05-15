@@ -34,9 +34,7 @@ static ADS_states startSampling(void){
 	}
 	adcDataArray.channel=1;
 
-	pga_index = 0; //start with PGA=1
 	setGain(getSPSRegValue(adcDataArray.sps), pga_const[pga_index]);	//continuous conversation starts here
-
 
 	HAL_NVIC_SetPriority(EXTI0_IRQn, 5, 7);
 	HAL_NVIC_EnableIRQ(EXTI0_IRQn); //enable DRDY interrupt
@@ -46,7 +44,7 @@ static ADS_states startSampling(void){
 
 int main(void){
 	uint32_t percent, total;
-	static uint32_t timer_USB, timer_intADC, timer_ADS, timer_update;
+	static uint32_t timer_USB, timer_intADC, timer_ADS, timer_update, timer_reboot;
 	static uint8_t nmea_valid;
 	static dateTimeStruct startdT;
 	static uint8_t sat_in_view;
@@ -55,7 +53,7 @@ int main(void){
 	static float vrefint = 1200;
 	//float vdda, c0, c1, c2, c3;
 	//float ch0, ch1, ch2, ch3;
-	enum display_pages {ADS, INTADC} display_page = ADS;
+	enum display_pages {ADS, INTADC, USER} display_page = ADS;
 	char cmd_str[21];
 	char query_str[21];
 	static int elog = 0;	//indicates whether data is transmitted to host over USB. Initiated by command INIT:ELOG
@@ -100,7 +98,6 @@ int main(void){
 		// will return FR_NOT_READY: The physical drive cannot work   if no SD card inserted
 		// returns FR_NO_FILESYSTEM: There is no valid PRIMARY formatted FAT32 partition on the SD card
 		print_fresult(fres, str);
-		lcd_line(&lcd, str);
 		SD_state = SD_FSERROR;
 	} else {
 		fres = checkSDusage(&percent, &total);
@@ -116,7 +113,7 @@ int main(void){
 
 	HAL_Delay(5000);
 
-	fres = readWriteConfigFile("config.txt");
+	fres = readWriteConfigFile("config.txt", false);	//not requested to overwrite if present
 	if (fres != FR_OK){
 		SD_state = SD_FSERROR;
 	}
@@ -251,10 +248,7 @@ int main(void){
 				}
 
 			}
-			lcd_cursor(&lcd, 1, 0);
-			snprintf(str, 25, "%5dHz %1dch +-%4dmV", adcDataArray.sps, config_channels, range[pga_index]);
-			lcd_line(&lcd, str);
-
+			update_display_config();
 			usb_received = 0;
 		} // end of interpreting commands received over USB --------------------
 
@@ -286,33 +280,47 @@ int main(void){
 			}
 
 		}
-		if (display_page == ADS && HAL_GetTick() - timer_ADS > 500){ //check if 300ms ellapsed
-			if (ADS_state == ADS_READY || ADS_state == ADS_RECORDING){
+		if (SD_state == SD_OK && (ADS_state == ADS_READY || ADS_state == ADS_RECORDING)){
+			if (HAL_GetTick() - timer_ADS > 500){ //check if 500ms ellapsed
 				timer_ADS = HAL_GetTick();	//update timer with present value of time
-
-				int32_t ch0 = calculate_average(adcDataArray.data, adcDataArray.length);
-				lcd_cursor(&lcd, 2,0);
-				uint8_t decimals=2;
-				int32_t abs_ch0 = (ch0 < 0) ? -ch0 : ch0; // Calculate absolute value
-				if (abs_ch0 < 1e6) //<1000mV
-					decimals = 3;
-				if (abs_ch0 < 1e5) //<100mV
-					decimals = 4;
-				if (abs_ch0 < 1e4)  //<10mV
-					decimals = 5;
-				// Format the output string in integer math.
-				snprintf(str, 20, "A:%ld.%0*ldmV", ch0/1000, decimals, abs_ch0 % 1000);
-				lcd_line(&lcd, str);
+				if (SD_state == SD_OK)
+					update_display_config(); 			//let the user select sample rates if ADS_READY || stop the recording when ADS_RECORDING
+				if (display_page == ADS){
+					int32_t ch0 = calculate_average(adcDataArray.data, adcDataArray.length);
+					lcd_cursor(&lcd, 2,0);
+					uint8_t decimals=2;
+					int32_t abs_ch0 = (ch0 < 0) ? -ch0 : ch0; // Calculate absolute value
+					if (abs_ch0 < 1e6) //<1000mV
+						decimals = 3;
+					if (abs_ch0 < 1e5) //<100mV
+						decimals = 4;
+					if (abs_ch0 < 1e4)  //<10mV
+						decimals = 5;
+					// Format the output string in integer math.
+					snprintf(str, 20, "A:%d.%0*dmV", ch0/1000, decimals, abs_ch0 % 1000);
+					lcd_line(&lcd, str);
+				}
 			}
-			else if(ADS_state == ADS_INIT) {
-				status = setupADS1256();
+		}
+		if(ADS_state == ADS_INIT) {
+			HAL_Delay(300);
+			status = setupADS1256();
+			lcd_cursor(&lcd, 2,0);
+			snprintf(str, 21, "ADS1256 status: 0x%02X", status);
+			lcd_line(&lcd, str);
+			ADS_state = startSampling();
+		}
+		if (ADS_state == ADS_ERROR) {
+			if (HAL_GetTick() - timer_ADS > 5000){ //check if 5s ellapsed
+				timer_ADS = HAL_GetTick();	//update timer with present value of time
 				lcd_cursor(&lcd, 2,0);
-				snprintf(str, 21, "ADS1256 status: 0x%02X", status);
-				lcd_line(&lcd, str);
-				ADS_state = startSampling();
+				lcd_line(&lcd, "please power cycle! ");
+				HAL_NVIC_DisableIRQ(EXTI0_IRQn); //disable DRDY interrupt
+				stopSampling();
+				ADS_state = ADS_INIT;
 			}
+		}
 
-		}	//end of display_page == ADS
 
 		if ((ADS_state == ADS_READY || ADS_state == ADS_RECORDING ) && flagBufferFull) { //ADC receive ring buffer full
 			flagBufferFull = 0;
@@ -320,30 +328,36 @@ int main(void){
 				transmitArrayOverUSB(&adcDataArray);
 			}
 			if (SD_state == SD_OK && GPS_state == GPS_TIME){
-				writeArrayToFile(&adcDataArray, &startdT);
-				if ((dateTimeNow.seconds == 1 || dateTimeNow.seconds == 31) && startdT.year > 2024){	//update twice every minute
-					lcd_cursor(&lcd, 1,0);
-					//"05-12/1400 133457kB "
-					FILINFO fno;
-					snprintf(str,sizeof(str),"%4u-%02u-%02u/%02u%02u.bin", startdT.year, startdT.month, startdT.day, startdT.hours, startdT.minutes );
-					fres = stat_with_lfn(str, &fno);
-					if (fres == FR_OK) {
-					    uint32_t size_kb = (fno.fsize + 1023) / 1024; // Round up to nearest KB
-					    snprintf(str,21,"%02u-%02u/%02u%02u %6ukB",startdT.month, startdT.day, startdT.hours, startdT.minutes, size_kb);
-					    lcd_line(&lcd,str);
+				fres = writeArrayToFile(&adcDataArray, &startdT);
+	            if (fres != FR_OK) {
+	            	lcd_cursor(&lcd, 1,0);
+	            	print_fresult(fres, str);
+	            	ADS_state = ADS_READY;
+	            	SD_state = SD_FSERROR;
+	            	timer_reboot = HAL_GetTick();
+	            }
+				if ((dateTimeNow.seconds == 10 || dateTimeNow.seconds == 40) && startdT.year > 2024 && (HAL_GetTick()-timer_update > 10000)){	//update twice every minute
+					timer_update = HAL_GetTick();
+					if (display_page == ADS && ADS_state == ADS_RECORDING){
+						//"05-12/1400 133457kB "
+						FILINFO fno;
+						snprintf(str,sizeof(str),"%4u-%02u-%02u/%02u%02u.bin", startdT.year, startdT.month, startdT.day, startdT.hours, startdT.minutes );
+						fres = stat_with_lfn(str, &fno);
+						if (fres == FR_OK) {
+							uint32_t size_kb = (fno.fsize + 1023) / 1024; // Round up to nearest KB
+							snprintf(str,21,"%02u-%02u/%02u%02u %6ukB",startdT.month, startdT.day, startdT.hours, startdT.minutes, size_kb);
+							lcd_cursor(&lcd, 1,0);
+							lcd_line(&lcd,str);
+						}
 					}
 				}
 			}
 		}
-		if (ADS_state == ADS_ERROR) {
-			if (HAL_GetTick() - timer_ADS > 5000){ //check if 5s ellapsed
-				lcd_cursor(&lcd, 2,0);
-				lcd_line(&lcd, "please power cycle! ");
-				timer_ADS = HAL_GetTick();	//update timer with present value of time
-				HAL_NVIC_DisableIRQ(EXTI0_IRQn); //disable DRDY interrupt
-				stopSampling();
-				ADS_state = ADS_INIT;
-			}
+
+		if (SD_state == SD_FSERROR && (HAL_GetTick()-timer_reboot >= 30000)){
+			//reboot after 30 if FS is corrupt
+			stopSampling();
+			NVIC_SystemReset();
 		}
 
 		//ITM_SendString(GPS_rx_buf);
@@ -375,10 +389,7 @@ int main(void){
 
 
 
-		if (USB_state ==  USBD_OK){
-			;
-		}
-		else { //if USB status not OK
+		if (USB_state !=  USBD_OK){
 			if (HAL_GetTick() - timer_USB > 1000){ //check if 1s ellapsed
 				timer_USB = HAL_GetTick();	//update timer with present value of time
 				USB_state = CDC_Transmit_FS(&status, 1);	//transmit some msg
@@ -386,11 +397,14 @@ int main(void){
 		}
 
 
-		if (dateTimeNow.seconds == 33 && HAL_GetTick() - timer_update > 10000){ //at least 10s passed
+		if (SD_state == SD_OK && dateTimeNow.seconds == 50 && (HAL_GetTick()-timer_update > 10000)){ //at least 10s passed
 			timer_update = HAL_GetTick();
 			fres = checkSDusage(&percent, &total);
 			if (fres != FR_OK){
 				SD_state = SD_FSERROR;
+				lcd_cursor(&lcd, 1,0);
+				print_fresult(fres, str);
+				lcd_line(&lcd, str);
 			}
 
 		}

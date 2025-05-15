@@ -88,10 +88,10 @@ extern const uint16_t sps[NUM_SPS_OPTIONS];
 #define MUXN_AIN7 0x07
 #define MUXN_AINCOM 0x08
 
-
-extern const uint8_t pga[7];
-extern const uint16_t range[7];
-extern const uint8_t pga_const[7];
+#define NUM_PGA_OPTIONS 7
+extern const uint8_t pga[NUM_PGA_OPTIONS];
+extern const uint16_t range[NUM_PGA_OPTIONS];
+extern const uint8_t pga_const[NUM_PGA_OPTIONS];
 
 
 extern SPI_HandleTypeDef hspi1;
@@ -100,6 +100,9 @@ int32_t calculate_average(const int32_t *Array, size_t length);
 uint8_t check_range(int value, uint8_t LLIM, uint8_t ULIM);
 uint16_t getSPSindex(int input);
 uint16_t validateSPS(int input);
+uint8_t validatePGA(int input);
+uint8_t getPGAindex(int input);
+
 uint8_t getSPSRegValue(int input);
 void sendCommand(uint8_t cmd);
 void writeRegister(uint8_t reg, uint8_t value);

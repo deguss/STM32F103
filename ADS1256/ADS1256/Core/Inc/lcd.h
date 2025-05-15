@@ -9,9 +9,8 @@
 #define LCD_H_
 
 #include "stm32f1xx_hal.h"
-#include "string.h"
-#include "stdio.h"
-#include "main.h"
+#include <string.h>
+#include <stdio.h>
 
 #define LCD20xN 		// For 20xN LCDs
 //#define LCD16xN			// For 16xN LCDs

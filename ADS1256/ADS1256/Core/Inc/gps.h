@@ -7,7 +7,8 @@
 
 #ifndef INC_GPS_H_
 #define INC_GPS_H_
-#include "displays.h"
+
+#include <stdint.h>
 
 typedef struct datetime {
 	uint8_t hours;

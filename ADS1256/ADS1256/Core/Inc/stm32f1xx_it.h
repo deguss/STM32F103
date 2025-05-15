@@ -45,7 +45,6 @@ extern volatile int32_t encoder_count;
 extern volatile int dma_complete;
 extern SPI_HandleTypeDef hspi1;
 extern UART_HandleTypeDef huart1;
-void transmitArrayOverUSB(AdcDataArrayStruct *arr);
 
 /* APP_TX_DATA_SIZE = 512, 12 bytes header, 4 bytes per int32_t -> (512-12)/4=125
  * packet transmit time for different sampling frequencies
@@ -74,18 +73,14 @@ extern uint16_t flagBufferFull;
 extern AdcDataArrayStruct adcDataArray;
 extern uint8_t sps_index;
 extern uint8_t pga_index;
+extern volatile int8_t sig_enc;
+extern volatile int8_t sig_btn;
 
 extern char GPS_rx_buf[]; // Buffer to store the received string
 extern uint16_t GPS_rx_index; // Index for the received_string buffer
 
-/* USER CODE END EC */
+void transmitArrayOverUSB(AdcDataArrayStruct *arr);
 
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
-
-/* USER CODE END EM */
-
-/* Exported functions prototypes ---------------------------------------------*/
 void NMI_Handler(void);
 void HardFault_Handler(void);
 void MemManage_Handler(void);

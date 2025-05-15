@@ -11,6 +11,7 @@
 #include <stdbool.h> // Include for bool
 #include "gps.h"
 #include "minmea.h"
+#include "displays.h"
 
 
 dateTimeStruct dateTimeNow;
@@ -107,7 +108,7 @@ int parse_nmea_minmea(const char *nmea_sentence, dateTimeStruct *dateTime, uint8
                 	//snprintf(s,sizeof(s),"GPGGA lat: %ld, lon: %ld (alt: %ld%c)\r\n",
 					//	minmea_rescale(&frame.latitude, 1000), minmea_rescale(&frame.longitude, 1000),
 					//	frame.altitude, frame.altitude_units);
-                	snprintf(s,sizeof(s),"GPGGA GPS fix %dD lat: %ld, lon: %ld (alt: %ld, height: %ld)\n", frame.fix_quality,
+                	snprintf(s,sizeof(s),"GPGGA GPS fix %dD lat: %i, lon: %ld (alt: %i, height: %i)\n", frame.fix_quality,
                 			frame.latitude.value, frame.longitude.value, frame.altitude, frame.height);
 					ITM_SendString(s);
                 	// fix_quality: 1...TIME only, 2=2D, 3=3D fix

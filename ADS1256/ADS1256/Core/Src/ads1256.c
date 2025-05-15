@@ -21,39 +21,43 @@ const uint16_t sps[NUM_SPS_OPTIONS] = {
 };
 
 
-const uint8_t pga[7] = {1,2,4,8,16,32,64};
-const uint16_t range[7] = {5000, 2500, 1250, 625, 312, 156, 78};
-const uint8_t pga_const[7] = {PGA1, PGA2, PGA4, PGA8, PGA16, PGA32, PGA64};
+const uint8_t pga[NUM_PGA_OPTIONS] = {1,2,4,8,16,32,64};
+const uint16_t range[NUM_PGA_OPTIONS] = {5000, 2500, 1250, 625, 312, 156, 78};
+const uint8_t pga_const[NUM_PGA_OPTIONS] = {PGA1, PGA2, PGA4, PGA8, PGA16, PGA32, PGA64};
 
-
-// Calculate average (avoiding float)
-int32_t calculate_average(const int32_t *Array, size_t length) {
-	int64_t sum = 0;
-	if (length == 0) {
-		return 0; // Or handle the error in a more robust way
-	}
-
-	for (size_t i = 0; i < length; i++) {
-		sum += Array[i];
-	}
-
-	// Crucial: Handle potential overflow.  If sum is too large, this will wrap around.
-	// Using int64_t is essential here.
-	int64_t average = (sum * 5000LL *1000LL) / length;
-
-	// Now, handle the right shift.  Crucially, do this *before* the cast to int32_t.
-	average >>= 23;
-
-	return (int32_t)average; //result in uV (microVolts)
+uint8_t validatePGA(int input) {
+    switch (input) {
+        case 1:
+        case 2:
+        case 4:
+        case 8:
+        case 16:
+        case 32:
+        case 64:
+            return (uint8_t)(input);
+        default:
+            return 1; // Default PGA gain
+    }
 }
 
-uint8_t check_range(int value, uint8_t LLIM, uint8_t ULIM) {
-    if (value < LLIM) {
-        return LLIM;
-    } else if (value > ULIM) {
-        return ULIM;
-    } else {
-        return value;
+uint8_t getPGAindex(int input) {
+    switch (input) {
+        case 1:
+            return 0;
+        case 2:
+            return 1;
+        case 4:
+            return 2;
+        case 8:
+            return 3;
+        case 16:
+            return 4;
+        case 32:
+            return 5;
+        case 64:
+            return 6;
+        default:
+            return 0; // Default to index of PGA 1
     }
 }
 
@@ -145,6 +149,39 @@ uint8_t getSPSRegValue(int input) {
     }
 }
 
+
+
+// Calculate average (avoiding float)
+int32_t calculate_average(const int32_t *Array, size_t length) {
+	int64_t sum = 0;
+	if (length == 0) {
+		return 0; // Or handle the error in a more robust way
+	}
+
+	for (size_t i = 0; i < length; i++) {
+		sum += Array[i];
+	}
+
+	// Crucial: Handle potential overflow.  If sum is too large, this will wrap around.
+	// Using int64_t is essential here.
+	int64_t average = (sum * 5000LL *1000LL) / length;
+
+	// Now, handle the right shift.  Crucially, do this *before* the cast to int32_t.
+	average >>= 23;
+
+	return (int32_t)average; //result in uV (microVolts)
+}
+
+uint8_t check_range(int value, uint8_t LLIM, uint8_t ULIM) {
+    if (value < LLIM) {
+        return LLIM;
+    } else if (value > ULIM) {
+        return ULIM;
+    } else {
+        return value;
+    }
+}
+
 uint8_t readRegister(uint8_t reg){
     uint8_t dat;
 
@@ -225,6 +262,10 @@ void stopSampling(void){
     while(NOT_DRDY) ;	//wait to complete
     sendCommand(CMD_SDATAC);
     while(NOT_DRDY) ;	//wait to complete
+
+    sendCommand(CMD_SDATAC);
+    while(NOT_DRDY) ;	//wait to complete
+    HAL_Delay(10);
     //sendCommand(CMD_RESET);
 }
 
@@ -313,16 +354,16 @@ void setGain(uint8_t drate, uint8_t gain) {
 	sendCommand(CMD_SDATAC);  // send out SDATAC command to stop continuous reading mode.
 
 	writeRegister(REG_DRATE, drate);  // write data rate register
-	HAL_Delay(1);	//ths delay is needed, as DRDY line is not immediately pulled high
+	HAL_Delay(1);	//this delay is needed, as DRDY line is not immediately pulled high
 	while(NOT_DRDY) ;	//wait to complete
 
 
 	writeRegister(REG_ADCON, 0x07 & gain);
-	HAL_Delay(1);	//ths delay is needed, as DRDY line is not immediately pulled high
+	HAL_Delay(1);	//this delay is needed, as DRDY line is not immediately pulled high
 	while(NOT_DRDY) ;	//wait to complete
 
     sendCommand(CMD_SELFCAL); //start Offset and Gain Self-Calibration
-    HAL_Delay(1);	//ths delay is needed, as DRDY line is not immediately pulled high
+    HAL_Delay(1);	//this delay is needed, as DRDY line is not immediately pulled high
     //can last up to 2 seconds for low data rates
     while(NOT_DRDY) ;	//wait to complete
 

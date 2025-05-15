@@ -18,18 +18,20 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
-#include "stm32f1xx_hal.h"
 #include "stm32f1xx_it.h"
 #include <stdbool.h>
+#include "main.h"
+#include "stm32f1xx_hal.h"
 #include "ff.h"
+#include "displays.h"
 
-#define DEBOUNCE_DELAY_MS 10  // Debounce delay in milliseconds
+#define DEBOUNCE_DELAY_MS 20  // Debounce delay in milliseconds
 
 volatile uint8_t last_a_state = 0;
 volatile uint8_t last_b_state = 0;
-volatile int32_t encoder_count = 0; // Use an int to hold the count
-volatile uint32_t last_interrupt_time = 0; // General interrupt timing
+volatile int8_t sig_enc = 0;
+volatile int8_t sig_btn = 0;
+uint32_t debounce1, debounce2;
 volatile int dma_complete = 0;
 
 
@@ -101,7 +103,6 @@ void HAL_PWR_PVDCallback(void)
         // Attempt to unmount the SD card to ensure data integrity
         if (f_mount(NULL, "", 1) == FR_OK){  // Unmounting the filesystem
         	while(1){
-        		ITM_SendString("power loss detected\r\n");
         		HAL_Delay(1);
         	}
         }
@@ -153,22 +154,32 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 			}
 			break;
 
+
 		case GPIO_PIN_2: // PPS
 			//ITM_SendString("PPS-interrupt\n");
 			break;
-		case GPIO_PIN_8: // BUT
+
+
+
+		case GPIO_PIN_8: // BUTTON
+			// Check if this interrupt is occurring after the debounce delay
+			if (HAL_GetTick() - debounce1 < DEBOUNCE_DELAY_MS) {
+				return; // Ignore if within debounce time
+			}
+			debounce1 = HAL_GetTick();
+			sig_btn = 1; //
 			ITM_SendString("BUTTON\n");
 			break;
 
+
+
 		case GPIO_PIN_10:
 		case GPIO_PIN_11:
-			// Get current time in milliseconds
-			uint32_t current_time = HAL_GetTick();
-
 			// Check if this interrupt is occurring after the debounce delay
-			if (current_time - last_interrupt_time < DEBOUNCE_DELAY_MS) {
+			if (HAL_GetTick() - debounce2 < DEBOUNCE_DELAY_MS) {
 				return; // Ignore if within debounce time
 			}
+			debounce2 = HAL_GetTick();
 
 			// Read the current state of both pins
 			last_a_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10); // Read the state of ROTA
@@ -177,81 +188,26 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 			if (GPIO_Pin == GPIO_PIN_10) { // ROTA
 				// Determine the direction of rotation
 				if (last_b_state == GPIO_PIN_RESET) {
-					encoder_count--; // Rotate left
+					sig_enc = -1; // Rotate left
 					ITM_SendString("LEFT\n");
 				} else {
-					encoder_count++; // Rotate right
+					sig_enc = 1; // Rotate right
 					ITM_SendString("RIGHT\n");
 				}
 			} else if (GPIO_Pin == GPIO_PIN_11) { // ROTB
 				// Determine the direction of rotation
 				if (last_a_state == GPIO_PIN_RESET) {
-					encoder_count++; // Rotate right
+					sig_enc = 1; // Rotate right
 					ITM_SendString("RIGHT\n");
 				} else {
-					encoder_count--; // Rotate left
+					sig_enc = -1; // Rotate left
 					ITM_SendString("LEFT\n");
 				}
 			}
 
-			// Update the last interrupt time
-			last_interrupt_time = current_time;
-			break;
-/*
-		case GPIO_PIN_10: // ROTA
-			// Check if this interrupt is occurring after the debounce delay
-			// Check debounce timing
-			if (current_time - last_interrupt_time >= DEBOUNCE_DELAY_MS) {
-				// Read the current state of both ROTA and ROTB
-				uint8_t current_a_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10);
-				uint8_t current_b_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11);
 
-				// Determine the direction based on the state of B
-				if (last_a_state == GPIO_PIN_RESET && current_a_state == GPIO_PIN_SET) {
-					// If A state changes from LOW to HIGH
-					if (current_b_state == GPIO_PIN_RESET) {
-						encoder_count++; // Rotate right
-						ITM_SendString("RIGHT\n");
-					} else {
-						encoder_count--; // Rotate left
-						ITM_SendString("LEFT\n");
-					}
-				}
-
-				// Update last_a_state
-				last_a_state = current_a_state;
-				// Update the last interrupt time
-				last_interrupt_time = current_time;
-			}
 			break;
 
-		case GPIO_PIN_11: // ROTB
-			// Check if this interrupt is occurring after the debounce delay
-			// Check debounce timing
-			if (current_time - last_interrupt_time >= DEBOUNCE_DELAY_MS) {
-				// Read the current state of both ROTA and ROTB
-				uint8_t current_a_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_10);
-				uint8_t current_b_state = HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11);
-
-				// Determine the direction based on the state of A
-				if (last_b_state == GPIO_PIN_RESET && current_b_state == GPIO_PIN_SET) {
-					// If B state changes from LOW to HIGH
-					if (current_a_state == GPIO_PIN_RESET) {
-						encoder_count--; // Rotate left
-						ITM_SendString("LEFT\n");
-					} else {
-						encoder_count++; // Rotate right
-						ITM_SendString("RIGHT\n");
-					}
-				}
-
-				// Update last_b_state
-				last_b_state = current_b_state;
-				// Update the last interrupt time
-				last_interrupt_time = current_time;
-			}
-			break;
-*/
 		// Optionally, handle default case
 		default:
 			while(1);
