@@ -46,18 +46,21 @@ FRESULT readWriteConfigFile(const char* fname, bool overwrite){
 	fres = read_config(fname, "sps", value, sizeof(value));
 	if (fres != FR_OK)		goto err_close;
 	sps_index = getSPSindex(validateSPS(atoi(value)));
-	adcDataArray.sps = sps[sps_index];
-	adcDataArray.length = bufferSizes[sps_index];
+	adcDataArray[0].sps = sps[sps_index];
+	adcDataArray[0].length = bufferSizes[sps_index];
+	adcDataArray[1].sps = sps[sps_index];
+	adcDataArray[1].length = bufferSizes[sps_index];
 	ITM_SendString("sps=");
-	snprintf(str, sizeof(str), "%u\n", adcDataArray.sps);
+	snprintf(str, sizeof(str), "%u\n", adcDataArray[0].sps);
 	ITM_SendString(str);
 
 	fres = read_config(fname, "gain", value, sizeof(value));
 	if (fres != FR_OK)		goto err_close;
 	pga_index = getPGAindex(validatePGA(atoi(value)));
-	adcDataArray.gain = pga[pga_index];
+	adcDataArray[0].gain = pga[pga_index];
+	adcDataArray[1].gain = pga[pga_index];
 	ITM_SendString("gain=");
-	snprintf(str, sizeof(str), "%u\n", adcDataArray.gain);
+	snprintf(str, sizeof(str), "%u\n", adcDataArray[0].gain);
 	ITM_SendString(str);
 
 
@@ -87,9 +90,11 @@ FRESULT writeArrayToFile(AdcDataArrayStruct *arr, dateTimeStruct* startdT) {
     FIL fil;
     UINT bytesWritten;
     FILINFO fno;
+    uint32_t timer_perf;
     char str[64];
-    char fn[32];
-    static char base[12]; // YYYY-MM-DD
+    static char base[13+1]; 	// YYYY-MM-DD
+    static char fn[6+1];		// HHMM
+    static char path[25];	// YYYY-MM-DD/HHMM.bin
     static dateTimeStruct lastdT;
     dateTimeStruct dT;
 
@@ -114,6 +119,7 @@ FRESULT writeArrayToFile(AdcDataArrayStruct *arr, dateTimeStruct* startdT) {
     if (isNewSession) {
         *startdT = dT;
         snprintf(base, sizeof(base), "%4u-%02u-%02u", dT.year, dT.month, dT.day);
+        snprintf(fn, sizeof(fn), "%02u%02u", startdT->hours, startdT->minutes);
 
         // Ensure directory exists
         fres = stat_with_lfn(base, &fno);
@@ -123,8 +129,8 @@ FRESULT writeArrayToFile(AdcDataArrayStruct *arr, dateTimeStruct* startdT) {
         }
 
         // Create log file if needed
-        snprintf(fn, sizeof(fn), "%s/%02u%02u.txt", base, dT.hours, dT.minutes);
-        if (stat_with_lfn(fn, &fno) != FR_OK) {
+        snprintf(path, sizeof(path), "%s/%s.txt", base, fn);
+        if (stat_with_lfn(path, &fno) != FR_OK) {
             fres = f_open(&fil, fn, FA_CREATE_ALWAYS | FA_WRITE);
             if (fres != FR_OK) {
                 ITM_SendString("failed to create log\n");
@@ -152,30 +158,34 @@ FRESULT writeArrayToFile(AdcDataArrayStruct *arr, dateTimeStruct* startdT) {
             f_sync(&fil);
             f_close(&fil);
         }
+        snprintf(path, sizeof(path), "%s/%s.bin", base, fn);	// create binary file name
     }
 
+    /*timer_perf = HAL_GetTick();
+	snprintf(str,sizeof(str), "%u ", HAL_GetTick() - timer_perf);
+	ITM_SendString(str); */
+
     // Write binary data
-    snprintf(fn, sizeof(fn), "%s/%02u%02u.bin", base, startdT->hours, startdT->minutes);
-    fres = f_open(&fil, fn, FA_WRITE | FA_OPEN_ALWAYS);
+    fres = f_open(&fil, path, FA_WRITE | FA_OPEN_ALWAYS);		// takes appr. 40ms
     if (fres != FR_OK) {
         ITM_SendString("failed to create data\n");
         return fres;
     }
 
-    fres = f_lseek(&fil, f_size(&fil));
+    fres = f_lseek(&fil, f_size(&fil));						// takes appr. 10-20ms depending on fsize
     if (fres != FR_OK) {
         ITM_SendString("failed to seek\n");
         goto error_close;
     }
 
     size_t write_len = sizeof(uint32_t) * 3 + arr->length * sizeof(int32_t); // Header + data
-    fres = f_write(&fil, arr, write_len, &bytesWritten);
+    fres = f_write(&fil, arr, write_len, &bytesWritten); 	//7-11ms
     if (fres != FR_OK || bytesWritten != write_len) {
         ITM_SendString("could not write all data\n");
         goto error_close;
     }
 
-    f_close(&fil);
+    f_close(&fil);											// takes 21ms
     lastdT = dT;
     return FR_OK;
 

@@ -33,7 +33,7 @@ extern "C" {
 #include "usb_device.h"
 #include "usbd_cdc_if.h"
 
-
+#define VREFINT_CAL_mV 1200  // factory-calibrated VREFINT in mV
 
 
 typedef enum {

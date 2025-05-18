@@ -70,7 +70,9 @@ extern UART_HandleTypeDef huart1;
 
 extern const uint8_t bufferSizes[16];
 extern uint16_t flagBufferFull;
-extern AdcDataArrayStruct adcDataArray;
+extern AdcDataArrayStruct adcDataArray[2];
+extern uint8_t arrW_idx;	//index of adcDataArray for writing
+extern uint8_t arrR_idx;	//index of adcDataArray for reading
 extern uint8_t sps_index;
 extern uint8_t pga_index;
 extern volatile int8_t sig_enc;

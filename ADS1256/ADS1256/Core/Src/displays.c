@@ -76,21 +76,24 @@ void update_display_config(void){
 					//int i = getSPSindex(adcDataArray.sps) + sig_enc;
 				i = (int)sps_index + sig_enc;
 				sps_index = (uint8_t)(MIN(MAX(i,0),(NUM_SPS_OPTIONS-1)));
-				adcDataArray.sps = sps[sps_index];
-				adcDataArray.length = bufferSizes[sps_index];
+				adcDataArray[0].sps = sps[sps_index];
+				adcDataArray[0].length = bufferSizes[sps_index];
+				adcDataArray[1].sps = sps[sps_index];
+				adcDataArray[1].length = bufferSizes[sps_index];
 
 			}
 			if (selection==1){  //adjusting PGA
 				i = (int)pga_index + sig_enc;
 				pga_index = (uint8_t)(MIN(MAX(i,0),(NUM_PGA_OPTIONS-1)));
-				adcDataArray.gain = pga[pga_index];
+				adcDataArray[0].gain = pga[pga_index];
+				adcDataArray[1].gain = pga[pga_index];
 
 			}
 			sig_enc = 0;
 		}
 		//as this function is called with 500ms frequency, wait 10 calls (5s) for letting a further button press stop recording
 		if (selection < 2 && !callcnt){	//display "1000Hz 1ch +-5000mV" by default, but not for 5 seconds after config saved
-			snprintf(str, sizeof(str), "%5dHz %1dch +-%4dmV", adcDataArray.sps, config_channels, range[pga_index]);
+			snprintf(str, sizeof(str), "%5dHz %1dch +-%4dmV", adcDataArray[0].sps, config_channels, range[pga_index]);
 			lcd_line(&lcd, str);
 		}
 		if (callcnt){
@@ -154,9 +157,6 @@ void updateStatesLCD(uint32_t percentFull, uint8_t sat_in_view){
 				break;
 			case ADS_RECORDING:
 				lcd_string(&lcd, "[REC]");
-				//lcd_cursor(&lcd, 1, 0);
-				//snprintf(str, sizeof(str), "%5dHz %1dch +-%4dmV", adcDataArray.sps, config_channels, range[pga_index]);
-				//lcd_line(&lcd, str);
 				break;
 			case ADS_ERROR:
 				lcd_string(&lcd, "!REC!");

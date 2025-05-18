@@ -27,8 +27,8 @@
 
 #define DEBOUNCE_DELAY_MS 20  // Debounce delay in milliseconds
 
-volatile uint8_t last_a_state = 0;
-volatile uint8_t last_b_state = 0;
+uint8_t last_a_state = 0;
+uint8_t last_b_state = 0;
 volatile int8_t sig_enc = 0;
 volatile int8_t sig_btn = 0;
 uint32_t debounce1, debounce2;
@@ -40,8 +40,10 @@ extern DMA_HandleTypeDef hdma_adc1;
 
 uint8_t adcData[3];
 
-AdcDataArrayStruct adcDataArray;
-uint32_t idx=0;
+AdcDataArrayStruct adcDataArray[2];
+uint8_t arrW_idx=0;	//index of adcDataArray for writing
+uint8_t arrR_idx=1;	//index of adcDataArray for reading
+uint32_t idx=0;		//index within adcDataArray.data
 uint16_t flagBufferFull = 0;
 uint8_t  sps_index = 6;	//default 50Hz sample rate
 uint8_t pga_index = 0; //default PGA = 1
@@ -143,14 +145,20 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 			//will be called on a falling edge of DRDY
 			HAL_SPI_Receive(&hspi1, adcData, 3, HAL_MAX_DELAY); // Receive 3 bytes of data
 
-			//store in a ring buffer
-			adcDataArray.data[idx] = concatenateToInt32(adcData);
+			//store in first or second ring buffer
+			adcDataArray[arrW_idx].data[idx] = concatenateToInt32(adcData);
 
 			idx++;
 			if(idx >= bufferSizes[sps_index]){
 				idx=0;
-				adcDataArray.length = bufferSizes[sps_index];
+				adcDataArray[arrW_idx].length = bufferSizes[sps_index];
 				flagBufferFull = 1;
+				//switch over to next ring buffer
+				arrR_idx=arrW_idx;		//read lags 1 behind write
+				arrW_idx++;
+				if (arrW_idx>1){
+					arrW_idx = 0;
+				}
 			}
 			break;
 
