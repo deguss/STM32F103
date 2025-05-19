@@ -196,8 +196,8 @@ FRESULT writeArrayToFile(AdcDataArrayStruct *arr, dateTimeStruct* startdT) {
 
     if (dT.seconds == 0){	//write file to disk every full minute
 		f_sync(&fil);
-		sprintf(str,"%02u%02u: %u\n", dT.hours, dT.minutes, timer_max);
-		ITM_SendString(str);
+		//sprintf(str,"%02u%02u: %u\n", dT.hours, dT.minutes, timer_max);
+		//ITM_SendString(str);
 	}
 
     if ((HAL_GetTick() - timer_perf) > timer_max){
