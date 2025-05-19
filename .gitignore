@@ -13,3 +13,15 @@
 *.o
 **/Debug/
 **/Release/
+ADS1256/ADS1256/.settings/language.settings.xml
+ADS1256/ADS1256/.settings/language.settings.xml
+ADS1256/ADS1256/.settings/stm32cubeide.project.prefs
+ADS1256/ADS1256/Debug/ADS1256.map
+ADS1256/ADS1256/Debug/Core/Src/subdir.mk
+ADS1256/ADS1256/Debug/Core/Src/subdir.mk
+ADS1256/ADS1256/Debug/Core/Startup/subdir.mk
+ADS1256/ADS1256/Debug/makefile
+ADS1256/ADS1256/Debug/sources.mk
+ADS1256/ADS1256/Debug/Middlewares/ST/STM32_USB_Device_Library/Core/Src/subdir.mk
+ADS1256/ADS1256/Debug/USB_DEVICE/App/subdir.mk
+ADS1256/ADS1256/Debug/USB_DEVICE/Target/subdir.mk
