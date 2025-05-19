@@ -180,7 +180,7 @@ void updateStatesLCD(uint32_t percentFull, uint8_t sat_in_view){
 		}
 		USB_state_past = USB_state;
 	}
-	if (SD_state != SD_state_past || percentFull_old != percentFull){
+    	if (SD_state != SD_state_past || percentFull_old != percentFull){
 		lcd_cursor(&lcd, 0, 5);
 		switch (SD_state){
 			case SD_INIT:
