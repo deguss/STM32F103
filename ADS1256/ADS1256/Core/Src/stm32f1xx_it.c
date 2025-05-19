@@ -26,6 +26,7 @@
 #include "displays.h"
 
 #define DEBOUNCE_DELAY_MS 20  // Debounce delay in milliseconds
+//#define TESTDATA 1
 
 uint8_t last_a_state = 0;
 uint8_t last_b_state = 0;
@@ -147,7 +148,10 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 
 			//store in first or second ring buffer
 			adcDataArray[arrW_idx].data[idx] = concatenateToInt32(adcData);
-
+#if defined(DEBUG) && defined(TESTDATA)
+			adcDataArray[arrW_idx].data[idx] = arrW_idx+1;
+#warning "TESTDATA ACTIVE!!!"
+#endif
 			idx++;
 			if(idx >= bufferSizes[sps_index]){
 				idx=0;

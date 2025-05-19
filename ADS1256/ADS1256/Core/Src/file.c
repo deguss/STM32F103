@@ -87,16 +87,19 @@ FRESULT stat_with_lfn(const char *path, FILINFO *fno) {
 
 FRESULT writeArrayToFile(AdcDataArrayStruct *arr, dateTimeStruct* startdT) {
     FRESULT fres;
-    FIL fil;
+    static FIL fil;
     UINT bytesWritten;
     FILINFO fno;
-    uint32_t timer_perf;
+    static bool fileOpen = false;
+    static DWORD current_offset = 0;
+    volatile uint32_t timer_perf, timer_max=0;
     char str[64];
     static char base[13+1]; 	// YYYY-MM-DD
     static char fn[6+1];		// HHMM
     static char path[25];	// YYYY-MM-DD/HHMM.bin
-    static dateTimeStruct lastdT;
-    dateTimeStruct dT;
+    static dateTimeStruct lastdT, dT;
+
+    timer_perf = HAL_GetTick();
 
     __disable_irq();
     dT = dateTimeNow;
@@ -159,34 +162,48 @@ FRESULT writeArrayToFile(AdcDataArrayStruct *arr, dateTimeStruct* startdT) {
             f_close(&fil);
         }
         snprintf(path, sizeof(path), "%s/%s.bin", base, fn);	// create binary file name
+
+        if (fileOpen)
+        	f_close(&fil);											// takes 21ms
+
+        fres = f_open(&fil, path, FA_WRITE | FA_OPEN_ALWAYS);		// takes appr. 40ms
+        if (fres != FR_OK) {
+        	fileOpen=false;
+            ITM_SendString("failed to create data\n");
+            return fres;
+        }
+        fileOpen=true;
+
+        fres = f_lseek(&fil, f_size(&fil));						// takes appr. 10-20ms depending on fsize
+        if (fres != FR_OK) {
+            ITM_SendString("failed to seek\n");
+            goto error_close;
+        }
+
     }
 
-    /*timer_perf = HAL_GetTick();
-	snprintf(str,sizeof(str), "%u ", HAL_GetTick() - timer_perf);
-	ITM_SendString(str); */
 
     // Write binary data
-    fres = f_open(&fil, path, FA_WRITE | FA_OPEN_ALWAYS);		// takes appr. 40ms
-    if (fres != FR_OK) {
-        ITM_SendString("failed to create data\n");
-        return fres;
-    }
-
-    fres = f_lseek(&fil, f_size(&fil));						// takes appr. 10-20ms depending on fsize
-    if (fres != FR_OK) {
-        ITM_SendString("failed to seek\n");
-        goto error_close;
-    }
-
-    size_t write_len = sizeof(uint32_t) * 3 + arr->length * sizeof(int32_t); // Header + data
+    size_t write_len = 12 + arr->length * sizeof(int32_t); // Header + data
     fres = f_write(&fil, arr, write_len, &bytesWritten); 	//7-11ms
     if (fres != FR_OK || bytesWritten != write_len) {
         ITM_SendString("could not write all data\n");
         goto error_close;
     }
+    current_offset += write_len;
 
-    f_close(&fil);											// takes 21ms
     lastdT = dT;
+
+    if (dT.seconds == 0){	//write file to disk every full minute
+		f_sync(&fil);
+		sprintf(str,"%02u%02u: %u\n", dT.hours, dT.minutes, timer_max);
+		ITM_SendString(str);
+	}
+
+    if ((HAL_GetTick() - timer_perf) > timer_max){
+    	timer_max = (HAL_GetTick() - timer_perf);
+    }
+
     return FR_OK;
 
 error_close:

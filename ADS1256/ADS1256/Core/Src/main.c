@@ -71,6 +71,8 @@ int main(void){
 	snprintf(str,sizeof(str),"24-bit data logger");
 	ITM_SendString(str);
 	ITM_SendString("\n");
+	ITM_SendString(str);
+	ITM_SendString("\n");
 	lcd_line(&lcd, str);
 
 	snprintf(str,sizeof(str),"Piri Daniel 2025");
@@ -107,6 +109,10 @@ int main(void){
 		print_fresult(fres, str);
 		SD_state = SD_FSERROR;
 	} else {
+		// Increase SPI speed after init
+		hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_8; // ~9 MHz
+		HAL_SPI_Init(&hspi2);
+
 		fres = checkSDusage(&percent, &total);
 		if (fres != FR_OK){
 			print_fresult(fres, str);
