@@ -134,7 +134,7 @@ FRESULT writeArrayToFile(AdcDataArrayStruct *arr, dateTimeStruct* startdT) {
         // Create log file if needed
         snprintf(path, sizeof(path), "%s/%s.txt", base, fn);
         if (stat_with_lfn(path, &fno) != FR_OK) {
-            fres = f_open(&fil, fn, FA_CREATE_ALWAYS | FA_WRITE);
+            fres = f_open(&fil, path, FA_CREATE_ALWAYS | FA_WRITE);
             if (fres != FR_OK) {
                 ITM_SendString("failed to create log\n");
                 return fres;

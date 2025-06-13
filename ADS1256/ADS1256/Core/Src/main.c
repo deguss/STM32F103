@@ -94,12 +94,12 @@ int main(void){
 		lcd_line(&lcd, "RESET "); */
 	__HAL_RCC_CLEAR_RESET_FLAGS();
 
-	HAL_Delay(10000);
+	HAL_Delay(5000);
 
 	MX_SPI2_Init(&hspi2);	//interface to SD-card
 	HAL_Delay(100);
 	MX_FATFS_Init();
-	HAL_Delay(100);
+	HAL_Delay(5000);
 	MX_TIM4_Init(&htim4);
 
 	lcd_cursor(&lcd, 3, 0);
@@ -108,11 +108,16 @@ int main(void){
 	for (int i = 0; i < 5 && fres != FR_OK; i++) {
 	    HAL_Delay(500);
 	    fres = f_mount(&FatFs, "", 1);
+	    if (fres != FR_OK){
+	    	print_fresult(fres, str);
+	    	lcd_line(&lcd, str);
+		}
 	}
 	if (fres != FR_OK) {
 		// will return FR_NOT_READY: The physical drive cannot work   if no SD card inserted
 		// returns FR_NO_FILESYSTEM: There is no valid PRIMARY formatted FAT32 partition on the SD card
 		print_fresult(fres, str);
+		lcd_line(&lcd, str);
 		SD_state = SD_FSERROR;
 	} else {
 		// Increase SPI speed after init

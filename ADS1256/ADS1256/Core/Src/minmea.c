@@ -423,6 +423,10 @@ bool minmea_parse_rmc(struct minmea_sentence_rmc *frame, const char *sentence)
     if (strcmp(type+2, "RMC"))
         return false;
 
+    if (frame->date.year < 100) {
+        frame->date.year += 2000;
+    }
+
     frame->valid = (validity == 'A');
     frame->latitude.value *= latitude_direction;
     frame->longitude.value *= longitude_direction;
